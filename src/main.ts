@@ -1,5 +1,5 @@
 import Phaser from "phaser";
-import { MainScene } from "./scenes/MainScene";
+import { FarmScene } from "./scenes/FarmScene";
 import { HudUI } from "./UI/HudUI";
 import { SettingsScene } from "./scenes/SettingsScene";
 
@@ -32,8 +32,7 @@ const config: Phaser.Types.Core.GameConfig = {
         },
     },
 
-    scene: [MainScene, HudUI, SettingsScene],
+    scene: [FarmScene, HudUI, SettingsScene],
 };
 
 export default new Phaser.Game(config);
-
