@@ -1,5 +1,4 @@
 <!doctype html>
-
 <html lang="en">
     <head>
         <meta charset="UTF-8" />
@@ -7,32 +6,123 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <link rel="stylesheet" href="/src/CSS/style.css" />
         <link rel="stylesheet" href="/src/CSS/settings.css" />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined"
+            rel="stylesheet"
+        />
         <title>greenvale</title>
     </head>
     <body>
         <div id="app">
-            <div id="game-container">
-                <div id="settings-menu" class="hidden">
-                <div class="settings-panel">
-                    <h2>Definições</h2>
-                    
-                    <label>Música
-                    <input type="range" id="music-volume" min="0" max="100" value="80">
-                    </label>
+            <div id="game-container"></div>
 
-                    <label>Sons
-                    <input type="range" id="sfx-volume" min="0" max="100" value="100">
-                    </label>
+            <div id="settings-menu" class="hidden">
+                <div class="panel">
+                    <button class="btn-close" id="close-settings">✕</button>
+                    <h1 class="panel-title">Definições</h1>
 
-                    <label>Fullscreen
-                    <input type="checkbox" id="fullscreen-toggle">
-                    </label>
+                    <div class="section">
+                        <span class="section-label">🌐 Idioma</span>
+                        <div class="lang-group">
+                            <button
+                                class="lang-btn active"
+                                onclick="setLang(this)"
+                            >
+                                🇵🇹 Português
+                            </button>
+                            <button class="lang-btn" onclick="setLang(this)">
+                                🇪🇸 Español
+                            </button>
+                            <button class="lang-btn" onclick="setLang(this)">
+                                🇬🇧 English
+                            </button>
+                        </div>
+                    </div>
 
-                    <button id="close-settings">Fechar</button>
+                    <hr class="divider" />
+
+                    <div class="section">
+                        <span class="section-label">🎮 Controlos</span>
+                        <div class="controls-group">
+                            <div
+                                class="control-card"
+                                onclick="setControl(this)"
+                            >
+                                <span
+                                    class="material-symbols-outlined control-icon"
+                                    >keyboard_double_arrow_up</span
+                                >
+                                <div class="keys-label">SETAS</div>
+                            </div>
+
+                            <div
+                                class="control-card active"
+                                onclick="setControl(this)"
+                            >
+                                <span
+                                    class="material-symbols-outlined control-icon"
+                                    >keyboard</span
+                                >
+                                <div class="keys-label">WASD</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr class="divider" />
+
+                    <div class="section">
+                        <span class="section-label">🔊 Áudio</span>
+                        <div class="toggle-row">
+                            <span>🎵 Música</span>
+                            <label class="toggle">
+                                <input
+                                    type="checkbox"
+                                    id="toggle-music"
+                                    checked
+                                />
+                                <div class="toggle-track"></div>
+                            </label>
+                        </div>
+                        <div class="toggle-row">
+                            <span>🔉 Sons</span>
+                            <label class="toggle">
+                                <input type="checkbox" id="toggle-sounds" />
+                                <div class="toggle-track"></div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <hr class="divider" />
+
+                    <div class="section">
+                        <span class="section-label">🖥️ Ecrã</span>
+                        <div class="toggle-row">
+                            <span>Ecrã Completo</span>
+                            <label class="toggle">
+                                <input type="checkbox" id="toggle-fullscreen" />
+                                <div class="toggle-track"></div>
+                            </label>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
+
+        <!-- Scripts no fim do body, uma única vez -->
         <script type="module" src="/src/main.ts"></script>
+        <script>
+            function setLang(btn) {
+                document
+                    .querySelectorAll(".lang-btn")
+                    .forEach((b) => b.classList.remove("active"));
+                btn.classList.add("active");
+            }
+            function setControl(card) {
+                document
+                    .querySelectorAll(".control-card")
+                    .forEach((c) => c.classList.remove("active"));
+                card.classList.add("active");
+            }
+        </script>
     </body>
 </html>
-

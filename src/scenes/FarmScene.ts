@@ -5,7 +5,7 @@ export class FarmScene extends Phaser.Scene {
     private player!: Player;
 
     constructor() {
-        super("main-scene");
+        super("FarmScene");
     }
 
     preload() {
@@ -95,6 +95,8 @@ export class FarmScene extends Phaser.Scene {
 
         collisionLayer?.setCollisionByExclusion([-1, 0]);
         this.physics.add.collider(this.player, collisionLayer!);
+
+        this.scene.launch("SettingsScene");
     }
 
     update() {
