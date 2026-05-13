@@ -1,27 +1,220 @@
+:root {
+    --bg-page: #1a0a02;
+    --bg-panel: #2e1b0f;
+    --bg-section: #392619;
+    --bg-btn: #8b5e2a;
+    --bg-btn-active: #5c3317;
+    --color-gold: #c8882a;
+    --color-cream: #f5e6c8;
+    --color-muted: #d4c4b5;
+    --color-green: #527122;
+    --toggle-off: #453023;
+}
+
 #settings-menu {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background: rgba(0, 0, 0, 0.7);
+    position: fixed;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.7);
     display: flex;
     align-items: center;
     justify-content: center;
-    z-index: 10;
+    z-index: 1000;
 }
 
 #settings-menu.hidden {
     display: none;
 }
 
-.settings-panel {
-    background: #1a1a2e;
-    padding: 40px;
-    border-radius: 12px;
-    color: white;
+.panel {
+    background-color: var(--bg-panel);
+    border: 5px double var(--color-gold); /* Double -> duplica linha simplesmente */
+    border-radius: 14px;
+    width: 400px;
+    padding: 20px 20px;
     display: flex;
     flex-direction: column;
-    gap: 20px;
-    min-width: 400px;
+}
+
+.panel-title {
+    text-align: center;
+    font-size: 28px;
+    color: var(--color-gold);
+    letter-spacing: 2px;
+    padding: 0px;
+    margin: 0px;
+    margin-bottom: 10px;
+}
+
+.divider {
+    border: none;
+    border-top: 1px solid var(--color-gold);
+    opacity: 0.3;
+    width: 100%;
+    margin-top: 15px;
+}
+
+.section {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.section-label {
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--color-muted);
+}
+
+.lang-group {
+    display: flex;
+    gap: 8px;
+}
+
+.lang-btn {
+    flex: 1;
+    padding: 8px 4px;
+    background-color: var(--bg-section);
+    color: var(--color-cream);
+    border: 2px solid transparent;
+    border-radius: 6px;
+    font-size: 13px;
+    font-family: Georgia, serif;
+    cursor: pointer;
+    transition:
+        border-color 0.2s,
+        background-color 0.2s;
+}
+
+.lang-btn:hover {
+    border-color: var(--color-gold);
+}
+
+.lang-btn.active {
+    border-color: var(--color-gold);
+    background-color: var(--bg-btn-active);
+    color: var(--color-gold);
+}
+
+.controls-group {
+    display: flex;
+    gap: 8px;
+}
+
+.control-card {
+    flex: 1;
+    background-color: var(--bg-section);
+    border: 2px solid transparent;
+    border-radius: 8px;
+    padding: 14px 8px;
+    text-align: center;
+    cursor: pointer;
+    transition: border-color 0.2s;
+}
+
+.control-card:hover {
+    border-color: var(--color-gold);
+}
+
+.control-card.active {
+    border-color: var(--color-gold);
+}
+
+.control-card .keys {
+    font-size: 20px;
+    margin-bottom: 6px;
+}
+
+.control-card .keys-label {
+    font-size: 13px;
+    color: var(--color-muted);
+}
+
+.toggle-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: var(--bg-section);
+    padding: 12px 16px;
+    border-radius: 8px;
+}
+
+.toggle-row + .toggle-row {
+    margin-top: 8px;
+}
+
+.toggle-row span {
+    font-size: 15px;
+}
+
+.toggle {
+    position: relative;
+    width: 48px;
+    height: 26px;
+}
+
+.toggle input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.toggle-track {
+    position: absolute;
+    inset: 0;
+    background-color: var(--toggle-off);
+    border-radius: 26px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.toggle-track::after {
+    content: "";
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 20px;
+    height: 20px;
+    background-color: var(--color-muted);
+    border-radius: 50%;
+    transition: transform 0.2s;
+}
+
+.toggle input:checked + .toggle-track {
+    background-color: var(--color-green);
+}
+
+.toggle input:checked + .toggle-track::after {
+    transform: translateX(22px);
+    background-color: var(--color-cream);
+}
+
+.btn-close {
+    position: flex;
+    text-align: right;
+    top: 12px;
+    right: 14px;
+    background: none;
+    border: none;
+    color: var(--color-muted);
+    font-size: 20px;
+    cursor: pointer;
+    line-height: 1;
+    transition:
+        color 0.2s,
+        transform 0.1s;
+}
+
+.btn-close:hover {
+    color: var(--color-gold);
+}
+
+.control-icon {
+    font-size: 36px;
+    color: var(--color-muted);
+    margin-bottom: 6px;
+}
+
+.control-card.active .control-icon {
+    color: var(--color-gold);
 }

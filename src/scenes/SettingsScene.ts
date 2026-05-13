@@ -2,32 +2,31 @@ import Phaser from "phaser";
 
 export class SettingsScene extends Phaser.Scene {
     constructor() {
-        super("settings-scene");
+        super({ key: "SettingsScene" });
     }
 
     create() {
         this.add
-            .text(this.scale.width - 20, 20, "⚙️", { fontSize: "28px" })
+            .text(this.scale.width - 16, 16, "⚙️", { fontSize: "28px" })
             .setOrigin(1, 0)
+            .setDepth(100)
             .setInteractive({ useHandCursor: true })
-            .on("pointerup", () => {
-                const menu = document.getElementById("settings-menu");
-                menu?.classList.toggle("hidden");
-
-                if (!menu?.classList.contains("hidden")) {
-                    this.scene.pause("main-scene");
-                } else {
-                    this.scene.resume("main-scene");
-                }
-            });
+            .on("pointerup", () => this.openSettings());
 
         document
             .getElementById("close-settings")
-            ?.addEventListener("click", () => {
-                document
-                    .getElementById("settings-menu")
-                    ?.classList.add("hidden");
-                this.scene.resume("main-scene");
-            });
+            ?.addEventListener("click", () => this.closeSettings());
+
+        this.input.keyboard?.on("keydown-ESC", () => this.closeSettings());
+    }
+
+    private openSettings() {
+        document.getElementById("settings-menu")?.classList.remove("hidden");
+        this.scene.pause("FarmScene");
+    }
+
+    private closeSettings() {
+        document.getElementById("settings-menu")?.classList.add("hidden");
+        this.scene.resume("FarmScene");
     }
 }

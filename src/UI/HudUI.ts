@@ -6,7 +6,7 @@ export class HudUI extends Phaser.Scene {
     }
 
     create() {
-        this.add
+        /* this.add
             .text(this.scale.width - 50, 50, "⚙️", {
                 fontSize: "28px",
             })
@@ -15,6 +15,6 @@ export class HudUI extends Phaser.Scene {
             .on("pointerup", () => {
                 this.scene.pause("main-scene");
                 this.scene.launch("settings-scene");
-            });
+            }); */
     }
 }
