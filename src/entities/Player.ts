@@ -7,6 +7,15 @@ const TREE_CANOPY_TILES = [676, 677];
 
 export class Player extends Phaser.Physics.Arcade.Sprite {
     private cursorKeys: Phaser.Types.Input.Keyboard.CursorKeys;
+    private wasdKeys!: {
+        W: Phaser.Input.Keyboard.Key;
+        A: Phaser.Input.Keyboard.Key;
+        S: Phaser.Input.Keyboard.Key;
+        D: Phaser.Input.Keyboard.Key;
+    };
+    public controlScheme: string =
+        localStorage.getItem("controlScheme") || "wasd";
+
     private shadow: Phaser.GameObjects.Ellipse;
     private idleTexture: string;
     private walkTexture: string;
@@ -36,6 +45,13 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
         scene.physics.add.existing(this);
 
         this.cursorKeys = scene.input.keyboard!.createCursorKeys();
+        this.wasdKeys = {
+            W: scene.input.keyboard!.addKey("W"),
+            A: scene.input.keyboard!.addKey("A"),
+            S: scene.input.keyboard!.addKey("S"),
+            D: scene.input.keyboard!.addKey("D"),
+        };
+
         this.setScale(0.4);
         this.setDepth(6);
         this.shadow = scene.add
@@ -66,18 +82,16 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
         const speed = 200;
         this.setVelocity(0);
 
-        if (this.cursorKeys.left.isDown) {
-            this.setVelocityX(-speed);
-            this.setFlipX(true);
-        } else if (this.cursorKeys.right.isDown) {
-            this.setVelocityX(speed);
-            this.setFlipX(false);
-        }
-
-        if (this.cursorKeys.up.isDown) {
-            this.setVelocityY(-speed);
-        } else if (this.cursorKeys.down.isDown) {
-            this.setVelocityY(speed);
+        if (this.controlScheme === "wasd") {
+            if (this.wasdKeys.A.isDown) this.setVelocityX(-speed);
+            if (this.wasdKeys.D.isDown) this.setVelocityX(speed);
+            if (this.wasdKeys.W.isDown) this.setVelocityY(-speed);
+            if (this.wasdKeys.S.isDown) this.setVelocityY(speed);
+        } else {
+            if (this.cursorKeys.left.isDown) this.setVelocityX(-speed);
+            if (this.cursorKeys.right.isDown) this.setVelocityX(speed);
+            if (this.cursorKeys.up.isDown) this.setVelocityY(-speed);
+            if (this.cursorKeys.down.isDown) this.setVelocityY(speed);
         }
     }
 

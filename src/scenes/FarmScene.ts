@@ -5,6 +5,7 @@ const SKINS = ["skin_a", "skin_b", "skin_c", "skin_d"];
 
 export class FarmScene extends Phaser.Scene {
     public player!: Player;
+    public bgMusic!: Phaser.Sound.BaseSound;
 
     constructor() {
         super("FarmScene");
@@ -46,6 +47,8 @@ export class FarmScene extends Phaser.Scene {
         );
         this.load.image("TileSet", "assets/images/map_images/Tileset2.png");
         this.load.image("Trees", "assets/images/map_images/spr_tree_9.png");
+
+        this.load.audio("bgMusic", "assets/audio/apple_cider.ogg");
     }
 
     create() {
@@ -129,6 +132,9 @@ export class FarmScene extends Phaser.Scene {
         this.physics.add.collider(this.player, collisionLayer!);
 
         this.scene.launch("SettingsScene");
+
+        this.bgMusic = this.sound.add("bgMusic", { loop: true, volume: 0.1 });
+        this.bgMusic.play();
     }
 
     update(time: number) {

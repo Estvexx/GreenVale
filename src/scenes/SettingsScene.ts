@@ -19,10 +19,28 @@ export class SettingsScene extends Phaser.Scene {
             ?.addEventListener("click", () => this.closeSettings());
 
         this.input.keyboard?.on("keydown-ESC", () => this.closeSettings());
+
+        document
+            .getElementById("toggle-music")
+            ?.addEventListener("change", (e) => {
+                const farmScene = this.scene.get("FarmScene") as FarmScene;
+                const target = e.target as HTMLInputElement;
+
+                if (target.checked) {
+                    farmScene.bgMusic.resume();
+                } else {
+                    farmScene.bgMusic.pause();
+                }
+            });
     }
 
     private openSettings() {
         document.getElementById("settings-menu")?.classList.remove("hidden");
+
+        import("../i18n").then(({ applyTranslations }) => {
+            applyTranslations();
+        });
+
         this.scene.pause("FarmScene");
     }
 
@@ -31,6 +49,9 @@ export class SettingsScene extends Phaser.Scene {
 
         const farmScene = this.scene.get("FarmScene") as FarmScene;
         farmScene.player.applySkin();
+
+        farmScene.player.controlScheme =
+            localStorage.getItem("controlScheme") || "wasd";
 
         this.scene.resume("FarmScene");
     }

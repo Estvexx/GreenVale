@@ -19,22 +19,31 @@
             <div id="settings-menu" class="hidden">
                 <div class="panel">
                     <button class="btn-close" id="close-settings">✕</button>
-                    <h1 class="panel-title">Definições</h1>
+                    <h1 class="panel-title" data-i18n="ui.settings"></h1>
 
                     <div class="section">
-                        <span class="section-label">🌐 Idioma</span>
+                        <span
+                            class="section-label"
+                            data-i18n="ui.language"
+                        ></span>
                         <div class="lang-group">
                             <button
                                 class="lang-btn active"
-                                onclick="setLang(this)"
+                                onclick="setLang(this, 'pt')"
                             >
                                 🇵🇹 Português
                             </button>
-                            <button class="lang-btn" onclick="setLang(this)">
-                                🇪🇸 Español
-                            </button>
-                            <button class="lang-btn" onclick="setLang(this)">
+                            <button
+                                class="lang-btn"
+                                onclick="setLang(this, 'en')"
+                            >
                                 🇬🇧 English
+                            </button>
+                            <button
+                                class="lang-btn"
+                                onclick="setLang(this, 'es')"
+                            >
+                                🇪🇸 Español
                             </button>
                         </div>
                     </div>
@@ -42,22 +51,27 @@
                     <hr class="divider" />
 
                     <div class="section">
-                        <span class="section-label">🎮 Controlos</span>
+                        <span
+                            class="section-label"
+                            data-i18n="ui.controls"
+                        ></span>
                         <div class="controls-group">
                             <div
-                                class="control-card"
-                                onclick="setControl(this)"
+                                class="control-card active"
+                                data-control="arrows"
+                                onclick="setControlKeys(this)"
                             >
                                 <span
                                     class="material-symbols-outlined control-icon"
                                     >keyboard_double_arrow_up</span
                                 >
-                                <div class="keys-label">SETAS</div>
+                                <div class="keys-label" data-i18n="ui.arrows"></div>
                             </div>
 
                             <div
-                                class="control-card active"
-                                onclick="setControl(this)"
+                                class="control-card"
+                                data-control="wasd"
+                                onclick="setControlKeys(this)"
                             >
                                 <span
                                     class="material-symbols-outlined control-icon"
@@ -71,9 +85,9 @@
                     <hr class="divider" />
 
                     <div class="section">
-                        <span class="section-label">🔊 Áudio</span>
+                        <span class="section-label" data-i18n="ui.audio"></span>
                         <div class="toggle-row">
-                            <span>🎵 Música</span>
+                            <span data-i18n="ui.music"></span>
                             <label class="toggle">
                                 <input
                                     type="checkbox"
@@ -84,7 +98,7 @@
                             </label>
                         </div>
                         <div class="toggle-row">
-                            <span>🔉 Sons</span>
+                            <span data-i18n="ui.sounds"></span>
                             <label class="toggle">
                                 <input type="checkbox" id="toggle-sounds" />
                                 <div class="toggle-track"></div>
@@ -95,23 +109,66 @@
                     <hr class="divider" />
 
                     <div class="section">
-                        <span class="section-label">🧑 Personagem</span>
+                        <span
+                            class="section-label"
+                            data-i18n="ui.character"
+                        ></span>
                         <div class="skin-group">
-                            <div class="skin-card active" onclick="setSkin(this, 'skin_a')">
-                                <img src="assets/images/players/player_walk1_skin_a.png" alt="Skin A" class="skin-preview" />
-                                <div class="skin-label">Clássico</div>
+                            <div
+                                class="skin-card active"
+                                onclick="setSkin(this, 'skin_a')"
+                            >
+                                <img
+                                    src="assets/images/players/player_walk1_skin_a.png"
+                                    alt="Skin A"
+                                    class="skin-preview"
+                                />
+                                <div
+                                    class="skin-label"
+                                    data-i18n="ui.classic"
+                                ></div>
                             </div>
-                            <div class="skin-card" onclick="setSkin(this, 'skin_b')">
-                                <img src="assets/images/players/player_walk1_skin_b.png" alt="Skin B" class="skin-preview" />
-                                <div class="skin-label">Azul</div>
+                            <div
+                                class="skin-card"
+                                onclick="setSkin(this, 'skin_b')"
+                            >
+                                <img
+                                    src="assets/images/players/player_walk1_skin_b.png"
+                                    alt="Skin B"
+                                    class="skin-preview"
+                                />
+                                <div
+                                    class="skin-label"
+                                    data-i18n="ui.blue"
+                                ></div>
                             </div>
-                            <div class="skin-card" onclick="setSkin(this, 'skin_c')">
-                                <img src="assets/images/players/player_walk1_skin_c.png" alt="Skin C" class="skin-preview" />
-                                <div class="skin-label">Vermelho</div>
+                            <div
+                                class="skin-card"
+                                onclick="setSkin(this, 'skin_c')"
+                            >
+                                <img
+                                    src="assets/images/players/player_walk1_skin_c.png"
+                                    alt="Skin C"
+                                    class="skin-preview"
+                                />
+                                <div
+                                    class="skin-label"
+                                    data-i18n="ui.red"
+                                ></div>
                             </div>
-                            <div class="skin-card" onclick="setSkin(this, 'skin_d')">
-                                <img src="assets/images/players/player_walk1_skin_d.png" alt="Skin D" class="skin-preview" />
-                                <div class="skin-label">Roxo</div>
+                            <div
+                                class="skin-card"
+                                onclick="setSkin(this, 'skin_d')"
+                            >
+                                <img
+                                    src="assets/images/players/player_walk1_skin_d.png"
+                                    alt="Skin D"
+                                    class="skin-preview"
+                                />
+                                <div
+                                    class="skin-label"
+                                    data-i18n="ui.purple"
+                                ></div>
                             </div>
                         </div>
                     </div>
@@ -119,11 +176,18 @@
                     <hr class="divider" />
 
                     <div class="section">
-                        <span class="section-label">🖥️ Ecrã</span>
+                        <span
+                            class="section-label"
+                            data-i18n="ui.screen"
+                        ></span>
                         <div class="toggle-row">
-                            <span>Ecrã Completo</span>
+                            <span data-i18n="ui.fullscreen"></span>
                             <label class="toggle">
-                                <input type="checkbox" id="toggle-fullscreen" />
+                                <input
+                                    type="checkbox"
+                                    id="toggle-fullscreen"
+                                    checked="false"
+                                />
                                 <div class="toggle-track"></div>
                             </label>
                         </div>
@@ -132,20 +196,29 @@
             </div>
         </div>
 
-        <!-- Scripts no fim do body, uma única vez -->
         <script type="module" src="/src/main.ts"></script>
         <script>
-            function setLang(btn) {
+            function setLang(btn, lang) {
                 document
                     .querySelectorAll(".lang-btn")
                     .forEach((b) => b.classList.remove("active"));
                 btn.classList.add("active");
+
+                import("/src/i18n/index.ts").then(({ setLanguage }) => {
+                    setLanguage(lang);
+                });
             }
-            function setControl(card) {
+
+            function setControlKeys(card) {
                 document
                     .querySelectorAll(".control-card")
                     .forEach((c) => c.classList.remove("active"));
+
                 card.classList.add("active");
+                // Aqui eu pego o valor do diretamente do atributo data-control do card clicado
+                const scheme = card.dataset.control;
+
+                localStorage.setItem("controlScheme", scheme);
             }
 
             function setSkin(card, skinKey) {
@@ -158,6 +231,18 @@
 
             // Ao abrir a página, marca a skin guardada como ativa
             window.addEventListener("DOMContentLoaded", () => {
+                const saved = localStorage.getItem("controlScheme") || "wasd";
+
+                document.querySelectorAll(".control-card").forEach((card) => {
+                    const scheme = card.dataset.control;
+
+                    if (scheme === saved) {
+                        card.classList.add("active");
+                    } else {
+                        card.classList.remove("active");
+                    }
+                });
+
                 const savedSkin = localStorage.getItem("playerSkin");
                 if (savedSkin) {
                     document.querySelectorAll(".skin-card").forEach((card) => {
@@ -169,6 +254,23 @@
                     });
                 }
             });
+
+            // Sincroniza sempre, independente das settings estarem abertas
+            document.addEventListener("fullscreenchange", () => {
+                const checkbox = document.getElementById("toggle-fullscreen");
+                if (checkbox) checkbox.checked = !!document.fullscreenElement;
+            });
+
+            // Fullscreen toggle — só age quando o utilizador clica
+            document
+                .getElementById("toggle-fullscreen")
+                ?.addEventListener("change", (e) => {
+                    if (e.target.checked) {
+                        document.documentElement.requestFullscreen();
+                    } else {
+                        document.exitFullscreen();
+                    }
+                });
         </script>
     </body>
 </html>
