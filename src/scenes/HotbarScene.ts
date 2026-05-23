@@ -7,6 +7,7 @@ const SLOT_PADDING = 8;
 export class HotbarScene extends Phaser.Scene {
     private inventory!: InventorySystem;
     private slots: Phaser.GameObjects.Rectangle[] = [];
+    private slotIcons: (Phaser.GameObjects.Image | null)[] = [];
 
     constructor() {
         super({ key: "HotbarScene" });
@@ -30,7 +31,7 @@ export class HotbarScene extends Phaser.Scene {
                 SLOT_SIZE,
                 SLOT_SIZE,
                 0x333333,
-                0.6,
+                0.9,
             );
             slot.setStrokeStyle(3, 0xffffff, 0.8);
             slot.setInteractive();
@@ -41,6 +42,7 @@ export class HotbarScene extends Phaser.Scene {
             });
 
             this.slots.push(slot);
+            this.slotIcons.push(null);
         }
 
         const keyCodes = [
@@ -62,7 +64,30 @@ export class HotbarScene extends Phaser.Scene {
             });
         }
 
+        this.updateUI();
         this.updateSelection();
+    }
+
+    updateUI() {
+        for (let i = 0; i < this.slots.length; i++) {
+            const item = this.inventory.slots[i];
+
+            // Remove ícone antigo se existir
+            if (this.slotIcons[i]) {
+                this.slotIcons[i]!.destroy();
+                this.slotIcons[i] = null;
+            }
+
+            // Se tem item, cria novo ícone
+            if (item) {
+                const x = this.slots[i].x;
+                const y = this.slots[i].y;
+
+                const icon = this.add.image(x, y, item.icon);
+                icon.setDisplaySize(SLOT_SIZE, SLOT_SIZE); // 52x52 (margem 6px)
+                this.slotIcons[i] = icon;
+            }
+        }
     }
 
     updateSelection() {

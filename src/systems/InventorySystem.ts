@@ -19,6 +19,23 @@ export class InventorySystem {
     slots: (Item | null)[] = [null, null, null, null, null, null, null, null];
     selectedSlot: number = 0;
 
+    addStartingItems() {
+        const startingTools: Item[] = [
+            { id: "hoe", name: "Enxada", icon: "enxada", quantity: 1 },
+            {
+                id: "empty_bucket",
+                name: "Balde Vazio",
+                icon: "balde_vazio",
+                quantity: 1,
+            },
+            { id: "scythe", name: "Foice", icon: "foice", quantity: 1 },
+        ];
+
+        for (const tool of startingTools) {
+            this.addItem(tool);
+        }
+    }
+
     addItem(item: Item): boolean {
         for (let i = 0; i < this.slots.length; i++) {
             if (this.slots[i]?.id === item.id) {
