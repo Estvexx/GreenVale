@@ -95,6 +95,30 @@
                     <hr class="divider" />
 
                     <div class="section">
+                        <span class="section-label">🧑 Personagem</span>
+                        <div class="skin-group">
+                            <div class="skin-card active" onclick="setSkin(this, 'skin_a')">
+                                <img src="assets/images/players/player_walk1_skin_a.png" alt="Skin A" class="skin-preview" />
+                                <div class="skin-label">Clássico</div>
+                            </div>
+                            <div class="skin-card" onclick="setSkin(this, 'skin_b')">
+                                <img src="assets/images/players/player_walk1_skin_b.png" alt="Skin B" class="skin-preview" />
+                                <div class="skin-label">Azul</div>
+                            </div>
+                            <div class="skin-card" onclick="setSkin(this, 'skin_c')">
+                                <img src="assets/images/players/player_walk1_skin_c.png" alt="Skin C" class="skin-preview" />
+                                <div class="skin-label">Vermelho</div>
+                            </div>
+                            <div class="skin-card" onclick="setSkin(this, 'skin_d')">
+                                <img src="assets/images/players/player_walk1_skin_d.png" alt="Skin D" class="skin-preview" />
+                                <div class="skin-label">Roxo</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr class="divider" />
+
+                    <div class="section">
                         <span class="section-label">🖥️ Ecrã</span>
                         <div class="toggle-row">
                             <span>Ecrã Completo</span>
@@ -123,6 +147,28 @@
                     .forEach((c) => c.classList.remove("active"));
                 card.classList.add("active");
             }
+
+            function setSkin(card, skinKey) {
+                document
+                    .querySelectorAll(".skin-card")
+                    .forEach((c) => c.classList.remove("active"));
+                card.classList.add("active");
+                localStorage.setItem("playerSkin", skinKey);
+            }
+
+            // Ao abrir a página, marca a skin guardada como ativa
+            window.addEventListener("DOMContentLoaded", () => {
+                const savedSkin = localStorage.getItem("playerSkin");
+                if (savedSkin) {
+                    document.querySelectorAll(".skin-card").forEach((card) => {
+                        if (card.getAttribute("onclick")?.includes(savedSkin)) {
+                            card.classList.add("active");
+                        } else {
+                            card.classList.remove("active");
+                        }
+                    });
+                }
+            });
         </script>
     </body>
 </html>

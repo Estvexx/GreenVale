@@ -218,3 +218,40 @@
 .control-card.active .control-icon {
     color: var(--color-gold);
 }
+
+.skin-group {
+    display: flex;
+    gap: 8px;
+}
+
+.skin-card {
+    flex: 1;
+    background-color: var(--bg-section);
+    border: 2px solid transparent;
+    border-radius: 8px;
+    padding: 14px 8px;
+    text-align: center;
+    cursor: pointer;
+    transition: border-color 0.2s;
+}
+
+.skin-card:hover {
+    border-color: var(--color-gold);
+}
+
+.skin-card.active {
+    border-color: var(--color-gold);
+}
+
+.skin-preview {
+    width: 48px;
+    height: 48px;
+    object-fit: contain;
+    image-rendering: pixelated;
+    margin-bottom: 6px;
+}
+
+.skin-label {
+    font-size: 13px;
+    color: var(--color-muted);
+}

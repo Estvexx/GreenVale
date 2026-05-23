@@ -1,4 +1,5 @@
 import Phaser from "phaser";
+import { FarmScene } from "./FarmScene";
 
 export class SettingsScene extends Phaser.Scene {
     constructor() {
@@ -27,6 +28,10 @@ export class SettingsScene extends Phaser.Scene {
 
     private closeSettings() {
         document.getElementById("settings-menu")?.classList.add("hidden");
+
+        const farmScene = this.scene.get("FarmScene") as FarmScene;
+        farmScene.player.applySkin();
+
         this.scene.resume("FarmScene");
     }
 }
