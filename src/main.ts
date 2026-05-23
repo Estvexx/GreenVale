@@ -2,6 +2,7 @@ import Phaser from "phaser";
 import { FarmScene } from "./scenes/FarmScene";
 import { HudUI } from "./UI/HudUI";
 import { SettingsScene } from "./scenes/SettingsScene";
+import { HotbarScene } from "./scenes/HotbarScene";
 
 const config: Phaser.Types.Core.GameConfig = {
     type: Phaser.AUTO,
@@ -32,7 +33,7 @@ const config: Phaser.Types.Core.GameConfig = {
         },
     },
 
-    scene: [FarmScene, HudUI, SettingsScene],
+    scene: [FarmScene, HotbarScene, HudUI, SettingsScene],
 };
 
 export default new Phaser.Game(config);
