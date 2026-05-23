@@ -1,5 +1,7 @@
 import Phaser from "phaser";
 import { Player } from "../entities/Player";
+import { InventorySystem } from "../systems/InventorySystem";
+import type { Item } from "../systems/InventorySystem";
 
 const SKINS = ["skin_a", "skin_b", "skin_c", "skin_d"];
 
@@ -135,6 +137,27 @@ export class FarmScene extends Phaser.Scene {
 
         this.bgMusic = this.sound.add("bgMusic", { loop: true, volume: 0.1 });
         this.bgMusic.play();
+
+        this.scene.launch("HotbarScene");
+
+        const inv = InventorySystem.getInstance();
+
+        const startingTools: Item[] = [
+            { id: "hoe", name: "Enxada", icon: "enxada", quantity: 1 },
+            {
+                id: "empty_bucket",
+                name: "Balde Vazio",
+                icon: "balde_vazio",
+                quantity: 1,
+            },
+            { id: "scythe", name: "Foice", icon: "foice", quantity: 1 },
+        ];
+
+        for (const tool of startingTools) {
+            inv.addItem(tool);
+        }
+
+        console.log("Inventário inicial:", inv.slots);
     }
 
     update(time: number) {

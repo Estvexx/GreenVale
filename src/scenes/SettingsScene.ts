@@ -8,7 +8,7 @@ export class SettingsScene extends Phaser.Scene {
 
     create() {
         this.add
-            .text(this.scale.width - 16, 16, "⚙️", { fontSize: "28px" })
+            .text(this.scale.width - 32, 32, "⚙️", { fontSize: "28px" })
             .setOrigin(1, 0)
             .setDepth(100)
             .setInteractive({ useHandCursor: true })
