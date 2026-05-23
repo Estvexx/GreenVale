@@ -22,7 +22,7 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
         x: number,
         y: number,
         canopyLayer: Phaser.Tilemaps.TilemapLayer,
-        trunkLayer: Phaser.Tilemaps.TilemapLayer
+        trunkLayer: Phaser.Tilemaps.TilemapLayer,
     ) {
         const skin = Player.getSavedSkin();
         super(scene, x, y, `${skin}_idle`);
@@ -30,7 +30,7 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
         this.idleTexture = `${skin}_idle`;
         this.walkTexture = `${skin}_walk`;
         this.canopyLayer = canopyLayer;
-        this.trunkLayer  = trunkLayer;
+        this.trunkLayer = trunkLayer;
 
         scene.add.existing(this);
         scene.physics.add.existing(this);
@@ -38,7 +38,9 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
         this.cursorKeys = scene.input.keyboard!.createCursorKeys();
         this.setScale(0.4);
         this.setDepth(6);
-        this.shadow = scene.add.ellipse(x, y + 22, 18, 6, 0x000000, 0.4).setDepth(this.depth - 1);
+        this.shadow = scene.add
+            .ellipse(x, y + 22, 18, 6, 0x000000, 0.4)
+            .setDepth(this.depth - 1);
     }
 
     static getSavedSkin(): string {
@@ -80,12 +82,15 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
     }
 
     private updateAnimation(time: number) {
-        const isMoving = this.body!.velocity.x !== 0 || this.body!.velocity.y !== 0;
+        const isMoving =
+            this.body!.velocity.x !== 0 || this.body!.velocity.y !== 0;
 
         if (isMoving) {
             if (time > this.walkTimer) {
                 this.walkFrame = this.walkFrame === 0 ? 1 : 0;
-                this.setTexture(this.walkFrame === 0 ? this.idleTexture : this.walkTexture);
+                this.setTexture(
+                    this.walkFrame === 0 ? this.idleTexture : this.walkTexture,
+                );
                 this.walkTimer = time + Player.WALK_FRAME_INTERVAL;
             }
         } else {
@@ -102,9 +107,13 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
             this.canopyLayer.getTileAtWorldXY(this.x, this.y) ??
             this.canopyLayer.getTileAtWorldXY(this.x, this.y + 22);
 
-        if (!canopyTile || !TREE_CANOPY_TILES.includes(canopyTile.index)) return;
+        if (!canopyTile || !TREE_CANOPY_TILES.includes(canopyTile.index))
+            return;
 
-        const leftCol = canopyTile.index === TREE_CANOPY_TILES[0] ? canopyTile.x : canopyTile.x - 1;
+        const leftCol =
+            canopyTile.index === TREE_CANOPY_TILES[0]
+                ? canopyTile.x
+                : canopyTile.x - 1;
 
         for (const col of [leftCol, leftCol + 1]) {
             this.canopyLayer.getTileAt(col, canopyTile.y)?.setAlpha(0.4);
