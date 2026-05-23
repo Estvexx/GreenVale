@@ -1,0 +1,20 @@
+{
+    "ui": {
+        "title": "GreenVale",
+        "settings": "Definições",
+        "language": "Idioma",
+        "controls": "Controlos",
+        "arrows": "Setas",
+        "audio": "Áudio",
+        "music": "Música",
+        "sounds": "Sons",
+        "character": "Personagem",
+        "classic": "Clássico",
+        "blue": "Azul",
+        "red": "Vermelho",
+        "purple": "Roxo",
+        "screen": "Ecrã",
+        "fullscreen": "Ecrã Completo",
+        "close": "✕"
+    }
+}
