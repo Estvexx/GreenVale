@@ -35,7 +35,14 @@ const config: Phaser.Types.Core.GameConfig = {
         },
     },
 
-    scene: [BootScene, PreloaderScene, FarmScene, HotbarScene, HudUI, SettingsScene],
+    scene: [
+        BootScene,
+        PreloaderScene,
+        FarmScene,
+        HotbarScene,
+        HudUI,
+        SettingsScene,
+    ],
 };
 
 export default new Phaser.Game(config);

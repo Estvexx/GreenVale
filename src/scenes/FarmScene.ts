@@ -1,6 +1,7 @@
 import Phaser from "phaser";
 import { Player } from "../entities/Player";
-import { InventorySystem} from "../systems/InventorySystem";
+import { InventorySystem } from "../systems/InventorySystem";
+import { MoneySystem } from "../systems/MoneySystem";
 
 export class FarmScene extends Phaser.Scene {
     public player!: Player;
@@ -16,6 +17,7 @@ export class FarmScene extends Phaser.Scene {
         this.scene.launch("SettingsScene");
 
         InventorySystem.getInstance().addStartingItems();
+        MoneySystem.getInstance();
 
         const map = this.make.tilemap({ key: "farm" });
 
