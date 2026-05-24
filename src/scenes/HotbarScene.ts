@@ -9,6 +9,17 @@ export class HotbarScene extends Phaser.Scene {
     private slots: Phaser.GameObjects.Rectangle[] = [];
     private slotIcons: (Phaser.GameObjects.Image | null)[] = [];
 
+    keyCodes = [
+        Phaser.Input.Keyboard.KeyCodes.ONE,
+        Phaser.Input.Keyboard.KeyCodes.TWO,
+        Phaser.Input.Keyboard.KeyCodes.THREE,
+        Phaser.Input.Keyboard.KeyCodes.FOUR,
+        Phaser.Input.Keyboard.KeyCodes.FIVE,
+        Phaser.Input.Keyboard.KeyCodes.SIX,
+        Phaser.Input.Keyboard.KeyCodes.SEVEN,
+        Phaser.Input.Keyboard.KeyCodes.EIGHT,
+    ];
+
     constructor() {
         super({ key: "HotbarScene" });
     }
@@ -43,21 +54,15 @@ export class HotbarScene extends Phaser.Scene {
 
             this.slots.push(slot);
             this.slotIcons.push(null);
+
+            this.inventory.onChange(() => {
+                console.log("DEBUG: Inventario atualizou...");
+                this.updateUI();
+            });
         }
 
-        const keyCodes = [
-            Phaser.Input.Keyboard.KeyCodes.ONE,
-            Phaser.Input.Keyboard.KeyCodes.TWO,
-            Phaser.Input.Keyboard.KeyCodes.THREE,
-            Phaser.Input.Keyboard.KeyCodes.FOUR,
-            Phaser.Input.Keyboard.KeyCodes.FIVE,
-            Phaser.Input.Keyboard.KeyCodes.SIX,
-            Phaser.Input.Keyboard.KeyCodes.SEVEN,
-            Phaser.Input.Keyboard.KeyCodes.EIGHT,
-        ];
-
-        for (let i = 0; i < keyCodes.length; i++) {
-            const key = this.input.keyboard!.addKey(keyCodes[i]);
+        for (let i = 0; i < this.keyCodes.length; i++) {
+            const key = this.input.keyboard!.addKey(this.keyCodes[i]);
             key.on("down", () => {
                 this.inventory.selectSlot(i);
                 this.updateSelection();

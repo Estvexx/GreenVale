@@ -2,16 +2,19 @@ import Phaser from "phaser";
 import { Player } from "../entities/Player";
 import { InventorySystem } from "../systems/InventorySystem";
 import { MoneySystem } from "../systems/MoneySystem";
+import { ShopManager } from "../shops/ShopManager";
 
 export class FarmScene extends Phaser.Scene {
     public player!: Player;
     public bgMusic!: Phaser.Sound.BaseSound;
+    private shopManager!: ShopManager;
 
     constructor() {
         super("FarmScene");
     }
 
     create() {
+        this.shopManager = new ShopManager(this);
         this.scene.launch("HotbarScene");
         this.scene.launch("hud-ui");
         this.scene.launch("SettingsScene");
@@ -96,5 +99,9 @@ export class FarmScene extends Phaser.Scene {
 
     update(time: number) {
         this.player.update(time);
+        this.shopManager.update(this.player.x, this.player.y);
+        /* console.log(
+            `Player: x=${Math.floor(this.player.x)}, y=${Math.floor(this.player.y)}`,
+        ); */
     }
 }
