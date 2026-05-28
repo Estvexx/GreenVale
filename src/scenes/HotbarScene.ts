@@ -55,6 +55,7 @@ export class HotbarScene extends Phaser.Scene {
             this.slots.push(slot);
             this.slotIcons.push(null);
 
+            // Quando adiciono 1 item atualizo a UI da hotbar
             this.inventory.onChange(() => {
                 console.log("DEBUG: Inventario atualizou...");
                 this.updateUI();

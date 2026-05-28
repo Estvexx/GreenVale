@@ -43,6 +43,9 @@ export class ShopManager {
         (window as any).sellItem = (id: string, price: number) => {
             service.sell(id, price);
         };
+
+        // Quando atualizo o inventário atualizado o estado da loja
+        this.inventory.onChange(() => this.syncShopState());
     }
 
     update(playerX: number, playerY: number) {
@@ -50,7 +53,6 @@ export class ShopManager {
         for (const type in SHOP_ZONES) {
             const zone = SHOP_ZONES[type as ShopType];
 
-            // Distância entre o jogador e o centro da zona
             const dist = Phaser.Math.Distance.Between(
                 playerX,
                 playerY,
@@ -82,5 +84,23 @@ export class ShopManager {
         document.getElementById(`shop-${type}`)?.classList.remove("hidden");
         (window as any).openShop(type);
         // this.scene.scene.pause("FarmScene");
+    }
+
+    private syncShopState(): void {
+        console.log("DEBUG: Sincronizando estado da loja com inventário...");
+        for (const shopType in SHOP_DATA) {
+            SHOP_DATA[shopType as ShopType].forEach((shopItem) => {
+                const existing = this.inventory.slots.find(
+                    (s) => s?.id === shopItem.id,
+                );
+                shopItem.isActive =
+                    (existing?.quantity ?? 0) < shopItem.maxStack;
+            });
+
+            const grid = document.getElementById(`grid-${shopType}`);
+            if (grid && grid.innerHTML !== "") {
+                (window as any).openShop(shopType);
+            }
+        }
     }
 }

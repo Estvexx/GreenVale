@@ -1,5 +1,3 @@
-import { SHOP_DATA, type ShopType } from "../shops/ShopData";
-
 export interface Item {
     id: string;
     name: string;
@@ -52,6 +50,7 @@ export class InventorySystem {
         for (let i = 0; i < this.slots.length; i++) {
             if (this.slots[i]?.id === item.id) {
                 this.slots[i]!.quantity += item.quantity;
+                this.onChangeCallback?.();
                 return true;
             }
         }
@@ -61,7 +60,6 @@ export class InventorySystem {
 
         this.slots[emptyIndex] = item;
         this.onChangeCallback?.();
-        this.syncShopState();
         return true;
     }
 
@@ -74,29 +72,11 @@ export class InventorySystem {
             this.slots[slotIndex] = null;
         }
         this.onChangeCallback?.();
-        this.syncShopState();
     }
 
     selectSlot(index: number): void {
         if (index >= 0 && index < 8) {
             this.selectedSlot = index;
-        }
-    }
-
-    private syncShopState(): void {
-        for (const shopType in SHOP_DATA) {
-            SHOP_DATA[shopType as ShopType].forEach((shopItem) => {
-                const existing = this.slots.find((s) => s?.id === shopItem.id);
-                const quantity = existing?.quantity ?? 0;
-                shopItem.isActive = quantity < shopItem.maxStack;
-            });
-        }
-
-        for (const shopType in SHOP_DATA) {
-            const grid = document.getElementById(`grid-${shopType}`);
-            if (grid && grid.innerHTML !== "") {
-                (window as any).openShop(shopType);
-            }
         }
     }
 }
