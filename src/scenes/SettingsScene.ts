@@ -36,11 +36,6 @@ export class SettingsScene extends Phaser.Scene {
 
     private openSettings() {
         document.getElementById("settings-menu")?.classList.remove("hidden");
-
-        import("../i18n").then(({ applyTranslations }) => {
-            applyTranslations();
-        });
-
         this.scene.pause("FarmScene");
     }
 

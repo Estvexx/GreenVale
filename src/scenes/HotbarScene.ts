@@ -7,6 +7,18 @@ const SLOT_PADDING = 8;
 export class HotbarScene extends Phaser.Scene {
     private inventory!: InventorySystem;
     private slots: Phaser.GameObjects.Rectangle[] = [];
+    private slotIcons: (Phaser.GameObjects.Image | null)[] = [];
+
+    keyCodes = [
+        Phaser.Input.Keyboard.KeyCodes.ONE,
+        Phaser.Input.Keyboard.KeyCodes.TWO,
+        Phaser.Input.Keyboard.KeyCodes.THREE,
+        Phaser.Input.Keyboard.KeyCodes.FOUR,
+        Phaser.Input.Keyboard.KeyCodes.FIVE,
+        Phaser.Input.Keyboard.KeyCodes.SIX,
+        Phaser.Input.Keyboard.KeyCodes.SEVEN,
+        Phaser.Input.Keyboard.KeyCodes.EIGHT,
+    ];
 
     constructor() {
         super({ key: "HotbarScene" });
@@ -30,7 +42,7 @@ export class HotbarScene extends Phaser.Scene {
                 SLOT_SIZE,
                 SLOT_SIZE,
                 0x333333,
-                0.6,
+                0.9,
             );
             slot.setStrokeStyle(3, 0xffffff, 0.8);
             slot.setInteractive();
@@ -41,28 +53,47 @@ export class HotbarScene extends Phaser.Scene {
             });
 
             this.slots.push(slot);
+            this.slotIcons.push(null);
+
+            // Quando adiciono 1 item atualizo a UI da hotbar
+            this.inventory.onChange(() => {
+                console.log("DEBUG: Inventario atualizou...");
+                this.updateUI();
+            });
         }
 
-        const keyCodes = [
-            Phaser.Input.Keyboard.KeyCodes.ONE,
-            Phaser.Input.Keyboard.KeyCodes.TWO,
-            Phaser.Input.Keyboard.KeyCodes.THREE,
-            Phaser.Input.Keyboard.KeyCodes.FOUR,
-            Phaser.Input.Keyboard.KeyCodes.FIVE,
-            Phaser.Input.Keyboard.KeyCodes.SIX,
-            Phaser.Input.Keyboard.KeyCodes.SEVEN,
-            Phaser.Input.Keyboard.KeyCodes.EIGHT,
-        ];
-
-        for (let i = 0; i < keyCodes.length; i++) {
-            const key = this.input.keyboard!.addKey(keyCodes[i]);
+        for (let i = 0; i < this.keyCodes.length; i++) {
+            const key = this.input.keyboard!.addKey(this.keyCodes[i]);
             key.on("down", () => {
                 this.inventory.selectSlot(i);
                 this.updateSelection();
             });
         }
 
+        this.updateUI();
         this.updateSelection();
+    }
+
+    updateUI() {
+        for (let i = 0; i < this.slots.length; i++) {
+            const item = this.inventory.slots[i];
+
+            // Remove ícone antigo se existir
+            if (this.slotIcons[i]) {
+                this.slotIcons[i]!.destroy();
+                this.slotIcons[i] = null;
+            }
+
+            // Se tem item, cria novo ícone
+            if (item) {
+                const x = this.slots[i].x;
+                const y = this.slots[i].y;
+
+                const icon = this.add.image(x, y, item.icon);
+                icon.setDisplaySize(SLOT_SIZE, SLOT_SIZE); // 52x52 (margem 6px)
+                this.slotIcons[i] = icon;
+            }
+        }
     }
 
     updateSelection() {

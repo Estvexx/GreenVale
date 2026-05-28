@@ -1,4 +1,6 @@
 import Phaser from "phaser";
+import { BootScene } from "./scenes/BootScene";
+import { PreloaderScene } from "./scenes/PreloaderScene";
 import { FarmScene } from "./scenes/FarmScene";
 import { HudUI } from "./UI/HudUI";
 import { SettingsScene } from "./scenes/SettingsScene";
@@ -33,7 +35,14 @@ const config: Phaser.Types.Core.GameConfig = {
         },
     },
 
-    scene: [FarmScene, HotbarScene, HudUI, SettingsScene],
+    scene: [
+        BootScene,
+        PreloaderScene,
+        FarmScene,
+        HotbarScene,
+        HudUI,
+        SettingsScene,
+    ],
 };
 
 export default new Phaser.Game(config);

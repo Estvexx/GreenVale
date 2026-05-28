@@ -3,9 +3,11 @@
     <head>
         <meta charset="UTF-8" />
         <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <link rel="stylesheet" href="/src/CSS/style.css" />
         <link rel="stylesheet" href="/src/CSS/settings.css" />
+        <link rel="stylesheet" href="/src/CSS/shop.css" />
         <link
             href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined"
             rel="stylesheet"
@@ -15,7 +17,6 @@
     <body>
         <div id="app">
             <div id="game-container"></div>
-
             <div id="settings-menu" class="hidden">
                 <div class="panel">
                     <button class="btn-close" id="close-settings">✕</button>
@@ -65,7 +66,10 @@
                                     class="material-symbols-outlined control-icon"
                                     >keyboard_double_arrow_up</span
                                 >
-                                <div class="keys-label" data-i18n="ui.arrows"></div>
+                                <div
+                                    class="keys-label"
+                                    data-i18n="ui.arrows"
+                                ></div>
                             </div>
 
                             <div
@@ -194,6 +198,45 @@
                     </div>
                 </div>
             </div>
+
+            <div id="shop-ferragens" class="shop hidden">
+                <div class="shop-panel">
+                    <button class="btn-close" onclick="closeShop('ferragens')">
+                        ✕
+                    </button>
+                    <h2 class="shop-title">🔨 Loja de Ferragens</h2>
+                    <p class="shop-balance">
+                        🪙 <span class="balance-amount"></span>
+                    </p>
+                    <div class="shop-grid" id="grid-ferragens"></div>
+                </div>
+            </div>
+
+            <div id="shop-sementes" class="shop hidden">
+                <div class="shop-panel">
+                    <button class="btn-close" onclick="closeShop('sementes')">
+                        ✕
+                    </button>
+                    <h2 class="shop-title">🌱 Loja de Sementes</h2>
+                    <p class="shop-balance">
+                        🪙 <span class="balance-amount"></span>
+                    </p>
+                    <div class="shop-grid" id="grid-sementes"></div>
+                </div>
+            </div>
+
+            <div id="shop-mercado" class="shop hidden">
+                <div class="shop-panel">
+                    <button class="btn-close" onclick="closeShop('mercado')">
+                        ✕
+                    </button>
+                    <h2 class="shop-title">🏪 Mercado</h2>
+                    <p class="shop-balance">
+                        🪙 <span class="balance-amount"></span>
+                    </p>
+                    <div class="shop-grid" id="grid-mercado"></div>
+                </div>
+            </div>
         </div>
 
         <script type="module" src="/src/main.ts"></script>
@@ -271,6 +314,51 @@
                         document.exitFullscreen();
                     }
                 });
+
+            function openShop(type) {
+                const balance = localStorage.getItem("balance") || "100";
+                document
+                    .querySelectorAll(".balance-amount")
+                    .forEach((el) => (el.textContent = balance));
+
+                const grid = document.getElementById(`grid-${type}`);
+                grid.innerHTML = "";
+
+                import("/src/shops/ShopData.ts").then(({ SHOP_DATA }) => {
+                    const items = SHOP_DATA[type];
+                    const isMercado = type === "mercado";
+
+                    items.forEach((item) => {
+                        const btnAction = isMercado
+                            ? `sellItem('${item.id}', ${item.price})`
+                            : `buyItem('${item.id}', '${type}')`;
+
+                        grid.innerHTML += `
+                                            <div class="shop-item">
+                                                <img src="assets/images/tools/${item.icon}.png" alt="${item.name}">
+                                                <span class="shop-item-name">${item.name}</span>
+                                                <span class="shop-item-price">🪙 ${item.price}</span>
+                                                <button class="shop-item-btn" onclick="${btnAction}" ${item.isActive ? "" : "disabled"}>
+                                                    ${isMercado ? "Vender" : item.isActive ? "Comprar" : "Obtido"}
+                                                </button>
+                                            </div>
+                                        `;
+                    });
+                });
+            }
+
+            function closeShop(type) {
+                document
+                    .getElementById(`shop-${type}`)
+                    ?.classList.add("hidden");
+            }
+
+            function buyItem(id, shopType) {
+                window.buyItem(id, shopType);
+            }
+            function sellItem(id, price) {
+                window.sellItem(id, price);
+            }
         </script>
     </body>
 </html>
