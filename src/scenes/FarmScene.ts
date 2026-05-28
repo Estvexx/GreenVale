@@ -22,62 +22,60 @@ export class FarmScene extends Phaser.Scene {
         InventorySystem.getInstance().addStartingItems();
         MoneySystem.getInstance();
 
-        const map = this.make.tilemap({ key: "farm" });
+        const map = this.make.tilemap({ key: "mapa" });
+        const tsGround = map.addTilesetImage("TileSet_Ground", "chao")!;
+        map.createLayer("Ground", tsGround)?.setDepth(0);
 
-        const tsGround = map.addTilesetImage("Ground", "Ground")!;
-        const tsGroundDetails = map.addTilesetImage(
-            "Ground Details",
-            "Ground Details",
-        )!;
-        const tsTerraLavrada = map.addTilesetImage(
-            "Terra Lavrada",
-            "Terra Lavrada",
-        )!;
-        const tsCercas = map.addTilesetImage("Cercas", "Cercas")!;
-        const tsTenda = map.addTilesetImage("Tenda", "Tenda")!;
-        const tsArmazem = map.addTilesetImage(
-            "Armazem_Green",
-            "Armazem_Green",
-        )!;
-        const tsTileSet = map.addTilesetImage("TileSet", "TileSet")!;
-        const tsFields = map.addTilesetImage(
-            "Fields TileSet",
-            "Fields TileSet",
-        )!;
-        const tsTendaVenda = map.addTilesetImage("Tenda Venda", "Tenda Venda")!;
-        const tsTrees = map.addTilesetImage("Trees", "Trees")!;
-        const tsCollider = map.addTilesetImage("Collider", "Collider")!;
+        const tsFarmable = map.addTilesetImage("Terras_Aradas", "terras")!;
+        map.createLayer("Farmable Layer", tsFarmable)?.setDepth(1);
 
-        map.createLayer("Ground", [tsGround, tsFields])?.setDepth(0);
-        map.createLayer("Ground Details", [
-            tsGroundDetails,
-            tsCercas,
-            tsTileSet,
-        ])?.setDepth(1);
-        map.createLayer("Farmable Layer", tsTerraLavrada)?.setDepth(2);
+        const tsFence = map.addTilesetImage("Fence", "cercas")!;
+        const tsBoat = map.addTilesetImage("boat", "barcos")!;
+        const tsRocks = map.addTilesetImage("Rocks", "rochas")!;
+        const tsPlantsandWell = map.addTilesetImage(
+            "Plantacao_Poco",
+            "arvores_e_poco",
+        )!;
+
         map.createLayer("Decoration", [
-            tsTenda,
-            tsTendaVenda,
-            tsArmazem,
-        ])?.setDepth(3);
+            tsFence,
+            tsBoat,
+            tsRocks,
+            tsPlantsandWell,
+        ])?.setDepth(2);
 
-        const trunkLayer = map.createLayer(
-            "Trees",
-            tsTrees,
-        ) as Phaser.Tilemaps.TilemapLayer;
-        const canopyLayer = map.createLayer(
-            "AbovePlayer",
-            tsTrees,
-        ) as Phaser.Tilemaps.TilemapLayer;
-        trunkLayer.setDepth(4);
-        canopyLayer.setDepth(10);
+        map.createLayer("Trees", tsPlantsandWell)?.setDepth(3);
+        map.createLayer("Trees2", tsPlantsandWell)?.setDepth(4);
+        map.createLayer("Trees3", tsPlantsandWell)?.setDepth(5);
 
-        const collisionLayer = map.createLayer("Collision", tsCollider);
-        collisionLayer?.setVisible(false);
+        const tsBuildings = map.addTilesetImage("Shops", "lojas")!;
+        map.createLayer("Buildings", [tsBuildings, tsPlantsandWell])?.setDepth(
+            3,
+        );
+
+        //const collisionLayer = map.createLayer("Collision", tsCollider);
+        //collisionLayer?.setVisible(false);
 
         var camera = this.cameras.main;
 
-        this.player = new Player(this, 272, 496, canopyLayer, trunkLayer);
+        const spawnPoint = map.getObjectLayer("SpawnPoint")?.objects[0];
+        this.player = new Player(
+            this,
+            spawnPoint?.x ?? 272,
+            spawnPoint?.y ?? 496,
+        );
+
+        const collisionLayer = map.getObjectLayer("Collision");
+        collisionLayer?.objects.forEach((obj) => {
+            const rect = this.add.rectangle(
+                obj.x! + obj.width! / 2,
+                obj.y! + obj.height! / 2,
+                obj.width!,
+                obj.height!,
+            );
+            this.physics.add.existing(rect, true);
+            this.physics.add.collider(this.player, rect);
+        });
 
         camera.startFollow(
             this.player, // gameObject
@@ -90,8 +88,8 @@ export class FarmScene extends Phaser.Scene {
 
         camera.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
 
-        collisionLayer?.setCollisionByExclusion([-1, 0]);
-        this.physics.add.collider(this.player, collisionLayer!);
+        //collisionLayer?.setCollisionByExclusion([-1, 0]);
+        //this.physics.add.collider(this.player, collisionLayer!);
 
         this.bgMusic = this.sound.add("bgMusic", { loop: true, volume: 0.1 });
         this.bgMusic.play();

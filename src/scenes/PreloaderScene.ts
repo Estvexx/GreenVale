@@ -83,30 +83,17 @@ export class PreloaderScene extends Phaser.Scene {
         this.load.image("balde_agua", "assets/images/tools/Balde_Agua.png");
 
         // Tudo relacionado ao mapa
-        this.load.tilemapTiledJSON("farm", "assets/maps/mapa_final.tmj");
+        this.load.tilemapTiledJSON("mapa", "assets/map/mapa.tmj");
+        this.load.image("barcos", "assets/images/map_images/boat.png");
+        this.load.image("terras", "assets/images/map_images/dirt.png");
+        this.load.image("cercas", "assets/images/map_images/fence.png");
+        this.load.image("chao", "assets/images/map_images/ground.png");
+        this.load.image("rochas", "assets/images/map_images/rocks.png");
+        this.load.image("lojas", "assets/images/map_images/shops.png");
         this.load.image(
-            "Armazem_Green",
-            "assets/images/map_images/Supplies.png",
+            "arvores_e_poco",
+            "assets/images/map_images/trees_and_well.png",
         );
-        this.load.image("Cercas", "assets/images/map_images/fence_alt.png");
-        this.load.image("Collider", "assets/images/map_images/collider.png");
-        this.load.image(
-            "Fields TileSet",
-            "assets/images/map_images/FieldsTileset.png",
-        );
-        this.load.image("Ground", "assets/images/map_images/TileSet_V1.png");
-        this.load.image(
-            "Ground Details",
-            "assets/images/map_images/TX Props.png",
-        );
-        this.load.image("Tenda", "assets/images/map_images/1.png");
-        this.load.image("Tenda Venda", "assets/images/map_images/4.png");
-        this.load.image(
-            "Terra Lavrada",
-            "assets/images/map_images/terrain.png",
-        );
-        this.load.image("TileSet", "assets/images/map_images/Tileset2.png");
-        this.load.image("Trees", "assets/images/map_images/spr_tree_9.png");
 
         // Musica e sons
         this.load.audio("bgMusic", "assets/audio/apple_cider.ogg");
