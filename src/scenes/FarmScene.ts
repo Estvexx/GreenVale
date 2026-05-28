@@ -3,6 +3,7 @@ import { Player } from "../entities/Player";
 import { InventorySystem } from "../systems/InventorySystem";
 import { MoneySystem } from "../systems/MoneySystem";
 import { ShopManager } from "../shops/ShopManager";
+import { SettingsUI } from "../UI/SettingsUI";
 
 export class FarmScene extends Phaser.Scene {
     public player!: Player;
@@ -14,10 +15,13 @@ export class FarmScene extends Phaser.Scene {
     }
 
     create() {
+        this.bgMusic = this.sound.add("bgMusic", { loop: true, volume: 0.1 });
+        const settingsUI = new SettingsUI(this);
+        settingsUI.initMusic();
+
         this.shopManager = new ShopManager(this);
         this.scene.launch("HotbarScene");
         this.scene.launch("hud-ui");
-        this.scene.launch("SettingsScene");
 
         InventorySystem.getInstance().addStartingItems();
         MoneySystem.getInstance();
@@ -90,9 +94,6 @@ export class FarmScene extends Phaser.Scene {
 
         //collisionLayer?.setCollisionByExclusion([-1, 0]);
         //this.physics.add.collider(this.player, collisionLayer!);
-
-        this.bgMusic = this.sound.add("bgMusic", { loop: true, volume: 0.1 });
-        this.bgMusic.play();
     }
 
     update(time: number) {

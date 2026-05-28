@@ -10,7 +10,50 @@
     --color-green: #527122;
     --toggle-off: #453023;
 }
+/* ====================== Botao das definicoes ====================== */
+.settings-btn {
+    position: absolute;
+    top: 30px;
+    right: 30px;
 
+    /* Sem background, sem borda, sem shadow */
+    background: none;
+    border: none;
+    padding: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+
+    pointer-events: auto;
+    z-index: 100;
+
+    transition: transform 0.12s ease;
+}
+
+.settings-btn:hover {
+    /* Só o efeito de hover na imagem */
+    transform: scale(1.1);
+}
+
+.settings-btn:active {
+    transform: scale(0.95);
+}
+
+/* Imagem ocupa a largura toda do botão */
+.settings-icon-img {
+    width: 64px;
+    height: 64px;
+    image-rendering: pixelated;
+    image-rendering: crisp-edges;
+    /* Sombra suave na própria imagem */
+    filter: drop-shadow(2px 2px 2px rgba(0, 0, 0, 0.3));
+    pointer-events: none;
+    display: block;
+}
+
+/* ====================== Menu das definicoes ====================== */
 #settings-menu {
     position: fixed;
     inset: 0;
@@ -254,4 +297,12 @@
 .skin-label {
     font-size: 13px;
     color: var(--color-muted);
+}
+
+.panel button,
+.panel .lang-btn,
+.panel .control-card,
+.panel .skin-card,
+.panel .toggle {
+    pointer-events: auto;
 }
