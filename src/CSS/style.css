@@ -17,7 +17,20 @@ body {
 
 #game-container {
     position: relative;
-    width: 100%;
+    width: 100vw;
     height: 100vh;
+    overflow: hidden;
 }
 
+#game-canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+#ui-layer {
+    position: absolute;
+    inset: 0;
+    z-index: 10;
+    pointer-events: none;
+}
