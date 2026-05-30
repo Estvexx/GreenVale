@@ -306,3 +306,7 @@
 .panel .toggle {
     pointer-events: auto;
 }
+
+.hidden {
+    display: none;
+}

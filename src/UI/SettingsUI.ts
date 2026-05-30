@@ -3,8 +3,10 @@ import { FarmScene } from "../scenes/FarmScene";
 export class SettingsUI {
     private scene: FarmScene;
     private menu: HTMLElement;
+    private container = document.getElementById("btnDefinicoes")!;
 
     constructor(scene: FarmScene) {
+        this.container.classList.remove("hidden");
         this.scene = scene;
         this.menu = document.getElementById("settings-menu")!;
 
