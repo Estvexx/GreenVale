@@ -2,11 +2,12 @@ import { MoneySystem } from "../systems/MoneySystem";
 
 export class UIMoneyManager {
     private money = MoneySystem.getInstance();
-
+    private container = document.getElementById("money-hud")!;
     private coins = document.getElementById("coins")!;
     private boss = document.getElementById("bossTokens")!;
 
     constructor() {
+        this.container.classList.remove("hidden");
         this.money.onChange((currency, value) => {
             this.update(currency, value);
         });
