@@ -1,5 +1,6 @@
 import Phaser from "phaser";
 import { InventorySystem } from "../systems/InventorySystem";
+import { MoneySystem } from "../systems/MoneySystem";
 
 const SLOT_KEYS = [
     Phaser.Input.Keyboard.KeyCodes.ONE,
@@ -15,11 +16,12 @@ const SLOT_KEYS = [
 export class InputManager {
     private scene: Phaser.Scene;
     private inventory = InventorySystem.getInstance();
+    private money = MoneySystem.getInstance();
 
     constructor(scene: Phaser.Scene) {
         this.scene = scene;
         this.registerInventoryKeys();
-        // this.registerShopKeys();
+        this.addMoneyTestKeys();
     }
 
     private registerInventoryKeys() {
@@ -35,6 +37,18 @@ export class InputManager {
 
         this.scene.input.keyboard?.on("keydown-ESC", () => {
             this.inventory.closeInventory();
+        });
+    }
+
+    private addMoneyTestKeys() {
+        this.scene.input.keyboard?.on("keydown-P", () => {
+            this.money.add("coins", 100);
+            console.log("+100 coins");
+        });
+
+        this.scene.input.keyboard?.on("keydown-O", () => {
+            this.money.add("bossTokens", 1);
+            console.log("+1 boss token");
         });
     }
 }

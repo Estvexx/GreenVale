@@ -1,0 +1,35 @@
+.money-hud {
+    position: absolute;
+    top: 30px;
+    left: 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    pointer-events: auto;
+    z-index: 2;
+}
+
+.money-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(107, 68, 35, 0.6);
+    border: 2px solid var(--panel-border);
+    border-radius: 8px;
+    padding: 6px 12px;
+}
+
+.money-icon {
+    width: 40px;
+    height: 40px;
+    image-rendering: pixelated;
+    pointer-events: none;
+}
+
+.money-item span {
+    color: var(--color-cream);
+    font-family: "Courier New", monospace;
+    font-size: 16px;
+    font-weight: 700;
+    text-shadow: 1px 1px 0 var(--panel-shadow);
+}
