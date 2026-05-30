@@ -41,13 +41,14 @@ export class UI_HotBar {
     }
 
     private updateHotbarItems() {
-        document.querySelectorAll(".slot").forEach((slot, index) => {
+        document.querySelectorAll(".slot").forEach((slot) => {
+            const index = Number(slot.getAttribute("data-slot"));
+
             const item = this.inventory.slots[index];
 
             let img = slot.querySelector("img");
 
             if (item) {
-                // cria imagem se não existir
                 if (!img) {
                     img = document.createElement("img");
                     slot.prepend(img);

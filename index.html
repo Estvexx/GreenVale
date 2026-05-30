@@ -237,29 +237,29 @@
                 </div>
 
                 <!-- ======================================== HOTBAR ======================================== -->
-                <div class="hotbar-container">
-                    <div class="slot active" data-slot="1">
+                <div class="hotbar-container hidden" id="hotbar-container">
+                    <div class="slot active" data-slot="0">
                         <span class="hotkey">1</span>
                     </div>
-                    <div class="slot" data-slot="2">
+                    <div class="slot" data-slot="1">
                         <span class="hotkey">2</span>
                     </div>
-                    <div class="slot" data-slot="3">
+                    <div class="slot" data-slot="2">
                         <span class="hotkey">3</span>
                     </div>
-                    <div class="slot" data-slot="4">
+                    <div class="slot" data-slot="3">
                         <span class="hotkey">4</span>
                     </div>
-                    <div class="slot" data-slot="5">
+                    <div class="slot" data-slot="4">
                         <span class="hotkey">5</span>
                     </div>
-                    <div class="slot" data-slot="6">
+                    <div class="slot" data-slot="5">
                         <span class="hotkey">6</span>
                     </div>
-                    <div class="slot" data-slot="7">
+                    <div class="slot" data-slot="6">
                         <span class="hotkey">7</span>
                     </div>
-                    <div class="slot" data-slot="8">
+                    <div class="slot" data-slot="7">
                         <span class="hotkey">8</span>
                     </div>
                     <div class="separator"></div>
@@ -272,7 +272,114 @@
                         />
                     </div>
                 </div>
+
+                <div id="item-tooltip" class="tooltip hidden">
+                    <div class="tooltip-title"></div>
+                    <div class="tooltip-desc"></div>
+                </div>
+
+                <div id="inventory-overlay" class="hidden">
+                    <div class="inventory-panel">
+                        <div class="inventory-header">
+                            <h2>Mochila</h2>
+                            <button class="btn-close" id="close-inventory">
+                                ✕
+                            </button>
+                        </div>
+
+                        <div class="inventory-grid">
+                            <div class="slot" data-slot="8">
+                                <span class="hotkey">9</span>
+                            </div>
+                            <div class="slot" data-slot="9">
+                                <span class="hotkey">10</span>
+                            </div>
+                            <div class="slot" data-slot="10">
+                                <span class="hotkey">11</span>
+                            </div>
+                            <div class="slot" data-slot="11">
+                                <span class="hotkey">12</span>
+                            </div>
+                            <div class="slot" data-slot="12">
+                                <span class="hotkey">13</span>
+                            </div>
+                            <div class="slot" data-slot="13">
+                                <span class="hotkey">14</span>
+                            </div>
+                            <div class="slot" data-slot="14">
+                                <span class="hotkey">15</span>
+                            </div>
+                            <div class="slot" data-slot="15">
+                                <span class="hotkey">16</span>
+                            </div>
+                            <div class="slot" data-slot="16">
+                                <span class="hotkey">17</span>
+                            </div>
+                            <div class="slot" data-slot="17">
+                                <span class="hotkey">18</span>
+                            </div>
+                            <div class="slot" data-slot="18">
+                                <span class="hotkey">19</span>
+                            </div>
+                            <div class="slot" data-slot="19">
+                                <span class="hotkey">20</span>
+                            </div>
+                            <div class="slot" data-slot="20">
+                                <span class="hotkey">21</span>
+                            </div>
+                            <div class="slot" data-slot="21">
+                                <span class="hotkey">22</span>
+                            </div>
+                            <div class="slot" data-slot="22">
+                                <span class="hotkey">23</span>
+                            </div>
+                            <div class="slot" data-slot="23">
+                                <span class="hotkey">24</span>
+                            </div>
+                            <div class="slot" data-slot="24">
+                                <span class="hotkey">25</span>
+                            </div>
+                            <div class="slot" data-slot="25">
+                                <span class="hotkey">26</span>
+                            </div>
+                            <div class="slot" data-slot="26">
+                                <span class="hotkey">27</span>
+                            </div>
+                            <div class="slot" data-slot="27">
+                                <span class="hotkey">28</span>
+                            </div>
+                        </div>
+
+                        <div class="hotbar-inside-inventory">
+                            <div class="slot" data-slot="0">
+                                <span class="hotkey">1</span>
+                            </div>
+                            <div class="slot" data-slot="1">
+                                <span class="hotkey">2</span>
+                            </div>
+                            <div class="slot" data-slot="2">
+                                <span class="hotkey">3</span>
+                            </div>
+                            <div class="slot" data-slot="3">
+                                <span class="hotkey">4</span>
+                            </div>
+                            <div class="slot" data-slot="4">
+                                <span class="hotkey">5</span>
+                            </div>
+                            <div class="slot" data-slot="5">
+                                <span class="hotkey">6</span>
+                            </div>
+                            <div class="slot" data-slot="6">
+                                <span class="hotkey">7</span>
+                            </div>
+                            <div class="slot" data-slot="7">
+                                <span class="hotkey">8</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
+            <!-- ======================================== Aqui acaba a UI-LAYER ======================================== -->
         </div>
 
         <script type="module" src="/src/main.ts"></script>

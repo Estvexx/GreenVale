@@ -1,6 +1,7 @@
 export interface Item {
     id: string;
     name: string;
+    description: string;
     icon: string;
     quantity: number;
     maxStack: number;
@@ -66,6 +67,7 @@ export class InventorySystem {
                 id: "hoe",
                 name: "Enxada",
                 icon: "assets/images/tools/Enxada.png",
+                description: "Use para preparar a terra para plantar.",
                 quantity: 1,
                 maxStack: 1,
             },
@@ -98,6 +100,10 @@ export class InventorySystem {
         return true;
     }
 
+    getCurrentItem(): Item | null {
+        return this.slots[this.selectedSlot];
+    }
+
     removeItem(index: number) {
         const slot = this.slots[index];
         if (!slot) return;
@@ -111,9 +117,33 @@ export class InventorySystem {
         this.emitInventoryChange();
     }
 
-    toggleInventory() {
-        console.log("Abrir o inventário");
-        this.isInventoryOpen = !this.isInventoryOpen;
+    swapItems(from: number, to: number) {
+        const temp = this.slots[from];
+        this.slots[from] = this.slots[to];
+        this.slots[to] = temp;
+
         this.emitInventoryChange();
+    }
+
+    openInventory() {
+        if (!this.isInventoryOpen) {
+            this.isInventoryOpen = true;
+            this.emitInventoryChange();
+        }
+    }
+
+    closeInventory() {
+        if (this.isInventoryOpen) {
+            this.isInventoryOpen = false;
+            this.emitInventoryChange();
+        }
+    }
+
+    toggleInventory() {
+        console.log(
+            "Toggling inventory. Currently open?",
+            this.isInventoryOpen,
+        );
+        this.isInventoryOpen ? this.closeInventory() : this.openInventory();
     }
 }

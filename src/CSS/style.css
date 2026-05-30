@@ -1,3 +1,27 @@
+:root {
+    --color-primary: #4a7c59; /* Verde fazenda */
+    --color-cream: #f5e6d3; /* Texto claro */
+    --color-muted: #d4c4b5; /* Texto secundário */
+
+    --slot-bg: #7a6a5a; /* Slot normal */
+    --slot-border: #5a4a35; /* Borda slot */
+    --slot-hover: #9b7f5e; /* Hover slot */
+    --slot-active: #c4a35a; /* Slot ativo/dourado */
+    --slot-active-border: #e8d5a3; /* Borda ativa */
+    --slot-shadow: #4a3a2a; /* Sombra slot */
+    --slot-active-shadow: #8a7a3a; /* Sombra ativa */
+
+    --key-bg: #f5e6d3; /* Tecla fundo */
+    --key-border: #c4b5a0; /* Tecla borda */
+    --key-shadow: #b0a08a; /* Tecla sombra */
+    --key-text: #5a4a3a; /* Tecla texto */
+
+    --panel-bg-start: #6b4423; /* Painel gradiente início */
+    --panel-bg-end: #5a3a1f; /* Painel gradiente fim */
+    --panel-border: #4a3520; /* Painel borda */
+    --panel-shadow: #3d2b18; /* Painel sombra */
+}
+
 body {
     margin: 0;
     padding: 0;

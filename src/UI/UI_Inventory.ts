@@ -12,31 +12,26 @@ export class UI_Inventory {
     }
 
     render() {
-        const slots = document.querySelectorAll("#inventory-overlay .slot");
+        document
+            .querySelectorAll("#inventory-overlay .slot")
+            .forEach((slot) => {
+                const index = Number(slot.getAttribute("data-slot"));
 
-        this.inventory.slots.forEach((item, index) => {
-            const slot = slots[index];
-            if (!slot) return;
+                const item = this.inventory.slots[index];
 
-            let img = slot.querySelector("img");
+                let img = slot.querySelector("img");
 
-            if (item) {
-                if (!img) {
-                    img = document.createElement("img");
-                    slot.appendChild(img);
+                if (item) {
+                    if (!img) {
+                        img = document.createElement("img");
+                        slot.prepend(img);
+                    }
+
+                    img.setAttribute("src", item.icon);
+                    img.setAttribute("alt", item.name);
+                } else {
+                    img?.remove();
                 }
-
-                img.setAttribute("src", item.icon);
-                img.setAttribute("alt", item.name);
-            } else {
-                img?.remove();
-            }
-
-            // highlight hotbar selection também aqui (opcional)
-            slot.classList.toggle(
-                "active",
-                index === this.inventory.selectedSlot,
-            );
-        });
+            });
     }
 }
