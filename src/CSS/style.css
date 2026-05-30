@@ -16,6 +16,7 @@
     --key-shadow: #b0a08a; /* Tecla sombra */
     --key-text: #5a4a3a; /* Tecla texto */
 
+    --panel-bg: #6b4423; /* Painel gradiente início */
     --panel-bg-start: #6b4423; /* Painel gradiente início */
     --panel-bg-end: #5a3a1f; /* Painel gradiente fim */
     --panel-border: #4a3520; /* Painel borda */

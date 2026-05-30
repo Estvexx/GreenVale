@@ -10,6 +10,7 @@ import { UIInventoryManager } from "../UI/UI_InventoryManager";
 import { InputManager } from "../input/inputManager";
 import { CameraManager } from "../camera/CameraManager";
 import { MapManager } from "../map/MapManager";
+import { UIMoneyManager } from "../UI/UI_MoneyManager";
 
 export class FarmScene extends Phaser.Scene {
     public player!: Player;
@@ -27,6 +28,7 @@ export class FarmScene extends Phaser.Scene {
         new UI_HotBar();
         new UI_Inventory();
         new UIInventoryManager();
+        new UIMoneyManager();
 
         this.shopManager = new ShopManager(this);
         const settingsUI = new SettingsUI(this);
