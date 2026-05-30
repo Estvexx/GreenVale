@@ -9,6 +9,7 @@ import { UI_Inventory } from "../UI/UI_Inventory";
 import { UIInventoryManager } from "../UI/UI_InventoryManager";
 import { InputManager } from "../input/inputManager";
 import { CameraManager } from "../camera/CameraManager";
+import { MapManager } from "../map/MapManager";
 
 export class FarmScene extends Phaser.Scene {
     public player!: Player;
@@ -21,13 +22,12 @@ export class FarmScene extends Phaser.Scene {
     }
 
     create() {
-        const map = this.make.tilemap({ key: "mapa" });
-
+        const mapManager = new MapManager(this);
         new InputManager(this);
         new UI_HotBar();
         new UI_Inventory();
         new UIInventoryManager();
-        new CameraManager(this, this.player, map);
+
         this.shopManager = new ShopManager(this);
         const settingsUI = new SettingsUI(this);
 
@@ -35,6 +35,17 @@ export class FarmScene extends Phaser.Scene {
         MoneySystem.getInstance();
 
         //this.scene.launch("hud-ui");
+
+        const spawnPoint =
+            mapManager.map.getObjectLayer("SpawnPoint")?.objects[0];
+
+        this.player = new Player(
+            this,
+            spawnPoint?.x ?? 272,
+            spawnPoint?.y ?? 496,
+        );
+
+        new CameraManager(this, this.player, mapManager.map);
 
         this.bgMusic = this.sound.add("bgMusic", { loop: true, volume: 0.1 });
         settingsUI.initMusic();
@@ -45,44 +56,7 @@ export class FarmScene extends Phaser.Scene {
 
         this.updateHeldItem();
 
-        const tsGround = map.addTilesetImage("TileSet_Ground", "chao")!;
-        map.createLayer("Ground", tsGround)?.setDepth(0);
-
-        const tsFarmable = map.addTilesetImage("Terras_Aradas", "terras")!;
-        map.createLayer("Farmable Layer", tsFarmable)?.setDepth(1);
-
-        const tsFence = map.addTilesetImage("Fence", "cercas")!;
-        const tsBoat = map.addTilesetImage("boat", "barcos")!;
-        const tsRocks = map.addTilesetImage("Rocks", "rochas")!;
-        const tsPlantsandWell = map.addTilesetImage(
-            "Plantacao_Poco",
-            "arvores_e_poco",
-        )!;
-
-        map.createLayer("Decoration", [
-            tsFence,
-            tsBoat,
-            tsRocks,
-            tsPlantsandWell,
-        ])?.setDepth(2);
-
-        map.createLayer("Trees", tsPlantsandWell)?.setDepth(3);
-        map.createLayer("Trees2", tsPlantsandWell)?.setDepth(4);
-        map.createLayer("Trees3", tsPlantsandWell)?.setDepth(5);
-
-        const tsBuildings = map.addTilesetImage("Shops", "lojas")!;
-        map.createLayer("Buildings", [tsBuildings, tsPlantsandWell])?.setDepth(
-            3,
-        );
-
-        const spawnPoint = map.getObjectLayer("SpawnPoint")?.objects[0];
-        this.player = new Player(
-            this,
-            spawnPoint?.x ?? 272,
-            spawnPoint?.y ?? 496,
-        );
-
-        const collisionLayer = map.getObjectLayer("Collision");
+        const collisionLayer = mapManager.map.getObjectLayer("Collision");
         collisionLayer?.objects.forEach((obj) => {
             const rect = this.add.rectangle(
                 obj.x! + obj.width! / 2,
