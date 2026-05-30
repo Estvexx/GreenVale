@@ -1,7 +1,7 @@
 import Phaser from "phaser";
 import { SHOP_DATA, type ShopType } from "./ShopData";
 import { ShopService } from "./ShopService";
-import { InventorySystem } from "../systems/InventorySystem";
+//import { InventorySystem } from "../systems/InventorySystem";
 
 // TODO: substituir por object layer do Tiled
 const SHOP_ZONES: Record<ShopType, { x: number; y: number; radius: number }> = {
@@ -14,7 +14,7 @@ export class ShopManager {
     //private scene: Phaser.Scene;
     private promptText!: Phaser.GameObjects.Text;
     private currentShop: ShopType | null = null;
-    private inventory = InventorySystem.getInstance();
+    //private inventory = InventorySystem.getInstance();
 
     constructor(scene: Phaser.Scene) {
         //this.scene = scene;
@@ -45,7 +45,7 @@ export class ShopManager {
         };
 
         // Quando atualizo o inventário atualizado o estado da loja
-        this.inventory.onChange(() => this.syncShopState());
+        // this.inventory.onChange(() => this.syncShopState());
     }
 
     update(playerX: number, playerY: number) {
@@ -74,11 +74,11 @@ export class ShopManager {
 
     private openShop(type: ShopType) {
         SHOP_DATA[type].forEach((shopItem) => {
-            const inventoryItem = this.inventory.slots.find(
+            /* const inventoryItem = this.inventory.slots.find(
                 (s) => s?.id === shopItem.id,
             );
             shopItem.isActive =
-                !inventoryItem || inventoryItem.quantity < shopItem.maxStack;
+                !inventoryItem || inventoryItem.quantity < shopItem.maxStack; */
         });
 
         document.getElementById(`shop-${type}`)?.classList.remove("hidden");
@@ -88,7 +88,7 @@ export class ShopManager {
 
     private syncShopState(): void {
         console.log("DEBUG: Sincronizando estado da loja com inventário...");
-        for (const shopType in SHOP_DATA) {
+        /* for (const shopType in SHOP_DATA) {
             SHOP_DATA[shopType as ShopType].forEach((shopItem) => {
                 const existing = this.inventory.slots.find(
                     (s) => s?.id === shopItem.id,
@@ -101,6 +101,6 @@ export class ShopManager {
             if (grid && grid.innerHTML !== "") {
                 (window as any).openShop(shopType);
             }
-        }
+        } */
     }
 }

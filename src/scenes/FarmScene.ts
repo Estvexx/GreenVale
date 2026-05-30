@@ -4,8 +4,22 @@ import { InventorySystem } from "../systems/InventorySystem";
 import { MoneySystem } from "../systems/MoneySystem";
 import { ShopManager } from "../shops/ShopManager";
 import { SettingsUI } from "../UI/SettingsUI";
+import { UI_HotBar } from "../UI/UI_Hotbar";
+import { UI_Inventory } from "../UI/UI_Inventory";
+import { UIInventoryManager } from "../UI/UIInventoryManager";
 
 export class FarmScene extends Phaser.Scene {
+    keyCodes = [
+        Phaser.Input.Keyboard.KeyCodes.ONE,
+        Phaser.Input.Keyboard.KeyCodes.TWO,
+        Phaser.Input.Keyboard.KeyCodes.THREE,
+        Phaser.Input.Keyboard.KeyCodes.FOUR,
+        Phaser.Input.Keyboard.KeyCodes.FIVE,
+        Phaser.Input.Keyboard.KeyCodes.SIX,
+        Phaser.Input.Keyboard.KeyCodes.SEVEN,
+        Phaser.Input.Keyboard.KeyCodes.EIGHT,
+    ];
+
     public player!: Player;
     public bgMusic!: Phaser.Sound.BaseSound;
     private shopManager!: ShopManager;
@@ -15,9 +29,27 @@ export class FarmScene extends Phaser.Scene {
     }
 
     create() {
+        const inventory = InventorySystem.getInstance();
+
+        for (let i = 0; i < this.keyCodes.length; i++) {
+            const key = this.input.keyboard!.addKey(this.keyCodes[i]);
+
+            key.on("down", () => {
+                inventory.selectSlot(i);
+            });
+        }
+
         this.bgMusic = this.sound.add("bgMusic", { loop: true, volume: 0.1 });
         const settingsUI = new SettingsUI(this);
         settingsUI.initMusic();
+
+        new UI_HotBar();
+        new UI_Inventory();
+        new UIInventoryManager();
+
+        this.input.keyboard?.on("keydown-E", () => {
+            inventory.toggleInventory();
+        });
 
         this.shopManager = new ShopManager(this);
         this.scene.launch("HotbarScene");

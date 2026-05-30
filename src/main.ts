@@ -3,13 +3,13 @@ import { BootScene } from "./scenes/BootScene";
 import { PreloaderScene } from "./scenes/PreloaderScene";
 import { FarmScene } from "./scenes/FarmScene";
 import { HudUI } from "./UI/HudUI";
-import { HotbarScene } from "./scenes/HotbarScene";
+//import { HotbarScene } from "./scenes/HotbarScene";
 
 const config: Phaser.Types.Core.GameConfig = {
     type: Phaser.AUTO,
 
-    width: 1280,
-    height: 720,
+    width: 1920,
+    height: 1080,
 
     parent: "game-container",
 
@@ -22,7 +22,7 @@ const config: Phaser.Types.Core.GameConfig = {
     },
 
     scale: {
-        mode: Phaser.Scale.FIT,
+        mode: Phaser.Scale.RESIZE,
         autoCenter: Phaser.Scale.CENTER_BOTH,
     },
 
@@ -30,11 +30,11 @@ const config: Phaser.Types.Core.GameConfig = {
         default: "arcade",
         arcade: {
             //gravity: { y: 0 }, nao faz sentido gravidade
-            debug: false,
+            debug: true,
         },
     },
 
-    scene: [BootScene, PreloaderScene, FarmScene, HotbarScene, HudUI],
+    scene: [BootScene, PreloaderScene, FarmScene /* HotbarScene*/, HudUI],
 };
 
 export default new Phaser.Game(config);

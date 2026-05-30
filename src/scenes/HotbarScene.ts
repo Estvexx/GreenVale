@@ -1,4 +1,4 @@
-import Phaser from "phaser";
+/* import Phaser from "phaser";
 import { InventorySystem } from "../systems/InventorySystem";
 
 const SLOT_SIZE = 64;
@@ -107,3 +107,4 @@ export class HotbarScene extends Phaser.Scene {
         }
     }
 }
+ */

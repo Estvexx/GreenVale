@@ -6,36 +6,69 @@ export interface Item {
     maxStack: number;
 }
 
+type Listener = () => void;
+
 export class InventorySystem {
-    private static _instance: InventorySystem;
+    private static instance: InventorySystem;
 
-    private onChangeCallback: (() => void) | null = null;
-
-    onChange(callback: () => void): void {
-        this.onChangeCallback = callback;
-    }
-
-    // Assim so utilizo uma instancia e chamo o getinstance na farmscne
     static getInstance(): InventorySystem {
-        if (!InventorySystem._instance) {
-            InventorySystem._instance = new InventorySystem();
+        if (!this.instance) {
+            this.instance = new InventorySystem();
         }
-        return InventorySystem._instance;
+        return this.instance;
     }
-    slots: (Item | null)[] = [null, null, null, null, null, null, null, null];
-    selectedSlot: number = 0;
+
+    // ======================
+    // STATE
+    // ======================
+
+    slots: (Item | null)[] = Array(28).fill(null);
+    selectedSlot = 0;
+    isInventoryOpen = false;
+
+    // ======================
+    // LISTENERS
+    // ======================
+
+    private inventoryListeners: Listener[] = [];
+    private selectionListeners: Listener[] = [];
+
+    onInventoryChange(cb: Listener) {
+        this.inventoryListeners.push(cb);
+    }
+
+    onSelectionChange(cb: Listener) {
+        this.selectionListeners.push(cb);
+    }
+
+    private emitInventoryChange() {
+        this.inventoryListeners.forEach((cb) => cb());
+    }
+
+    private emitSelectionChange() {
+        this.selectionListeners.forEach((cb) => cb());
+    }
+
+    // ======================
+    // ACTIONS
+    // ======================
+
+    selectSlot(index: number) {
+        if (index < 0 || index >= this.slots.length) return;
+
+        this.selectedSlot = index;
+        this.emitSelectionChange();
+    }
 
     addStartingItems() {
         const startingTools: Item[] = [
             {
                 id: "hoe",
                 name: "Enxada",
-                icon: "enxada",
+                icon: "assets/images/tools/Enxada.png",
                 quantity: 1,
                 maxStack: 1,
             },
-            //{id: "empty_bucket",name: "Balde Vazio",icon: "balde_vazio",quantity: 1, maxStack: 99},
-            //{ id: "scythe", name: "Foice", icon: "foice", quantity: 1,  maxStack: 1},
         ];
 
         for (const tool of startingTools) {
@@ -44,39 +77,43 @@ export class InventorySystem {
     }
 
     addItem(item: Item): boolean {
-        console.log(
-            `DEBUG BRABO ${item.quantity}x ${item.name} ao inventário...`,
-        );
+        // stack
         for (let i = 0; i < this.slots.length; i++) {
-            if (this.slots[i]?.id === item.id) {
-                this.slots[i]!.quantity += item.quantity;
-                this.onChangeCallback?.();
+            const slot = this.slots[i];
+
+            if (slot && slot.id === item.id && slot.quantity < slot.maxStack) {
+                slot.quantity += item.quantity;
+                this.emitInventoryChange();
                 return true;
             }
         }
 
-        const emptyIndex = this.slots.findIndex((slot) => slot === null);
-        if (emptyIndex === -1) return false;
+        // empty slot
+        const empty = this.slots.findIndex((s) => s === null);
 
-        this.slots[emptyIndex] = item;
-        this.onChangeCallback?.();
+        if (empty === -1) return false;
+
+        this.slots[empty] = { ...item };
+        this.emitInventoryChange();
         return true;
     }
 
-    removeItem(slotIndex: number): void {
-        const slot = this.slots[slotIndex];
+    removeItem(index: number) {
+        const slot = this.slots[index];
         if (!slot) return;
 
         slot.quantity--;
-        if (slot.quantity === 0) {
-            this.slots[slotIndex] = null;
+
+        if (slot.quantity <= 0) {
+            this.slots[index] = null;
         }
-        this.onChangeCallback?.();
+
+        this.emitInventoryChange();
     }
 
-    selectSlot(index: number): void {
-        if (index >= 0 && index < 8) {
-            this.selectedSlot = index;
-        }
+    toggleInventory() {
+        console.log("Abrir o inventário");
+        this.isInventoryOpen = !this.isInventoryOpen;
+        this.emitInventoryChange();
     }
 }
