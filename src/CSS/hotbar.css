@@ -1,5 +1,37 @@
 /* ============================================
-   HOTBAR - Estilo Fazenda / Terra / Madeira
+   ROOT - Variáveis padronizadas
+   ============================================ */
+
+:root {
+    /* Cores base */
+    --color-primary: #4a7c59;
+    --color-cream: #f5e6d3;
+    --color-muted: #d4c4b5;
+
+    /* Slots */
+    --slot-bg: #7a6a5a;
+    --slot-border: #5a4a35;
+    --slot-hover: #9b7f5e;
+    --slot-active: #c4a35a;
+    --slot-active-border: #e8d5a3;
+    --slot-shadow: #4a3a2a;
+    --slot-active-shadow: #8a7a3a;
+
+    /* Teclas */
+    --key-bg: #f5e6d3;
+    --key-border: #c4b5a0;
+    --key-shadow: #b0a08a;
+    --key-text: #5a4a3a;
+
+    /* Painéis */
+    --panel-bg-start: #6b4423;
+    --panel-bg-end: #5a3a1f;
+    --panel-border: #4a3520;
+    --panel-shadow: #3d2b18;
+}
+
+/* ============================================
+   HOTBAR (jogo)
    ============================================ */
 
 .hotbar-container {
@@ -7,25 +39,28 @@
     bottom: 40px;
     left: 50%;
     transform: translateX(-50%);
-
     display: flex;
     align-items: flex-end;
     gap: 6px;
-
-    /* Fundo estilo madeira envelhecida */
-    /*background: rgba(107, 68, 35, 0.2);*/
     padding: 10px 14px;
     border-radius: 12px;
-
     pointer-events: auto;
     z-index: 100;
 }
 
+.hotbar-container.hidden {
+    display: none;
+}
+
+/* ============================================
+   SLOT BASE (reutilizado em todos os sítios)
+   ============================================ */
+
 .slot {
     width: 70px;
     height: 70px;
-    background: #7a6a5a;
-    border: 3px solid #5a4a35;
+    background: var(--slot-bg);
+    border: 3px solid var(--slot-border);
     border-radius: 8px;
     display: flex;
     align-items: center;
@@ -33,82 +68,72 @@
     position: relative;
     cursor: pointer;
     transition: all 0.1s ease;
-
-    /* Sombra interna estilo "escavação" */
     box-shadow:
         inset 0 2px 4px rgba(0, 0, 0, 0.3),
-        0 3px 0 #4a3a2a;
+        0 3px 0 var(--slot-shadow);
 }
 
 .slot:hover {
-    background: #9b7f5e;
+    background: var(--slot-hover);
     border-color: #6a5a45;
     transform: translateY(-2px);
     box-shadow:
         inset 0 2px 4px rgba(0, 0, 0, 0.2),
-        0 5px 0 #4a3a2a;
+        0 5px 0 var(--slot-shadow);
 }
 
-.slot.active {
-    background: #c4a35a;
-    border-color: #e8d5a3;
-    box-shadow:
-        0 0 12px rgba(196, 163, 90, 0.4),
-        inset 0 2px 4px rgba(255, 255, 255, 0.2),
-        0 3px 0 #8a7a3a;
-}
-
-/* Slot pressionado*/
 .slot:active {
     transform: translateY(2px);
     box-shadow:
         inset 0 3px 6px rgba(0, 0, 0, 0.4),
-        0 1px 0 #4a3a2a;
+        0 1px 0 var(--slot-shadow);
 }
 
-/* Imagem 40x40 (aumentada) */
+.hotbar-container .slot.active {
+    background: var(--slot-active);
+    border-color: var(--slot-active-border);
+    box-shadow:
+        0 0 12px rgba(196, 163, 90, 0.4),
+        inset 0 2px 4px rgba(255, 255, 255, 0.2),
+        0 3px 0 var(--slot-active-shadow);
+}
+
+/* Imagem nos slots */
 .slot img {
-    padding-top: 10px;
     width: 70px;
     height: 70px;
     image-rendering: pixelated;
-    image-rendering: crisp-edges;
     pointer-events: none;
 }
 
 /* ============================================
-   TECLAS - Estilo "teclado antigo/mecânico"
+   TECLAS (hotkey) - Estilo teclado antigo
    ============================================ */
 
-.slot .hotkey {
+.hotkey {
     position: absolute;
-    top: -20px; /* Fora do slot, por cima */
+    top: -20px;
     left: 50%;
     transform: translateX(-50%);
-
-    /* Estilo tecla física */
     min-width: 20px;
     height: 20px;
-    margin: 0;
-    padding: 0px;
-    background: #f5e6d3;
-    border: 2px solid #c4b5a0;
+    padding: 0 4px;
+    background: var(--key-bg);
+    border: 2px solid var(--key-border);
     border-radius: 4px;
-    border-bottom: 3px solid #b0a08a;
-
-    color: #5a4a3a;
+    border-bottom: 3px solid var(--key-shadow);
+    color: var(--key-text);
     font-size: 11px;
     font-weight: 800;
     font-family: "Courier New", monospace;
     text-align: center;
     line-height: 18px;
-
     box-shadow: 0 2px 0 #a09080;
     pointer-events: none;
 }
 
-/* ================================ ============
-   SEPARADOR - Estilo madeira/couro
+/* ============================================
+   SEPARADOR
    ============================================ */
 
 .separator {
@@ -119,13 +144,13 @@
 }
 
 /* ============================================
-   MOCHILA - Mesmo estilo, ícone maior
+   BOTÃO MOCHILA (hotbar)
    ============================================ */
 
 .inventory-btn {
     width: 70px;
     height: 70px;
-    background: #7a6a5a;
+    background: var(--slot-bg);
     border: 3px solid #5a4a3a;
     border-radius: 8px;
     display: flex;
@@ -136,65 +161,180 @@
     position: relative;
     box-shadow:
         inset 0 2px 4px rgba(0, 0, 0, 0.3),
-        0 3px 0 #4a3a2a;
+        0 3px 0 var(--slot-shadow);
 }
 
 .inventory-btn:hover {
-    background: #9b7f5e;
+    background: var(--slot-hover);
     border-color: #a09080;
     transform: translateY(-2px);
     box-shadow:
         inset 0 2px 4px rgba(0, 0, 0, 0.2),
-        0 5px 0 #4a3a2a;
+        0 5px 0 var(--slot-shadow);
 }
 
 .inventory-btn:active {
     transform: translateY(2px);
     box-shadow:
         inset 0 3px 6px rgba(0, 0, 0, 0.4),
-        0 1px 0 #4a3a2a;
+        0 1px 0 var(--slot-shadow);
 }
 
-/* Ícone da mochila */
 .inventory-btn .bag-img {
     width: 40px;
     height: 40px;
     image-rendering: pixelated;
-    image-rendering: crisp-edges;
     filter: drop-shadow(1px 1px 0 rgba(0, 0, 0, 0.3));
     pointer-events: none;
 }
 
-/* Tooltip estilo fazenda */
+/* Tecla E na mochila */
 .inventory-btn .hotkey {
-    position: absolute;
-    top: -20px; /* Fora do slot, por cima */
-    left: 50%;
-    transform: translateX(-50%);
-
-    /* Estilo tecla física */
     min-width: 30px;
-    height: 20px;
-    margin: 0;
-    padding: 0px;
-    background: #f5e6d3;
-    border: 2px solid #c4b5a0;
-    border-radius: 4px;
-    border-bottom: 3px solid #b0a08a;
-
-    color: #5a4a3a;
-    font-size: 11px;
-    font-weight: 800;
-    font-family: "Courier New", monospace;
-    text-align: center;
-    line-height: 18px;
-
-    box-shadow: 0 2px 0 #a09080;
-    pointer-events: none;
 }
 
-@keyframes fadeIn {
-    to {
-        opacity: 1;
-    }
+/* ============================================
+   INVENTÁRIO / MOCHILA - Overlay
+   ============================================ */
+
+#inventory-overlay {
+    position: fixed;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+    pointer-events: auto;
+}
+
+#inventory-overlay.hidden {
+    display: none;
+}
+
+.inventory-panel {
+    background: linear-gradient(
+        180deg,
+        var(--panel-bg-start) 0%,
+        var(--panel-bg-end) 100%
+    );
+    border: 3px solid var(--panel-border);
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow:
+        0 8px 0 var(--panel-shadow),
+        0 12px 30px rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    min-width: 320px;
+}
+
+/* Cabeçalho */
+.inventory-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid var(--panel-border);
+    padding-bottom: 10px;
+}
+
+.inventory-header h2 {
+    color: var(--color-cream);
+    font-family: Georgia, serif;
+    font-size: 20px;
+    margin: 0;
+    text-shadow: 1px 1px 0 var(--panel-shadow);
+}
+
+.inventory-header .btn-close {
+    background: none;
+    border: none;
+    color: var(--color-muted);
+    font-size: 20px;
+    cursor: pointer;
+    transition: color 0.2s;
+    pointer-events: auto;
+}
+
+.inventory-header .btn-close:hover {
+    color: #c8882a;
+}
+
+/* ============================================
+   GRIDS
+   ============================================ */
+
+.inventory-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 20px;
+    /*padding: 10px;*/
+    padding: 20px 0px 10px 0px;
+    border-radius: 8px;
+    border: 2px solid var(--panel-border);
+    justify-content: center;
+    justify-items: center;
+}
+
+.hotbar-inside-inventory {
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+    padding: 20px 0px 10px 0px;
+    border-radius: 8px;
+}
+
+/* ============================================
+   SLOTS DO INVENTÁRIO (herdam .slot base)
+   ============================================ */
+
+.inventory-grid .slot,
+.hotbar-inside-inventory .slot {
+    width: 56px;
+    height: 56px;
+}
+
+.inventory-grid .slot .hotkey,
+.hotbar-inside-inventory .slot .hotkey {
+    top: -16px;
+    min-width: 18px;
+    height: 16px;
+    font-size: 9px;
+    line-height: 14px;
+}
+
+.hotbar-inside-inventory .slot:hover {
+    background: var(--slot-hover);
+    border-color: #6a5a45;
+    transform: translateY(-2px);
+    box-shadow:
+        inset 0 2px 4px rgba(0, 0, 0, 0.2),
+        0 5px 0 var(--slot-shadow);
+}
+
+.slot.selected {
+    outline: 2px solid #ffcc00;
+    box-shadow: 0 0 10px #ffcc00;
+    transform: scale(1.05);
+}
+
+.tooltip {
+    position: absolute;
+    background: rgba(0, 0, 0, 0.85);
+    color: white;
+    padding: 8px 12px;
+    border-radius: 6px;
+    pointer-events: none;
+    z-index: 9999;
+    max-width: 200px;
+}
+
+.tooltip.hidden {
+    display: none;
+}
+
+.tooltip-title {
+    font-weight: bold;
+    margin-bottom: 4px;
 }
