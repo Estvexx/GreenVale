@@ -50,12 +50,6 @@ export class FarmScene extends Phaser.Scene {
         this.bgMusic = this.sound.add("bgMusic", { loop: true, volume: 0.1 });
         settingsUI.initMusic();
 
-        this.inventory.onSelectionChange(() => {
-            this.updateHeldItem();
-        });
-
-        this.updateHeldItem();
-
         const collisionLayer = mapManager.map.getObjectLayer("Collision");
         collisionLayer?.objects.forEach((obj) => {
             const rect = this.add.rectangle(
@@ -67,6 +61,12 @@ export class FarmScene extends Phaser.Scene {
             this.physics.add.existing(rect, true);
             this.physics.add.collider(this.player, rect);
         });
+
+        this.inventory.onSelectionChange(() => {
+            this.updateHeldItem();
+        });
+
+        this.updateHeldItem();
     }
 
     updateHeldItem() {

@@ -19,17 +19,9 @@ export class InventorySystem {
         return this.instance;
     }
 
-    // ======================
-    // STATE
-    // ======================
-
     slots: (Item | null)[] = Array(28).fill(null);
     selectedSlot = 0;
     isInventoryOpen = false;
-
-    // ======================
-    // LISTENERS
-    // ======================
 
     private inventoryListeners: Listener[] = [];
     private selectionListeners: Listener[] = [];
@@ -49,10 +41,6 @@ export class InventorySystem {
     private emitSelectionChange() {
         this.selectionListeners.forEach((cb) => cb());
     }
-
-    // ======================
-    // ACTIONS
-    // ======================
 
     selectSlot(index: number) {
         if (index < 0 || index >= this.slots.length) return;
@@ -79,7 +67,6 @@ export class InventorySystem {
     }
 
     addItem(item: Item): boolean {
-        // stack
         for (let i = 0; i < this.slots.length; i++) {
             const slot = this.slots[i];
 
@@ -90,7 +77,6 @@ export class InventorySystem {
             }
         }
 
-        // empty slot
         const empty = this.slots.findIndex((s) => s === null);
 
         if (empty === -1) return false;
