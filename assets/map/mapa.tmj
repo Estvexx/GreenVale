@@ -439,6 +439,17 @@
                  "id":45,
                  "name":"armazem",
                  "opacity":1,
+                 "properties":[
+                        {
+                         "name":"shopId",
+                         "type":"string",
+                         "value":"storage"
+                        }, 
+                        {
+                         "name":"type",
+                         "type":"string",
+                         "value":"storage"
+                        }],
                  "rotation":0,
                  "type":"",
                  "visible":true,
@@ -451,6 +462,12 @@
                  "id":46,
                  "name":"poco",
                  "opacity":1,
+                 "properties":[
+                        {
+                         "name":"type",
+                         "type":"string",
+                         "value":"well"
+                        }],
                  "rotation":0,
                  "type":"",
                  "visible":true,
@@ -463,6 +480,17 @@
                  "id":47,
                  "name":"sementes",
                  "opacity":1,
+                 "properties":[
+                        {
+                         "name":"shopId",
+                         "type":"string",
+                         "value":"sementes"
+                        }, 
+                        {
+                         "name":"type",
+                         "type":"string",
+                         "value":"shop"
+                        }],
                  "rotation":0,
                  "type":"",
                  "visible":true,
@@ -475,6 +503,17 @@
                  "id":48,
                  "name":"ferragens",
                  "opacity":1,
+                 "properties":[
+                        {
+                         "name":"shopId",
+                         "type":"string",
+                         "value":"ferragens"
+                        }, 
+                        {
+                         "name":"type",
+                         "type":"string",
+                         "value":"shop"
+                        }],
                  "rotation":0,
                  "type":"",
                  "visible":true,
@@ -487,6 +526,17 @@
                  "id":49,
                  "name":"mercado",
                  "opacity":1,
+                 "properties":[
+                        {
+                         "name":"shopId",
+                         "type":"string",
+                         "value":"mercado"
+                        }, 
+                        {
+                         "name":"type",
+                         "type":"string",
+                         "value":"sell"
+                        }],
                  "rotation":0,
                  "type":"",
                  "visible":true,
@@ -499,6 +549,12 @@
                  "id":77,
                  "name":"poco",
                  "opacity":1,
+                 "properties":[
+                        {
+                         "name":"type",
+                         "type":"string",
+                         "value":"well"
+                        }],
                  "rotation":0,
                  "type":"",
                  "visible":true,
@@ -511,6 +567,12 @@
                  "id":78,
                  "name":"poco",
                  "opacity":1,
+                 "properties":[
+                        {
+                         "name":"type",
+                         "type":"string",
+                         "value":"well"
+                        }],
                  "rotation":0,
                  "type":"",
                  "visible":true,
@@ -523,6 +585,12 @@
                  "id":79,
                  "name":"poco",
                  "opacity":1,
+                 "properties":[
+                        {
+                         "name":"type",
+                         "type":"string",
+                         "value":"well"
+                        }],
                  "rotation":0,
                  "type":"",
                  "visible":true,
@@ -535,6 +603,12 @@
                  "id":80,
                  "name":"poco",
                  "opacity":1,
+                 "properties":[
+                        {
+                         "name":"type",
+                         "type":"string",
+                         "value":"well"
+                        }],
                  "rotation":0,
                  "type":"",
                  "visible":true,
@@ -547,6 +621,12 @@
                  "id":81,
                  "name":"poco",
                  "opacity":1,
+                 "properties":[
+                        {
+                         "name":"type",
+                         "type":"string",
+                         "value":"well"
+                        }],
                  "rotation":0,
                  "type":"",
                  "visible":true,

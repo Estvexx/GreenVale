@@ -1,4 +1,5 @@
-import { InventorySystem, type Item } from "../systems/InventorySystem";
+import { InventorySystem } from "../systems/InventorySystem";
+import { ITEMS } from "../data/ItemDatabase";
 
 export class UIInventoryManager {
     private inventory = InventorySystem.getInstance();
@@ -35,11 +36,8 @@ export class UIInventoryManager {
 
             slot.addEventListener("mouseenter", (e) => {
                 const index = Number(slot.getAttribute("data-slot"));
-                const item = this.inventory.slots[index];
 
-                if (!item) return;
-
-                this.showTooltip(item, e as MouseEvent);
+                this.showTooltip(index, e as MouseEvent);
             });
 
             slot.addEventListener("mouseleave", () => {
@@ -109,14 +107,20 @@ export class UIInventoryManager {
             });
     }
 
-    private showTooltip(item: Item, event: MouseEvent) {
+    private showTooltip(slotId: number, event: MouseEvent) {
         if (!this.tooltip) return;
+
+        const slot = this.inventory.slots[slotId];
+        if (!slot) return;
+
+        const itemData = ITEMS[slot.id];
+        if (!itemData) return;
 
         const title = this.tooltip.querySelector(".tooltip-title")!;
         const desc = this.tooltip.querySelector(".tooltip-desc")!;
 
-        title.textContent = item.name;
-        desc.textContent = item.description;
+        title.textContent = itemData.name;
+        desc.textContent = itemData.description ?? "";
 
         this.tooltip.classList.remove("hidden");
 

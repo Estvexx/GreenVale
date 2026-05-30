@@ -2,8 +2,8 @@ import Phaser from "phaser";
 import { Player } from "../entities/Player";
 import { InventorySystem } from "../systems/InventorySystem";
 import { MoneySystem } from "../systems/MoneySystem";
-import { ShopManager } from "../shops/ShopManager";
-import { SettingsUI } from "../UI/SettingsUI";
+import { UI_ShopManager } from "../UI/UI_ShopManager";
+import { SettingsUI } from "../UI/UI_Settings";
 import { UI_HotBar } from "../UI/UI_Hotbar";
 import { UI_Inventory } from "../UI/UI_Inventory";
 import { UIInventoryManager } from "../UI/UI_InventoryManager";
@@ -15,8 +15,12 @@ import { UIMoneyManager } from "../UI/UI_MoneyManager";
 export class FarmScene extends Phaser.Scene {
     public player!: Player;
     public bgMusic!: Phaser.Sound.BaseSound;
-    private shopManager!: ShopManager;
+
+    private shopManager!: UI_ShopManager;
+
     inventory = InventorySystem.getInstance();
+
+    private currentZone: { type: string; shopId: string } | null = null;
 
     constructor() {
         super("FarmScene");
@@ -24,19 +28,18 @@ export class FarmScene extends Phaser.Scene {
 
     create() {
         const mapManager = new MapManager(this);
+
         new InputManager(this);
         new UI_HotBar();
         new UI_Inventory();
         new UIInventoryManager();
         new UIMoneyManager();
 
-        this.shopManager = new ShopManager(this);
+        this.shopManager = new UI_ShopManager();
         const settingsUI = new SettingsUI(this);
 
         InventorySystem.getInstance().addStartingItems();
         MoneySystem.getInstance();
-
-        //this.scene.launch("hud-ui");
 
         const spawnPoint =
             mapManager.map.getObjectLayer("SpawnPoint")?.objects[0];
@@ -49,10 +52,18 @@ export class FarmScene extends Phaser.Scene {
 
         new CameraManager(this, this.player, mapManager.map);
 
-        this.bgMusic = this.sound.add("bgMusic", { loop: true, volume: 0.1 });
+        this.bgMusic = this.sound.add("bgMusic", {
+            loop: true,
+            volume: 0.1,
+        });
+
         settingsUI.initMusic();
 
+        // -----------------------------
+        // COLLISIONS
+        // -----------------------------
         const collisionLayer = mapManager.map.getObjectLayer("Collision");
+
         collisionLayer?.objects.forEach((obj) => {
             const rect = this.add.rectangle(
                 obj.x! + obj.width! / 2,
@@ -60,8 +71,45 @@ export class FarmScene extends Phaser.Scene {
                 obj.width!,
                 obj.height!,
             );
+
             this.physics.add.existing(rect, true);
             this.physics.add.collider(this.player, rect);
+        });
+
+        // -----------------------------
+        // INTERACTABLE ZONES
+        // -----------------------------
+        mapManager.getInteractables().forEach((obj) => {
+            const zone = this.add.zone(
+                obj.x! + obj.width! / 2,
+                obj.y! + obj.height! / 2,
+                obj.width!,
+                obj.height!,
+            );
+            this.physics.add.existing(zone, true);
+
+            const type = obj.properties?.find(
+                (p: any) => p.name === "type",
+            )?.value;
+            const shopId = obj.properties?.find(
+                (p: any) => p.name === "shopId",
+            )?.value;
+
+            this.physics.add.overlap(this.player, zone, () => {
+                this.currentZone = { type, shopId };
+                //console.log("Entrou na zona:", this.currentZone);
+            });
+        });
+
+        this.input.keyboard?.on("keydown-F", () => {
+            if (!this.currentZone) return;
+
+            const { type, shopId } = this.currentZone;
+            console.log("Interagindo com zona:", this.currentZone);
+            if (type === "shop") this.shopManager.open(shopId);
+            if (type === "sell") console.log("Abrir venda");
+            if (type === "well") console.log("Encher água");
+            if (type === "storage") console.log("Abrir armazém");
         });
 
         this.inventory.onSelectionChange(() => {
@@ -72,13 +120,14 @@ export class FarmScene extends Phaser.Scene {
     }
 
     updateHeldItem() {
-        const item = this.inventory.getCurrentItem();
-
-        console.log("Item na mão agora:", item);
+        this.inventory.getCurrentItem();
+        //const item = this.inventory.getCurrentItem();
+        //console.log("Item na mão agora:", item);
     }
 
     update(time: number) {
         this.player.update(time);
-        this.shopManager.update(this.player.x, this.player.y);
+
+        //this.currentZone = null;
     }
 }

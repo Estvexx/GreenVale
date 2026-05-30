@@ -1,11 +1,5 @@
-export interface Item {
-    id: string;
-    name: string;
-    description: string;
-    icon: string;
-    quantity: number;
-    maxStack: number;
-}
+import type { InventorySlot } from "../types/InventoryTypes";
+import { ITEMS } from "../data/ItemDatabase";
 
 type Listener = () => void;
 
@@ -19,7 +13,7 @@ export class InventorySystem {
         return this.instance;
     }
 
-    slots: (Item | null)[] = Array(28).fill(null);
+    slots: InventorySlot[] = Array(28).fill(null);
     selectedSlot = 0;
     isInventoryOpen = false;
 
@@ -49,45 +43,48 @@ export class InventorySystem {
         this.emitSelectionChange();
     }
 
-    addStartingItems() {
-        const startingTools: Item[] = [
-            {
-                id: "hoe",
-                name: "Enxada",
-                icon: "assets/images/tools/Enxada.png",
-                description: "Use para preparar a terra para plantar.",
-                quantity: 1,
-                maxStack: 1,
-            },
-        ];
+    addItem(id: number, quantity: number = 1): boolean {
+        const itemData = ITEMS[id];
+        if (!itemData) return false;
 
-        for (const tool of startingTools) {
-            this.addItem(tool);
-        }
-    }
-
-    addItem(item: Item): boolean {
         for (let i = 0; i < this.slots.length; i++) {
             const slot = this.slots[i];
 
-            if (slot && slot.id === item.id && slot.quantity < slot.maxStack) {
-                slot.quantity += item.quantity;
-                this.emitInventoryChange();
-                return true;
+            if (slot && slot.id === id) {
+                const max = itemData.maxStack;
+
+                if (slot.quantity >= max) continue;
+
+                const space = max - slot.quantity;
+                const addAmount = Math.min(space, quantity);
+
+                slot.quantity += addAmount;
+                quantity -= addAmount;
+
+                if (quantity <= 0) {
+                    this.emitInventoryChange();
+                    return true;
+                }
             }
         }
 
-        const empty = this.slots.findIndex((s) => s === null);
+        for (let i = 0; i < this.slots.length; i++) {
+            if (quantity <= 0) break;
 
-        if (empty === -1) return false;
+            if (this.slots[i] === null) {
+                const addAmount = Math.min(itemData.maxStack, quantity);
 
-        this.slots[empty] = { ...item };
+                this.slots[i] = {
+                    id,
+                    quantity: addAmount,
+                };
+
+                quantity -= addAmount;
+            }
+        }
+
         this.emitInventoryChange();
-        return true;
-    }
-
-    getCurrentItem(): Item | null {
-        return this.slots[this.selectedSlot];
+        return quantity <= 0;
     }
 
     removeItem(index: number) {
@@ -103,33 +100,27 @@ export class InventorySystem {
         this.emitInventoryChange();
     }
 
-    swapItems(from: number, to: number) {
-        const temp = this.slots[from];
-        this.slots[from] = this.slots[to];
-        this.slots[to] = temp;
+    swapItems(a: number, b: number) {
+        const temp = this.slots[a];
+        this.slots[a] = this.slots[b];
+        this.slots[b] = temp;
 
         this.emitInventoryChange();
     }
 
-    openInventory() {
-        if (!this.isInventoryOpen) {
-            this.isInventoryOpen = true;
-            this.emitInventoryChange();
-        }
+    getCurrentItem() {
+        const slot = this.slots[this.selectedSlot];
+        if (!slot) return null;
+
+        return ITEMS[slot.id];
     }
 
-    closeInventory() {
-        if (this.isInventoryOpen) {
-            this.isInventoryOpen = false;
-            this.emitInventoryChange();
-        }
+    addStartingItems() {
+        this.addItem(1, 1);
     }
 
     toggleInventory() {
-        console.log(
-            "Toggling inventory. Currently open?",
-            this.isInventoryOpen,
-        );
-        this.isInventoryOpen ? this.closeInventory() : this.openInventory();
+        this.isInventoryOpen = !this.isInventoryOpen;
+        this.emitInventoryChange();
     }
 }

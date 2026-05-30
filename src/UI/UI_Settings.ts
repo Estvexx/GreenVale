@@ -1,4 +1,4 @@
-import { FarmScene } from "../scenes/FarmScene";
+import { FarmScene } from "../scenes/FarmScene.ts";
 
 export class SettingsUI {
     private scene: FarmScene;
