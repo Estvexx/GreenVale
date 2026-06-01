@@ -6,6 +6,7 @@ export const ITEMS: Record<number, Item> = {
         name: "Enxada",
         icon: "assets/images/tools/Enxada.png",
         maxStack: 1,
+        maxSlots: 1,
         description: "Ferramenta para cultivar terreno",
     },
 
@@ -14,6 +15,7 @@ export const ITEMS: Record<number, Item> = {
         name: "Foice",
         icon: "assets/images/tools/Foice.png",
         maxStack: 1,
+        maxSlots: 1,
         description: "Usada para colher plantações",
     },
 
@@ -22,6 +24,7 @@ export const ITEMS: Record<number, Item> = {
         name: "Balde Vazio",
         icon: "assets/images/tools/Balde_Vazio.png",
         maxStack: 10,
+        maxSlots: 1,
         description: "Utilizado para lubrificar o terreno e regar as plantas",
     },
 };

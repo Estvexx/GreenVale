@@ -21,6 +21,8 @@ export class FarmScene extends Phaser.Scene {
     inventory = InventorySystem.getInstance();
 
     private currentZone: { type: string; shopId: string } | null = null;
+    private isInZone = false;
+    private tooltip = document.getElementById("zone-tooltip")!;
 
     constructor() {
         super("FarmScene");
@@ -97,7 +99,7 @@ export class FarmScene extends Phaser.Scene {
 
             this.physics.add.overlap(this.player, zone, () => {
                 this.currentZone = { type, shopId };
-                //console.log("Entrou na zona:", this.currentZone);
+                this.isInZone = true;
             });
         });
 
@@ -105,7 +107,6 @@ export class FarmScene extends Phaser.Scene {
             if (!this.currentZone) return;
 
             const { type, shopId } = this.currentZone;
-            console.log("Interagindo com zona:", this.currentZone);
             if (type === "shop") this.shopManager.open(shopId);
             if (type === "sell") console.log("Abrir venda");
             if (type === "well") console.log("Encher água");
@@ -128,6 +129,12 @@ export class FarmScene extends Phaser.Scene {
     update(time: number) {
         this.player.update(time);
 
-        //this.currentZone = null;
+        this.tooltip.classList.toggle("hidden", !this.isInZone);
+
+        if (!this.isInZone) {
+            this.currentZone = null;
+        }
+
+        this.isInZone = false;
     }
 }

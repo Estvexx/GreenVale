@@ -9,8 +9,20 @@ export class UI_ShopManager {
     private closeBtn = document.getElementById("shop-close")!;
     private title = document.getElementById("shop-title")!;
 
+    BUY_MESSAGES: Record<string, string> = {
+        no_money: "Sem dinheiro!",
+        inventory_full: "Inventário cheio!",
+        max_slots: "Limite atingido!",
+    };
+
+    CURRENCY_ICONS: Record<string, string> = {
+        coins: "assets/images/Coin.png",
+        bossTokens: "assets/images/Boss_Coin.png",
+    };
+
     constructor() {
         this.closeBtn.addEventListener("click", () => this.close());
+        this.activateDragScroll();
     }
 
     open(type: any) {
@@ -33,7 +45,6 @@ export class UI_ShopManager {
     }
 
     private render(shop: any) {
-        console.log("Renderizando loja:", shop);
         const shopItems = this.container;
 
         shopItems.innerHTML = ""; // limpa UI
@@ -47,7 +58,10 @@ export class UI_ShopManager {
                 <img src="assets/images/tools/${item.icon}.png" alt="${item.name}">
                 <div class="shop-item-info">
                     <div class="shop-item-name">${item.name}</div>
-                    <div class="shop-item-price">${item.price} 💰</div>
+                    <div class="shop-item-price">
+                        <img src="${this.CURRENCY_ICONS[item.currency]}" alt="${item.currency}" class="price-icon">
+                        ${item.price}
+                    </div>
                 </div>
                 <button class="shop-item-btn">Comprar</button>
             `;
@@ -55,28 +69,61 @@ export class UI_ShopManager {
             const btn = div.querySelector(".shop-item-btn")!;
 
             btn.addEventListener("click", () => {
-                const success = this.system.buy(item.id);
+                const result = this.system.buy(item.id);
 
-                if (!success) {
-                    btn.textContent = "Sem dinheiro";
+                if (result !== "success") {
+                    btn.textContent = this.BUY_MESSAGES[result];
                     btn.classList.add("disabled");
 
                     setTimeout(() => {
                         btn.textContent = "Comprar";
                         btn.classList.remove("disabled");
-                    }, 800);
+                    }, 1200);
 
                     return;
                 }
 
                 btn.textContent = "Comprado ✓";
-
-                setTimeout(() => {
-                    btn.textContent = "Comprar";
-                }, 800);
+                setTimeout(() => (btn.textContent = "Comprar"), 800);
             });
 
             shopItems.appendChild(div);
+        });
+    }
+
+    private activateDragScroll() {
+        const container = document.querySelector(".shop-items-container");
+        if (!container) return;
+
+        let isDown = false;
+        let startX = 0;
+        let scrollLeft = 0;
+
+        container.addEventListener("mousedown", (e) => {
+            isDown = true;
+            container.classList.add("active");
+            startX =
+                (e as MouseEvent).pageX - (container as HTMLElement).offsetLeft;
+            scrollLeft = (container as HTMLElement).scrollLeft;
+        });
+
+        container.addEventListener("mouseleave", () => {
+            isDown = false;
+            container.classList.remove("active");
+        });
+
+        container.addEventListener("mouseup", () => {
+            isDown = false;
+            container.classList.remove("active");
+        });
+
+        container.addEventListener("mousemove", (e) => {
+            if (!isDown) return;
+            e.preventDefault();
+            const x =
+                (e as MouseEvent).pageX - (container as HTMLElement).offsetLeft;
+            const walk = (x - startX) * 2;
+            (container as HTMLElement).scrollLeft = scrollLeft - walk;
         });
     }
 }

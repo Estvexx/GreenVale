@@ -3,6 +3,8 @@ import { MoneySystem } from "../systems/MoneySystem";
 import { type Shop, type ShopType } from "../types/ShopTypes";
 import { FERRAGENS_SHOP, SEMENTES_SHOP } from "../data/ShopData";
 
+type BuyResult = "success" | "no_money" | "inventory_full" | "max_slots";
+
 export class ShopSystem {
     private static instance: ShopSystem;
 
@@ -31,20 +33,25 @@ export class ShopSystem {
         return this.currentShop;
     }
 
-    buy(itemId: number) {
-        if (!this.currentShop) return false;
+    // TODO: melhorar a funçao, devido ao reembolso desnecessário
+    buy(itemId: number): BuyResult {
+        if (!this.currentShop) return "inventory_full";
 
         const item = this.currentShop.items.find((i) => i.id === itemId);
-        if (!item) return false;
+        if (!item) return "inventory_full";
 
         const money = MoneySystem.getInstance();
         const inv = InventorySystem.getInstance();
 
-        const success = money.spend(item.currency, item.price);
-        if (!success) return false;
+        const spent = money.spend(item.currency, item.price);
+        if (!spent) return "no_money";
 
-        inv.addItem(item.id, item.amount);
+        const added = inv.addItem(item.id, item.amount);
+        if (!added) {
+            money.add(item.currency, item.price);
+            return "inventory_full";
+        }
 
-        return true;
+        return "success";
     }
 }

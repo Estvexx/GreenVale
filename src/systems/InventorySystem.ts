@@ -72,6 +72,15 @@ export class InventorySystem {
             if (quantity <= 0) break;
 
             if (this.slots[i] === null) {
+                const slotCount = this.slots.filter((s) => s?.id === id).length;
+
+                if (
+                    itemData.maxSlots !== undefined &&
+                    slotCount >= itemData.maxSlots
+                ) {
+                    break;
+                }
+
                 const addAmount = Math.min(itemData.maxStack, quantity);
 
                 this.slots[i] = {

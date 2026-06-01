@@ -3,5 +3,6 @@ export interface Item {
     name: string;
     icon: string;
     maxStack: number;
+    maxSlots?: number;
     description?: string;
 }

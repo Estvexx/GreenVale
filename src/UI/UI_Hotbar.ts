@@ -44,14 +44,13 @@ export class UI_HotBar {
     private updateHotbarItems() {
         document.querySelectorAll(".slot").forEach((slot) => {
             const index = Number(slot.getAttribute("data-slot"));
-
             const inventorySlot = this.inventory.slots[index];
 
             let img = slot.querySelector("img");
+            let qty = slot.querySelector(".qty");
 
             if (inventorySlot) {
                 const itemData = ITEMS[inventorySlot.id];
-
                 if (!itemData) return;
 
                 if (!img) {
@@ -61,8 +60,18 @@ export class UI_HotBar {
 
                 img.setAttribute("src", itemData.icon);
                 img.setAttribute("alt", itemData.name);
+
+                // cria ou atualiza o qty
+                if (!qty) {
+                    qty = document.createElement("span");
+                    qty.className = "qty";
+                    slot.appendChild(qty);
+                }
+
+                qty.textContent = String(inventorySlot.quantity);
             } else {
                 img?.remove();
+                qty?.remove();
             }
         });
     }
