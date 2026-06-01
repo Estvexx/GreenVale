@@ -1,8 +1,6 @@
 export type ShopItem = {
     id: number;
-    name: string;
     price: number;
-    icon: string;
     currency: "coins" | "bossTokens";
     amount: number;
 };

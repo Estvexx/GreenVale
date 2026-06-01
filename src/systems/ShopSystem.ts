@@ -1,7 +1,8 @@
 import { InventorySystem } from "../systems/InventorySystem";
 import { MoneySystem } from "../systems/MoneySystem";
 import { type Shop, type ShopType } from "../types/ShopTypes";
-import { FERRAGENS_SHOP, SEMENTES_SHOP } from "../data/ShopData";
+import { FERRAGENS_SHOP } from "../data/shops/ferragensShop";
+import { SEMENTES_SHOP } from "../data/shops/sementesShop";
 
 type BuyResult = "success" | "no_money" | "inventory_full" | "max_slots";
 
@@ -21,6 +22,7 @@ export class ShopSystem {
     private currentShop: Shop | null = null;
 
     open(type: ShopType) {
+        console.log("Loja aberta: ", type);
         this.currentShop = this.shops[type];
         return this.currentShop;
     }

@@ -1,5 +1,5 @@
 import { InventorySystem } from "../systems/InventorySystem";
-import { ITEMS } from "../data/ItemDatabase";
+import { renderItemIcon } from "../utils/renderItemIcon";
 
 export class UI_HotBar {
     private inventory: InventorySystem;
@@ -45,23 +45,11 @@ export class UI_HotBar {
         document.querySelectorAll(".slot").forEach((slot) => {
             const index = Number(slot.getAttribute("data-slot"));
             const inventorySlot = this.inventory.slots[index];
-
-            let img = slot.querySelector("img");
             let qty = slot.querySelector(".qty");
 
             if (inventorySlot) {
-                const itemData = ITEMS[inventorySlot.id];
-                if (!itemData) return;
+                renderItemIcon(slot as HTMLElement, inventorySlot.id);
 
-                if (!img) {
-                    img = document.createElement("img");
-                    slot.prepend(img);
-                }
-
-                img.setAttribute("src", itemData.icon);
-                img.setAttribute("alt", itemData.name);
-
-                // cria ou atualiza o qty
                 if (!qty) {
                     qty = document.createElement("span");
                     qty.className = "qty";
@@ -70,7 +58,8 @@ export class UI_HotBar {
 
                 qty.textContent = String(inventorySlot.quantity);
             } else {
-                img?.remove();
+                slot.querySelector("img")?.remove();
+                slot.querySelector(".sprite-icon")?.remove();
                 qty?.remove();
             }
         });

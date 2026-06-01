@@ -11,6 +11,7 @@ import { InputManager } from "../input/inputManager";
 import { CameraManager } from "../camera/CameraManager";
 import { MapManager } from "../map/MapManager";
 import { UIMoneyManager } from "../UI/UI_MoneyManager";
+import { preloadUIImages } from "../utils/preloadUIImages";
 
 export class FarmScene extends Phaser.Scene {
     public player!: Player;
@@ -29,7 +30,12 @@ export class FarmScene extends Phaser.Scene {
     }
 
     create() {
+        preloadUIImages();
+
         const mapManager = new MapManager(this);
+
+        InventorySystem.getInstance().addStartingItems();
+        MoneySystem.getInstance();
 
         new InputManager(this);
         new UI_HotBar();

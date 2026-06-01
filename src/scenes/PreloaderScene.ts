@@ -95,6 +95,17 @@ export class PreloaderScene extends Phaser.Scene {
             "assets/images/map_images/trees_and_well.png",
         );
 
+        // Relacionado a plantação
+        this.load.spritesheet("frutas", "assets/images/Fruits.png", {
+            frameWidth: 32,
+            frameHeight: 32,
+        });
+
+        this.load.spritesheet("frutas", "assets/images/Stages.png", {
+            frameWidth: 32,
+            frameHeight: 37,
+        });
+
         // Musica e sons
         this.load.audio("bgMusic", "assets/audio/apple_cider.ogg");
     }

@@ -135,12 +135,28 @@
         0 3px 0 var(--slot-shadow);
 }
 
-.shop-item > img,
-.shop-item .item-icon {
+.shop-item-icon {
+    width: 80px;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.shop-item-icon img {
     width: 80px;
     height: 80px;
     image-rendering: pixelated;
     pointer-events: none;
+}
+
+.shop-item-icon .sprite-icon {
+    width: 32px;
+    height: 32px;
+    background-repeat: no-repeat;
+    image-rendering: pixelated;
+    transform: scale(2.5);
+    transform-origin: center;
 }
 
 .shop-item-name {

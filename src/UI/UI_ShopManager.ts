@@ -1,5 +1,7 @@
+import { ITEMS } from "../data/ItemDatabase";
 import { ShopSystem } from "../systems/ShopSystem";
 import type { ShopItem } from "../types/ShopTypes";
+import { renderItemIcon } from "../utils/renderItemIcon";
 
 export class UI_ShopManager {
     private system = ShopSystem.getInstance();
@@ -26,6 +28,7 @@ export class UI_ShopManager {
     }
 
     open(type: any) {
+        console.log("Shop Aberta", type);
         const shop = this.system.open(type);
 
         if (!shop) return;
@@ -46,25 +49,32 @@ export class UI_ShopManager {
 
     private render(shop: any) {
         const shopItems = this.container;
-
-        shopItems.innerHTML = ""; // limpa UI
+        shopItems.innerHTML = "";
 
         shop.items.forEach((item: ShopItem) => {
-            console.log("Item:", item);
+            const itemData = ITEMS[item.id];
+            if (!itemData) return;
+
             const div = document.createElement("div");
             div.className = "shop-item";
 
+            // icon
+            const iconWrapper = document.createElement("div");
+            iconWrapper.className = "shop-item-icon";
+            renderItemIcon(iconWrapper, item.id);
+
             div.innerHTML = `
-                <img src="assets/images/tools/${item.icon}.png" alt="${item.name}">
-                <div class="shop-item-info">
-                    <div class="shop-item-name">${item.name}</div>
-                    <div class="shop-item-price">
-                        <img src="${this.CURRENCY_ICONS[item.currency]}" alt="${item.currency}" class="price-icon">
-                        ${item.price}
-                    </div>
+            <div class="shop-item-info">
+                <div class="shop-item-name">${itemData.name}</div>
+                <div class="shop-item-price">
+                    <img src="${this.CURRENCY_ICONS[item.currency]}" alt="${item.currency}" class="price-icon">
+                    ${item.price}
                 </div>
-                <button class="shop-item-btn">Comprar</button>
-            `;
+            </div>
+            <button class="shop-item-btn">Comprar</button>
+        `;
+
+            div.prepend(iconWrapper);
 
             const btn = div.querySelector(".shop-item-btn")!;
 

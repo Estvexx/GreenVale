@@ -71,3 +71,12 @@ body {
     border-radius: 8px;
     font-size: 14px;
 }
+
+.sprite-icon {
+    width: 32px;
+    height: 32px;
+    background-repeat: no-repeat;
+    image-rendering: pixelated; /* mantém pixel art nítido */
+    transform: scale(2);
+    transform-origin: center;
+}

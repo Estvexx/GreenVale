@@ -1,5 +1,5 @@
 import { InventorySystem } from "../systems/InventorySystem";
-import { ITEMS } from "../data/ItemDatabase";
+import { renderItemIcon } from "../utils/renderItemIcon";
 
 export class UI_Inventory {
     private inventory = InventorySystem.getInstance();
@@ -17,24 +17,13 @@ export class UI_Inventory {
             .querySelectorAll("#inventory-overlay .slot")
             .forEach((slot) => {
                 const index = Number(slot.getAttribute("data-slot"));
-
                 const item = this.inventory.slots[index];
 
-                let img = slot.querySelector("img");
-
                 if (item) {
-                    if (!img) {
-                        img = document.createElement("img");
-                        slot.prepend(img);
-                    }
-
-                    const itemData = ITEMS[item.id];
-                    if (itemData) {
-                        img.setAttribute("src", itemData.icon);
-                        img.setAttribute("alt", itemData.name);
-                    }
+                    renderItemIcon(slot as HTMLElement, item.id);
                 } else {
-                    img?.remove();
+                    slot.querySelector("img")?.remove();
+                    slot.querySelector(".sprite-icon")?.remove();
                 }
             });
     }
