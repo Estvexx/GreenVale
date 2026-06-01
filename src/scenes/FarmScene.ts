@@ -2,8 +2,9 @@ import Phaser from "phaser";
 import { Player } from "../entities/Player";
 import { InventorySystem } from "../systems/InventorySystem";
 import { MoneySystem } from "../systems/MoneySystem";
-import { UI_ShopManager } from "../UI/UI_ShopManager";
 import { SettingsUI } from "../UI/UI_Settings";
+import { UI_ShopManager } from "../UI/UI_ShopManager";
+import { UI_StorageManager } from "../UI/UI_StorageManager";
 import { UI_HotBar } from "../UI/UI_Hotbar";
 import { UI_Inventory } from "../UI/UI_Inventory";
 import { UIInventoryManager } from "../UI/UI_InventoryManager";
@@ -19,6 +20,7 @@ export class FarmScene extends Phaser.Scene {
     public bgMusic!: Phaser.Sound.BaseSound;
 
     private shopManager!: UI_ShopManager;
+    private storageManager!: UI_StorageManager;
 
     inventory = InventorySystem.getInstance();
 
@@ -45,6 +47,7 @@ export class FarmScene extends Phaser.Scene {
         new UIMoneyManager();
 
         this.shopManager = new UI_ShopManager();
+        this.storageManager = new UI_StorageManager();
         const settingsUI = new SettingsUI(this);
 
         InventorySystem.getInstance().addStartingItems();
@@ -120,7 +123,10 @@ export class FarmScene extends Phaser.Scene {
                 console.log("Zona", this.currentZone);
                 this.fillBucket();
             }
-            if (type === "storage") console.log("Abrir armazém");
+            if (type === "storage") {
+                console.log("Abrir armazém");
+                this.storageManager.open();
+            }
         });
 
         this.inventory.onSelectionChange(() => {

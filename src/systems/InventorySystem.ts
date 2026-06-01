@@ -1,5 +1,6 @@
 import type { InventorySlot } from "../types/InventoryTypes";
 import { ITEMS } from "../data/ItemDatabase";
+import { StorageSystem } from "./StorageSystem";
 
 type Listener = () => void;
 
@@ -194,6 +195,28 @@ export class InventorySystem {
 
     closeInventory() {
         this.isInventoryOpen = false;
+        this.emitInventoryChange();
+    }
+
+    moveItemToStorage(slotIndex: number): boolean {
+        const slot = this.slots[slotIndex];
+
+        if (!slot) return false;
+
+        const storage = StorageSystem.getInstance();
+
+        const success = storage.addItem(slot.id, slot.quantity);
+
+        if (!success) return false;
+
+        this.slots[slotIndex] = null;
+
+        this.emitInventoryChange();
+
+        return true;
+    }
+
+    forceRefresh() {
         this.emitInventoryChange();
     }
 }

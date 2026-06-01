@@ -26,7 +26,10 @@ export class UIInventoryManager {
 
         this.render();
 
-        const slots = document.querySelectorAll("#inventory-overlay .slot");
+        const inventoryOverlay = document.getElementById("inventory-overlay");
+        const slots = inventoryOverlay
+            ? inventoryOverlay.querySelectorAll<HTMLDivElement>(".slot")
+            : document.querySelectorAll("#inventory-overlay .slot");
 
         slots.forEach((slot) => {
             slot.addEventListener("click", () => {
@@ -98,13 +101,16 @@ export class UIInventoryManager {
     }
 
     private updateSelectionUI() {
-        document
-            .querySelectorAll("#inventory-overlay .slot")
-            .forEach((slot) => {
-                const index = Number(slot.getAttribute("data-slot"));
+        const inventoryOverlay = document.getElementById("inventory-overlay");
+        const slots = inventoryOverlay
+            ? inventoryOverlay.querySelectorAll<HTMLDivElement>(".slot")
+            : document.querySelectorAll("#inventory-overlay .slot");
 
-                slot.classList.toggle("selected", index === this.selectedSlot);
-            });
+        slots.forEach((slot) => {
+            const index = Number(slot.getAttribute("data-slot"));
+
+            slot.classList.toggle("selected", index === this.selectedSlot);
+        });
     }
 
     private showTooltip(slotId: number, event: MouseEvent) {
