@@ -75,4 +75,23 @@ export class ShopSystem {
         money.add(item.currency, item.price);
         return "success";
     }
+
+    sellAll(itemId: number): SellResult {
+        if (!this.currentShop) return "no_item";
+
+        const item = this.currentShop.items.find((i) => i.id === itemId);
+        if (!item) return "no_item";
+
+        const inv = InventorySystem.getInstance();
+        const money = MoneySystem.getInstance();
+
+        const quantity = inv.getItemQuantity(item.id);
+        if (quantity <= 0) return "no_item";
+
+        const removed = inv.removeItemById(item.id, quantity);
+        if (!removed) return "no_item";
+
+        money.add(item.currency, item.price * quantity);
+        return "success";
+    }
 }

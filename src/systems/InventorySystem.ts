@@ -96,6 +96,12 @@ export class InventorySystem {
         return quantity <= 0;
     }
 
+    getItemQuantity(id: number): number {
+        return this.slots
+            .filter((slot) => slot?.id === id)
+            .reduce((total, slot) => total + slot!.quantity, 0);
+    }
+
     removeItem(index: number) {
         const slot = this.slots[index];
         if (!slot) return;

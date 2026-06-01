@@ -72,34 +72,77 @@ export class UI_ShopManager {
                     ${item.price}
                 </div>
             </div>
-            <button class="shop-item-btn">${shop.mode === "sell" ? "Vender" : "Comprar"}</button>
+            ${
+                shop.mode === "sell"
+                    ? `
+                        <button class="shop-item-btn sell-one-btn">Vender</button>
+                        <button class="shop-item-btn sell-all-btn">Tudo</button>
+                    `
+                    : `<button class="shop-item-btn buy-btn">Comprar</button>`
+            }
         `;
 
             div.prepend(iconWrapper);
 
-            const btn = div.querySelector(".shop-item-btn")!;
-            const defaultText = shop.mode === "sell" ? "Vender" : "Comprar";
+            const buyBtn = div.querySelector(".buy-btn");
+            const sellOneBtn = div.querySelector(".sell-one-btn");
+            const sellAllBtn = div.querySelector(".sell-all-btn");
 
-            btn.addEventListener("click", () => {
-                const result =
-                    shop.mode === "sell"
-                        ? this.system.sell(item.id)
-                        : this.system.buy(item.id);
+            buyBtn?.addEventListener("click", () => {
+                const result = this.system.buy(item.id);
 
                 if (result !== "success") {
-                    btn.textContent = this.BUY_MESSAGES[result];
-                    btn.classList.add("disabled");
+                    buyBtn.textContent = this.BUY_MESSAGES[result];
+                    buyBtn.classList.add("disabled");
 
                     setTimeout(() => {
-                        btn.textContent = defaultText;
-                        btn.classList.remove("disabled");
+                        buyBtn.textContent = "Comprar";
+                        buyBtn.classList.remove("disabled");
                     }, 1200);
 
                     return;
                 }
 
-                btn.textContent = shop.mode === "sell" ? "Vendido!" : "Comprado!";
-                setTimeout(() => (btn.textContent = defaultText), 800);
+                buyBtn.textContent = "Comprado!";
+                setTimeout(() => (buyBtn.textContent = "Comprar"), 800);
+            });
+
+            sellOneBtn?.addEventListener("click", () => {
+                const result = this.system.sell(item.id);
+
+                if (result !== "success") {
+                    sellOneBtn.textContent = this.BUY_MESSAGES[result];
+                    sellOneBtn.classList.add("disabled");
+
+                    setTimeout(() => {
+                        sellOneBtn.textContent = "Vender";
+                        sellOneBtn.classList.remove("disabled");
+                    }, 1200);
+
+                    return;
+                }
+
+                sellOneBtn.textContent = "Vendido!";
+                setTimeout(() => (sellOneBtn.textContent = "Vender"), 800);
+            });
+
+            sellAllBtn?.addEventListener("click", () => {
+                const result = this.system.sellAll(item.id);
+
+                if (result !== "success") {
+                    sellAllBtn.textContent = this.BUY_MESSAGES[result];
+                    sellAllBtn.classList.add("disabled");
+
+                    setTimeout(() => {
+                        sellAllBtn.textContent = "Tudo";
+                        sellAllBtn.classList.remove("disabled");
+                    }, 1200);
+
+                    return;
+                }
+
+                sellAllBtn.textContent = "Vendido!";
+                setTimeout(() => (sellAllBtn.textContent = "Tudo"), 800);
             });
 
             shopItems.appendChild(div);
