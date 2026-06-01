@@ -1,5 +1,10 @@
 import { type Item } from "../types/ItemData";
 
+export const ITEM_IDS = {
+    BUCKET_EMPTY: 3,
+    BUCKET_WATER: 4,
+};
+
 export const ITEMS: Record<number, Item> = {
     1: {
         id: 1,
@@ -27,9 +32,17 @@ export const ITEMS: Record<number, Item> = {
         maxSlots: 1,
         description: "Utilizado para lubrificar o terreno e regar as plantas",
     },
-
     4: {
         id: 4,
+        name: "Balde Cheio",
+        icon: "assets/images/tools/Balde_Agua.png",
+        maxStack: 1,
+        maxSlots: 30,
+        description: "Utilizado para lubrificar o terreno e regar as plantas",
+    },
+
+    10: {
+        id: 10,
         name: "Uvas",
         spritesheet: "assets/images/Fruits.png",
         frame: 0,
@@ -37,8 +50,8 @@ export const ITEMS: Record<number, Item> = {
         maxSlots: 10,
         description: "Após ser coletada, pode ser vendida para ganhar moedas",
     },
-    5: {
-        id: 5,
+    11: {
+        id: 11,
         name: "Pepino",
         spritesheet: "assets/images/Fruits.png",
         frame: 1,
@@ -46,8 +59,8 @@ export const ITEMS: Record<number, Item> = {
         maxSlots: 10,
         description: "Após ser coletada, pode ser vendida para ganhar moedas",
     },
-    6: {
-        id: 6,
+    12: {
+        id: 12,
         name: "Pimenta",
         spritesheet: "assets/images/Fruits.png",
         frame: 2,
@@ -55,8 +68,8 @@ export const ITEMS: Record<number, Item> = {
         maxSlots: 10,
         description: "Após ser coletada, pode ser vendida para ganhar moedas",
     },
-    7: {
-        id: 7,
+    13: {
+        id: 13,
         name: "Vaga",
         spritesheet: "assets/images/Fruits.png",
         frame: 3,
@@ -64,8 +77,8 @@ export const ITEMS: Record<number, Item> = {
         maxSlots: 10,
         description: "Após ser coletada, pode ser vendida para ganhar moedas",
     },
-    8: {
-        id: 8,
+    14: {
+        id: 14,
         name: "Ananas",
         spritesheet: "assets/images/Fruits.png",
         frame: 4,
@@ -73,8 +86,8 @@ export const ITEMS: Record<number, Item> = {
         maxSlots: 10,
         description: "Após ser coletada, pode ser vendida para ganhar moedas",
     },
-    9: {
-        id: 9,
+    15: {
+        id: 15,
         name: "Feijao Verde",
         spritesheet: "assets/images/Fruits.png",
         frame: 5,

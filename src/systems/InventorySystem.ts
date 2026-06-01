@@ -124,6 +124,29 @@ export class InventorySystem {
         return ITEMS[slot.id];
     }
 
+    convertOneCurrentItem(newItemId: number): boolean {
+        const slot = this.slots[this.selectedSlot];
+        if (!slot) return false;
+
+        const oldItemId = slot.id;
+
+        slot.quantity--;
+
+        if (slot.quantity <= 0) {
+            this.slots[this.selectedSlot] = null;
+        }
+
+        const added = this.addItem(newItemId, 1);
+
+        if (!added) {
+            this.addItem(oldItemId, 1);
+            return false;
+        }
+
+        this.emitInventoryChange();
+        return true;
+    }
+
     addStartingItems() {
         this.addItem(1, 1);
     }

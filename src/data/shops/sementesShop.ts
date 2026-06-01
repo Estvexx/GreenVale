@@ -5,37 +5,37 @@ export const SEMENTES_SHOP: Shop = {
     name: "Sementes",
     items: [
         {
-            id: 4,
+            id: 10,
             price: 50,
             currency: "coins",
             amount: 1,
         },
         {
-            id: 5,
+            id: 11,
             price: 75,
             currency: "coins",
             amount: 1,
         },
         {
-            id: 6,
+            id: 12,
             price: 75,
             currency: "coins",
             amount: 1,
         },
         {
-            id: 7,
+            id: 13,
             price: 50,
             currency: "coins",
             amount: 1,
         },
         {
-            id: 8,
+            id: 14,
             price: 75,
             currency: "coins",
             amount: 1,
         },
         {
-            id: 9,
+            id: 15,
             price: 75,
             currency: "coins",
             amount: 1,

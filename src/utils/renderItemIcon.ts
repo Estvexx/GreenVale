@@ -7,6 +7,8 @@ export function renderItemIcon(element: HTMLElement, itemId: number) {
     let img = element.querySelector("img") as HTMLImageElement;
 
     if (itemData.icon) {
+        element.querySelector(".sprite-icon")?.remove();
+
         // imagem própria
         if (!img) {
             img = document.createElement("img");

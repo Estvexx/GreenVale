@@ -12,6 +12,7 @@ import { CameraManager } from "../camera/CameraManager";
 import { MapManager } from "../map/MapManager";
 import { UIMoneyManager } from "../UI/UI_MoneyManager";
 import { preloadUIImages } from "../utils/preloadUIImages";
+import { ITEM_IDS } from "../data/ItemDatabase";
 
 export class FarmScene extends Phaser.Scene {
     public player!: Player;
@@ -115,7 +116,10 @@ export class FarmScene extends Phaser.Scene {
             const { type, shopId } = this.currentZone;
             if (type === "shop") this.shopManager.open(shopId);
             if (type === "sell") console.log("Abrir venda");
-            if (type === "well") console.log("Encher água");
+            if (type === "well") {
+                console.log("Zona", this.currentZone);
+                this.fillBucket();
+            }
             if (type === "storage") console.log("Abrir armazém");
         });
 
@@ -142,5 +146,17 @@ export class FarmScene extends Phaser.Scene {
         }
 
         this.isInZone = false;
+    }
+
+    private fillBucket() {
+        console.log("Chamei a funçao");
+        const item = this.inventory.getCurrentItem();
+
+        if (!item) return;
+
+        if (item.id !== ITEM_IDS.BUCKET_EMPTY) return;
+        console.log("Ola boi");
+        this.inventory.convertOneCurrentItem(ITEM_IDS.BUCKET_WATER);
+        console.log("Balde cheio!");
     }
 }
