@@ -40,4 +40,8 @@ export class MapManager {
             .createLayer("Buildings", [tsBuildings, tsPlantsandWell])
             ?.setDepth(3);
     }
+
+    getInteractables(): Phaser.Types.Tilemaps.TiledObject[] {
+        return this.map.getObjectLayer("Interactables")?.objects ?? [];
+    }
 }

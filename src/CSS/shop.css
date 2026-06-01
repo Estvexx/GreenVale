@@ -1,124 +1,166 @@
-.shop {
+/* ============================================
+   LOJA - Overlay
+   ============================================ */
+
+#shop-overlay {
     position: fixed;
     inset: 0;
+    background-color: rgba(0, 0, 0, 0.6);
     display: flex;
     align-items: center;
     justify-content: center;
     z-index: 1000;
+    pointer-events: auto;
 }
 
-.shop.hidden {
+#shop-overlay.hidden {
     display: none;
 }
 
+/* ============================================
+   PAINEL DA LOJA
+   ============================================ */
+
 .shop-panel {
-    background-color: var(--bg-panel);
-    border: 5px double var(--color-gold);
-    border-radius: 14px;
-    width: 480px;
-    min-height: 500px;
+    background: linear-gradient(
+        180deg,
+        var(--panel-bg-start) 0%,
+        var(--panel-bg-end) 100%
+    );
+    border: 3px solid var(--panel-border);
+    border-radius: 12px;
     padding: 20px;
+    box-shadow:
+        0 8px 0 var(--panel-shadow),
+        0 12px 30px rgba(0, 0, 0, 0.5);
     display: flex;
     flex-direction: column;
     gap: 16px;
+    min-width: 500px;
+    max-width: 800px;
 }
 
-.shop-title {
-    text-align: center;
-    font-size: 28px;
-    color: var(--color-gold);
-    letter-spacing: 2px;
-    margin: 0 0 10px 0;
+/* ============================================
+   CABEÇALHO
+   ============================================ */
+
+.shop-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid var(--panel-border);
+    padding-bottom: 10px;
 }
 
-.shop-balance {
-    text-align: right;
-    color: var(--color-gold);
-    font-size: 16px;
-    padding: 8px 12px;
-    background-color: var(--bg-section);
-    border-radius: 8px;
-    margin-bottom: 10px;
+.shop-header h2 {
+    color: var(--color-cream);
+    font-family: Georgia, serif;
+    font-size: 20px;
+    margin: 0;
+    text-shadow: 1px 1px 0 var(--panel-shadow);
 }
 
-.shop-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
+.shop-close-btn {
+    background: none;
+    border: none;
+    color: var(--color-muted);
+    font-size: 20px;
+    cursor: pointer;
+    transition: color 0.2s;
+    pointer-events: auto;
+}
+
+.shop-close-btn:hover {
+    color: #c8882a;
+}
+
+/* ============================================
+   ITENS - Horizontal com scroll
+   ============================================ */
+
+.shop-items-container {
+    display: flex;
+    flex-direction: row; /* Horizontal */
     gap: 12px;
+    padding: 10px;
+    overflow-x: auto; /* Scroll horizontal */
+    overflow-y: hidden;
+
+    /* Estilo scroll */
+    scrollbar-width: thin;
+    scrollbar-color: var(--panel-border) var(--panel-bg-start);
 }
+
+/* Scrollbar para Chrome */
+.shop-items-container::-webkit-scrollbar {
+    height: 8px;
+}
+
+.shop-items-container::-webkit-scrollbar-track {
+    background: var(--panel-bg-start);
+    border-radius: 4px;
+}
+
+.shop-items-container::-webkit-scrollbar-thumb {
+    background: var(--panel-border);
+    border-radius: 4px;
+}
+
+/* ============================================
+   CADA ITEM DA LOJA
+   ============================================ */
 
 .shop-item {
-    background-color: var(--bg-section);
-    border: 2px solid transparent;
+    flex: 0 0 auto; /* Não encolhe, tamanho fixo */
+    width: 100px;
+    background: var(--slot-bg);
+    border: 2px solid var(--slot-border);
     border-radius: 8px;
-    padding: 12px;
+    padding: 10px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 8px;
-    transition: border-color 0.2s;
+    gap: 6px;
+    cursor: pointer;
+    transition: all 0.1s ease;
+    box-shadow:
+        inset 0 2px 4px rgba(0, 0, 0, 0.3),
+        0 3px 0 var(--slot-shadow);
 }
 
 .shop-item:hover {
-    border-color: var(--color-gold);
+    background: var(--slot-hover);
+    border-color: #6a5a45;
+    transform: translateY(-2px);
+    box-shadow:
+        inset 0 2px 4px rgba(0, 0, 0, 0.2),
+        0 5px 0 var(--slot-shadow);
+}
+
+.shop-item:active {
+    transform: translateY(2px);
+    box-shadow:
+        inset 0 3px 6px rgba(0, 0, 0, 0.4),
+        0 1px 0 var(--slot-shadow);
 }
 
 .shop-item img {
     width: 48px;
     height: 48px;
     image-rendering: pixelated;
+    pointer-events: none;
 }
 
 .shop-item-name {
     color: var(--color-cream);
-    font-size: 13px;
+    font-size: 12px;
     text-align: center;
+    font-family: Georgia, serif;
 }
 
 .shop-item-price {
-    color: var(--color-gold);
-    font-size: 13px;
-    font-weight: bold;
-}
-
-.shop-item-btn {
-    background-color: var(--bg-btn);
-    color: var(--color-cream);
-    border: none;
-    border-radius: 4px;
-    padding: 6px 12px;
-    cursor: pointer;
-    font-size: 12px;
-    width: 100%;
-    transition: background-color 0.2s;
-}
-
-.shop-item-btn:hover {
-    background-color: var(--bg-btn-active);
-    color: var(--color-gold);
-}
-
-.shop-close {
-    position: absolute;
-    top: 12px;
-    right: 14px;
-    background: none;
-    border: none;
-    color: var(--color-muted);
-    font-size: 20px;
-    cursor: pointer;
-    line-height: 1;
-    transition: color 0.2s;
-}
-
-.shop-close:hover {
-    color: var(--color-gold);
-}
-
-.shop-divider {
-    border: none;
-    border-top: 1px solid var(--color-gold);
-    opacity: 0.3;
-    width: 100%;
-    margin: 5px 0;
+    color: var(--slot-active);
+    font-size: 14px;
+    font-weight: 700;
+    font-family: "Courier New", monospace;
 }

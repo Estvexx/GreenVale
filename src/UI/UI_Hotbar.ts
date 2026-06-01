@@ -1,4 +1,5 @@
 import { InventorySystem } from "../systems/InventorySystem";
+import { ITEMS } from "../data/ItemDatabase";
 
 export class UI_HotBar {
     private inventory: InventorySystem;
@@ -44,18 +45,22 @@ export class UI_HotBar {
         document.querySelectorAll(".slot").forEach((slot) => {
             const index = Number(slot.getAttribute("data-slot"));
 
-            const item = this.inventory.slots[index];
+            const inventorySlot = this.inventory.slots[index];
 
             let img = slot.querySelector("img");
 
-            if (item) {
+            if (inventorySlot) {
+                const itemData = ITEMS[inventorySlot.id];
+
+                if (!itemData) return;
+
                 if (!img) {
                     img = document.createElement("img");
                     slot.prepend(img);
                 }
 
-                img.setAttribute("src", item.icon);
-                img.setAttribute("alt", item.name);
+                img.setAttribute("src", itemData.icon);
+                img.setAttribute("alt", itemData.name);
             } else {
                 img?.remove();
             }

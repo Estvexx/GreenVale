@@ -1,4 +1,5 @@
 import { InventorySystem } from "../systems/InventorySystem";
+import { ITEMS } from "../data/ItemDatabase";
 
 export class UI_Inventory {
     private inventory = InventorySystem.getInstance();
@@ -27,8 +28,11 @@ export class UI_Inventory {
                         slot.prepend(img);
                     }
 
-                    img.setAttribute("src", item.icon);
-                    img.setAttribute("alt", item.name);
+                    const itemData = ITEMS[item.id];
+                    if (itemData) {
+                        img.setAttribute("src", itemData.icon);
+                        img.setAttribute("alt", itemData.name);
+                    }
                 } else {
                     img?.remove();
                 }
