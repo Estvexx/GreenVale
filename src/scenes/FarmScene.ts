@@ -115,7 +115,7 @@ export class FarmScene extends Phaser.Scene {
 
             const { type, shopId } = this.currentZone;
             if (type === "shop") this.shopManager.open(shopId);
-            if (type === "sell") console.log("Abrir venda");
+            if (type === "sell") this.shopManager.open(shopId);
             if (type === "well") {
                 console.log("Zona", this.currentZone);
                 this.fillBucket();

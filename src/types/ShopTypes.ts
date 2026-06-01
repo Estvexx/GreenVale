@@ -8,7 +8,8 @@ export type ShopItem = {
 export type Shop = {
     id: string;
     name: string;
+    mode: "buy" | "sell";
     items: ShopItem[];
 };
 
-export type ShopType = "ferragens" | "sementes";
+export type ShopType = "ferragens" | "sementes" | "mercado";

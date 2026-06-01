@@ -15,6 +15,7 @@ export class UI_ShopManager {
         no_money: "Sem dinheiro!",
         inventory_full: "Inventário cheio!",
         max_slots: "Limite atingido!",
+        no_item: "Nao tens esse item!",
     };
 
     CURRENCY_ICONS: Record<string, string> = {
@@ -71,30 +72,34 @@ export class UI_ShopManager {
                     ${item.price}
                 </div>
             </div>
-            <button class="shop-item-btn">Comprar</button>
+            <button class="shop-item-btn">${shop.mode === "sell" ? "Vender" : "Comprar"}</button>
         `;
 
             div.prepend(iconWrapper);
 
             const btn = div.querySelector(".shop-item-btn")!;
+            const defaultText = shop.mode === "sell" ? "Vender" : "Comprar";
 
             btn.addEventListener("click", () => {
-                const result = this.system.buy(item.id);
+                const result =
+                    shop.mode === "sell"
+                        ? this.system.sell(item.id)
+                        : this.system.buy(item.id);
 
                 if (result !== "success") {
                     btn.textContent = this.BUY_MESSAGES[result];
                     btn.classList.add("disabled");
 
                     setTimeout(() => {
-                        btn.textContent = "Comprar";
+                        btn.textContent = defaultText;
                         btn.classList.remove("disabled");
                     }, 1200);
 
                     return;
                 }
 
-                btn.textContent = "Comprado ✓";
-                setTimeout(() => (btn.textContent = "Comprar"), 800);
+                btn.textContent = shop.mode === "sell" ? "Vendido!" : "Comprado!";
+                setTimeout(() => (btn.textContent = defaultText), 800);
             });
 
             shopItems.appendChild(div);

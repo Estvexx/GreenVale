@@ -109,6 +109,36 @@ export class InventorySystem {
         this.emitInventoryChange();
     }
 
+    removeItemById(id: number, quantity: number = 1): boolean {
+        const total = this.slots
+            .filter((slot) => slot?.id === id)
+            .reduce((sum, slot) => sum + slot!.quantity, 0);
+
+        if (total < quantity) return false;
+
+        let remaining = quantity;
+
+        for (let i = 0; i < this.slots.length; i++) {
+            const slot = this.slots[i];
+            if (!slot || slot.id !== id) continue;
+
+            const removeAmount = Math.min(slot.quantity, remaining);
+            slot.quantity -= removeAmount;
+            remaining -= removeAmount;
+
+            if (slot.quantity <= 0) {
+                this.slots[i] = null;
+            }
+
+            if (remaining <= 0) {
+                this.emitInventoryChange();
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     swapItems(a: number, b: number) {
         const temp = this.slots[a];
         this.slots[a] = this.slots[b];
@@ -153,6 +183,11 @@ export class InventorySystem {
 
     toggleInventory() {
         this.isInventoryOpen = !this.isInventoryOpen;
+        this.emitInventoryChange();
+    }
+
+    closeInventory() {
+        this.isInventoryOpen = false;
         this.emitInventoryChange();
     }
 }

@@ -18,7 +18,8 @@ export function renderItemIcon(element: HTMLElement, itemId: number) {
         img.setAttribute("alt", itemData.name);
     } else if (
         itemData.spritesheet !== undefined &&
-        itemData.frame !== undefined
+        itemData.col !== undefined &&
+        itemData.row !== undefined
     ) {
         // spritesheet
         img?.remove(); // remove img se existir
@@ -32,7 +33,7 @@ export function renderItemIcon(element: HTMLElement, itemId: number) {
         }
 
         sprite.style.backgroundImage = `url('${itemData.spritesheet}')`;
-        sprite.style.backgroundPosition = `-${itemData.frame * 32}px 0px`;
+        sprite.style.backgroundPosition = `-${itemData.col * 32}px -${itemData.row * 32}px`;
         sprite.title = itemData.name;
     }
 }

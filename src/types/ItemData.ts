@@ -3,7 +3,8 @@ export interface Item {
     name: string;
     icon?: string;
     spritesheet?: string;
-    frame?: number;
+    col?: number;
+    row?: number;
     maxStack: number;
     maxSlots?: number;
     description?: string;
