@@ -1,42 +1,42 @@
 import { type Shop } from "../../types/ShopTypes";
 
-export const SEMENTES_SHOP: Shop = {
-    id: "sementes",
-    name: "Sementes",
-    mode: "buy",
+export const MERCADO_SHOP: Shop = {
+    id: "mercado",
+    name: "Mercado",
+    mode: "sell",
     items: [
         {
-            id: 10,
-            price: 50,
-            currency: "coins",
-            amount: 1,
-        },
-        {
-            id: 11,
+            id: 20,
             price: 75,
             currency: "coins",
             amount: 1,
         },
         {
-            id: 12,
+            id: 21,
             price: 75,
             currency: "coins",
             amount: 1,
         },
         {
-            id: 13,
-            price: 50,
-            currency: "coins",
-            amount: 1,
-        },
-        {
-            id: 14,
+            id: 22,
             price: 75,
             currency: "coins",
             amount: 1,
         },
         {
-            id: 15,
+            id: 23,
+            price: 75,
+            currency: "coins",
+            amount: 1,
+        },
+        {
+            id: 24,
+            price: 75,
+            currency: "coins",
+            amount: 1,
+        },
+        {
+            id: 25,
             price: 75,
             currency: "coins",
             amount: 1,

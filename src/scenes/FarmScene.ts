@@ -2,8 +2,9 @@ import Phaser from "phaser";
 import { Player } from "../entities/Player";
 import { InventorySystem } from "../systems/InventorySystem";
 import { MoneySystem } from "../systems/MoneySystem";
-import { UI_ShopManager } from "../UI/UI_ShopManager";
 import { SettingsUI } from "../UI/UI_Settings";
+import { UI_ShopManager } from "../UI/UI_ShopManager";
+import { UI_StorageManager } from "../UI/UI_StorageManager";
 import { UI_HotBar } from "../UI/UI_Hotbar";
 import { UI_Inventory } from "../UI/UI_Inventory";
 import { UIInventoryManager } from "../UI/UI_InventoryManager";
@@ -11,23 +12,33 @@ import { InputManager } from "../input/inputManager";
 import { CameraManager } from "../camera/CameraManager";
 import { MapManager } from "../map/MapManager";
 import { UIMoneyManager } from "../UI/UI_MoneyManager";
+import { preloadUIImages } from "../utils/preloadUIImages";
+import { ITEM_IDS } from "../data/ItemDatabase";
 
 export class FarmScene extends Phaser.Scene {
     public player!: Player;
     public bgMusic!: Phaser.Sound.BaseSound;
 
     private shopManager!: UI_ShopManager;
+    private storageManager!: UI_StorageManager;
 
     inventory = InventorySystem.getInstance();
 
     private currentZone: { type: string; shopId: string } | null = null;
+    private isInZone = false;
+    private tooltip = document.getElementById("zone-tooltip")!;
 
     constructor() {
         super("FarmScene");
     }
 
     create() {
+        preloadUIImages();
+
         const mapManager = new MapManager(this);
+
+        InventorySystem.getInstance().addStartingItems();
+        MoneySystem.getInstance();
 
         new InputManager(this);
         new UI_HotBar();
@@ -36,6 +47,7 @@ export class FarmScene extends Phaser.Scene {
         new UIMoneyManager();
 
         this.shopManager = new UI_ShopManager();
+        this.storageManager = new UI_StorageManager();
         const settingsUI = new SettingsUI(this);
 
         InventorySystem.getInstance().addStartingItems();
@@ -97,7 +109,7 @@ export class FarmScene extends Phaser.Scene {
 
             this.physics.add.overlap(this.player, zone, () => {
                 this.currentZone = { type, shopId };
-                //console.log("Entrou na zona:", this.currentZone);
+                this.isInZone = true;
             });
         });
 
@@ -105,11 +117,16 @@ export class FarmScene extends Phaser.Scene {
             if (!this.currentZone) return;
 
             const { type, shopId } = this.currentZone;
-            console.log("Interagindo com zona:", this.currentZone);
             if (type === "shop") this.shopManager.open(shopId);
-            if (type === "sell") console.log("Abrir venda");
-            if (type === "well") console.log("Encher água");
-            if (type === "storage") console.log("Abrir armazém");
+            if (type === "sell") this.shopManager.open(shopId);
+            if (type === "well") {
+                console.log("Zona", this.currentZone);
+                this.fillBucket();
+            }
+            if (type === "storage") {
+                console.log("Abrir armazém");
+                this.storageManager.open();
+            }
         });
 
         this.inventory.onSelectionChange(() => {
@@ -128,6 +145,24 @@ export class FarmScene extends Phaser.Scene {
     update(time: number) {
         this.player.update(time);
 
-        //this.currentZone = null;
+        this.tooltip.classList.toggle("hidden", !this.isInZone);
+
+        if (!this.isInZone) {
+            this.currentZone = null;
+        }
+
+        this.isInZone = false;
+    }
+
+    private fillBucket() {
+        console.log("Chamei a funçao");
+        const item = this.inventory.getCurrentItem();
+
+        if (!item) return;
+
+        if (item.id !== ITEM_IDS.BUCKET_EMPTY) return;
+        console.log("Ola boi");
+        this.inventory.convertOneCurrentItem(ITEM_IDS.BUCKET_WATER);
+        console.log("Balde cheio!");
     }
 }

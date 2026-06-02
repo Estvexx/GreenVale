@@ -1,5 +1,6 @@
 import type { InventorySlot } from "../types/InventoryTypes";
 import { ITEMS } from "../data/ItemDatabase";
+import { StorageSystem } from "./StorageSystem";
 
 type Listener = () => void;
 
@@ -72,6 +73,15 @@ export class InventorySystem {
             if (quantity <= 0) break;
 
             if (this.slots[i] === null) {
+                const slotCount = this.slots.filter((s) => s?.id === id).length;
+
+                if (
+                    itemData.maxSlots !== undefined &&
+                    slotCount >= itemData.maxSlots
+                ) {
+                    break;
+                }
+
                 const addAmount = Math.min(itemData.maxStack, quantity);
 
                 this.slots[i] = {
@@ -87,6 +97,12 @@ export class InventorySystem {
         return quantity <= 0;
     }
 
+    getItemQuantity(id: number): number {
+        return this.slots
+            .filter((slot) => slot?.id === id)
+            .reduce((total, slot) => total + slot!.quantity, 0);
+    }
+
     removeItem(index: number) {
         const slot = this.slots[index];
         if (!slot) return;
@@ -98,6 +114,36 @@ export class InventorySystem {
         }
 
         this.emitInventoryChange();
+    }
+
+    removeItemById(id: number, quantity: number = 1): boolean {
+        const total = this.slots
+            .filter((slot) => slot?.id === id)
+            .reduce((sum, slot) => sum + slot!.quantity, 0);
+
+        if (total < quantity) return false;
+
+        let remaining = quantity;
+
+        for (let i = 0; i < this.slots.length; i++) {
+            const slot = this.slots[i];
+            if (!slot || slot.id !== id) continue;
+
+            const removeAmount = Math.min(slot.quantity, remaining);
+            slot.quantity -= removeAmount;
+            remaining -= removeAmount;
+
+            if (slot.quantity <= 0) {
+                this.slots[i] = null;
+            }
+
+            if (remaining <= 0) {
+                this.emitInventoryChange();
+                return true;
+            }
+        }
+
+        return false;
     }
 
     swapItems(a: number, b: number) {
@@ -115,12 +161,62 @@ export class InventorySystem {
         return ITEMS[slot.id];
     }
 
+    convertOneCurrentItem(newItemId: number): boolean {
+        const slot = this.slots[this.selectedSlot];
+        if (!slot) return false;
+
+        const oldItemId = slot.id;
+
+        slot.quantity--;
+
+        if (slot.quantity <= 0) {
+            this.slots[this.selectedSlot] = null;
+        }
+
+        const added = this.addItem(newItemId, 1);
+
+        if (!added) {
+            this.addItem(oldItemId, 1);
+            return false;
+        }
+
+        this.emitInventoryChange();
+        return true;
+    }
+
     addStartingItems() {
         this.addItem(1, 1);
     }
 
     toggleInventory() {
         this.isInventoryOpen = !this.isInventoryOpen;
+        this.emitInventoryChange();
+    }
+
+    closeInventory() {
+        this.isInventoryOpen = false;
+        this.emitInventoryChange();
+    }
+
+    moveItemToStorage(slotIndex: number): boolean {
+        const slot = this.slots[slotIndex];
+
+        if (!slot) return false;
+
+        const storage = StorageSystem.getInstance();
+
+        const success = storage.addItem(slot.id, slot.quantity);
+
+        if (!success) return false;
+
+        this.slots[slotIndex] = null;
+
+        this.emitInventoryChange();
+
+        return true;
+    }
+
+    forceRefresh() {
         this.emitInventoryChange();
     }
 }

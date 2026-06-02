@@ -9,7 +9,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    z-index: 1000;
+    z-index: 2;
     pointer-events: auto;
 }
 
@@ -36,8 +36,8 @@
     display: flex;
     flex-direction: column;
     gap: 16px;
-    min-width: 500px;
-    max-width: 800px;
+    width: 600px;
+    height: 400px;
 }
 
 /* ============================================
@@ -55,7 +55,7 @@
 .shop-header h2 {
     color: var(--color-cream);
     font-family: Georgia, serif;
-    font-size: 20px;
+    font-size: 30px;
     margin: 0;
     text-shadow: 1px 1px 0 var(--panel-shadow);
 }
@@ -79,12 +79,19 @@
    ============================================ */
 
 .shop-items-container {
+    flex: 1;
+
+    /* Centra os items verticalmente nesse espaço */
     display: flex;
-    flex-direction: row; /* Horizontal */
+    flex-direction: row;
+    align-items: center; /* Horizontal */
     gap: 12px;
     padding: 10px;
     overflow-x: auto; /* Scroll horizontal */
     overflow-y: hidden;
+
+    cursor: grab; /* Mão aberta */
+    user-select: none;
 
     /* Estilo scroll */
     scrollbar-width: thin;
@@ -112,7 +119,7 @@
 
 .shop-item {
     flex: 0 0 auto; /* Não encolhe, tamanho fixo */
-    width: 100px;
+    width: 140px;
     background: var(--slot-bg);
     border: 2px solid var(--slot-border);
     border-radius: 8px;
@@ -128,39 +135,56 @@
         0 3px 0 var(--slot-shadow);
 }
 
-.shop-item:hover {
-    background: var(--slot-hover);
-    border-color: #6a5a45;
-    transform: translateY(-2px);
-    box-shadow:
-        inset 0 2px 4px rgba(0, 0, 0, 0.2),
-        0 5px 0 var(--slot-shadow);
+.shop-item-icon {
+    width: 80px;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-.shop-item:active {
-    transform: translateY(2px);
-    box-shadow:
-        inset 0 3px 6px rgba(0, 0, 0, 0.4),
-        0 1px 0 var(--slot-shadow);
-}
-
-.shop-item img {
-    width: 48px;
-    height: 48px;
+.shop-item-icon img {
+    width: 80px;
+    height: 80px;
     image-rendering: pixelated;
     pointer-events: none;
 }
 
+.shop-item-icon .sprite-icon {
+    width: 32px;
+    height: 32px;
+    background-repeat: no-repeat;
+    image-rendering: pixelated;
+    transform: scale(2.5);
+    transform-origin: center;
+}
+
 .shop-item-name {
     color: var(--color-cream);
-    font-size: 12px;
+    font-size: 15px;
     text-align: center;
     font-family: Georgia, serif;
 }
 
 .shop-item-price {
     color: var(--slot-active);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 10px;
     font-size: 14px;
     font-weight: 700;
     font-family: "Courier New", monospace;
+}
+
+.price-icon {
+    width: 20px;
+    height: 20px;
+    image-rendering: pixelated;
+    pointer-events: none;
+}
+
+.shop-items-container:active,
+.shop-items-container.active {
+    cursor: grabbing; /* Mão fechada ao arrastar */
 }

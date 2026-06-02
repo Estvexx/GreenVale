@@ -1,7 +1,12 @@
 import { InventorySystem } from "../systems/InventorySystem";
 import { MoneySystem } from "../systems/MoneySystem";
 import { type Shop, type ShopType } from "../types/ShopTypes";
-import { FERRAGENS_SHOP, SEMENTES_SHOP } from "../data/ShopData";
+import { FERRAGENS_SHOP } from "../data/shops/ferragensShop";
+import { SEMENTES_SHOP } from "../data/shops/sementesShop";
+import { MERCADO_SHOP } from "../data/shops/mercadoShop";
+
+type BuyResult = "success" | "no_money" | "inventory_full" | "max_slots";
+type SellResult = "success" | "no_item";
 
 export class ShopSystem {
     private static instance: ShopSystem;
@@ -14,11 +19,13 @@ export class ShopSystem {
     private shops: Record<ShopType, Shop> = {
         ferragens: FERRAGENS_SHOP,
         sementes: SEMENTES_SHOP,
+        mercado: MERCADO_SHOP,
     };
 
     private currentShop: Shop | null = null;
 
     open(type: ShopType) {
+        console.log("Loja aberta: ", type);
         this.currentShop = this.shops[type];
         return this.currentShop;
     }
@@ -31,20 +38,60 @@ export class ShopSystem {
         return this.currentShop;
     }
 
-    buy(itemId: number) {
-        if (!this.currentShop) return false;
+    // TODO: melhorar a funçao, devido ao reembolso desnecessário
+    buy(itemId: number): BuyResult {
+        if (!this.currentShop) return "inventory_full";
 
         const item = this.currentShop.items.find((i) => i.id === itemId);
-        if (!item) return false;
+        if (!item) return "inventory_full";
 
         const money = MoneySystem.getInstance();
         const inv = InventorySystem.getInstance();
 
-        const success = money.spend(item.currency, item.price);
-        if (!success) return false;
+        const spent = money.spend(item.currency, item.price);
+        if (!spent) return "no_money";
 
-        inv.addItem(item.id, item.amount);
+        const added = inv.addItem(item.id, item.amount);
+        if (!added) {
+            money.add(item.currency, item.price);
+            return "inventory_full";
+        }
 
-        return true;
+        return "success";
+    }
+
+    sell(itemId: number): SellResult {
+        if (!this.currentShop) return "no_item";
+
+        const item = this.currentShop.items.find((i) => i.id === itemId);
+        if (!item) return "no_item";
+
+        const inv = InventorySystem.getInstance();
+        const money = MoneySystem.getInstance();
+
+        const removed = inv.removeItemById(item.id, item.amount);
+        if (!removed) return "no_item";
+
+        money.add(item.currency, item.price);
+        return "success";
+    }
+
+    sellAll(itemId: number): SellResult {
+        if (!this.currentShop) return "no_item";
+
+        const item = this.currentShop.items.find((i) => i.id === itemId);
+        if (!item) return "no_item";
+
+        const inv = InventorySystem.getInstance();
+        const money = MoneySystem.getInstance();
+
+        const quantity = inv.getItemQuantity(item.id);
+        if (quantity <= 0) return "no_item";
+
+        const removed = inv.removeItemById(item.id, quantity);
+        if (!removed) return "no_item";
+
+        money.add(item.currency, item.price * quantity);
+        return "success";
     }
 }

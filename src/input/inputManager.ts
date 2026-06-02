@@ -22,6 +22,7 @@ export class InputManager {
         this.scene = scene;
         this.registerInventoryKeys();
         this.addMoneyTestKeys();
+        this.addItemTestKeys();
     }
 
     private registerInventoryKeys() {
@@ -49,6 +50,13 @@ export class InputManager {
         this.scene.input.keyboard?.on("keydown-O", () => {
             this.money.add("bossTokens", 1);
             console.log("+1 boss token");
+        });
+    }
+
+    private addItemTestKeys() {
+        this.scene.input.keyboard?.on("keydown-I", () => {
+            this.inventory.addItem(20, 1);
+            console.log("+1 item vendavel");
         });
     }
 }

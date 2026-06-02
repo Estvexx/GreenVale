@@ -52,6 +52,7 @@ export class MoneySystem {
         this.emit(currency);
     }
 
+    // Currency é o tipo de moeda que estou a utilizar
     spend(currency: Currency, amount: number): boolean {
         if (this.values[currency] < amount) return false;
 

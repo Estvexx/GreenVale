@@ -338,3 +338,30 @@
     font-weight: bold;
     margin-bottom: 4px;
 }
+
+.qty {
+    position: absolute;
+    bottom: 2px;
+    right: 4px;
+
+    color: #f5e6d3;
+    font-size: 11px;
+    font-weight: 800;
+    font-family: "Courier New", monospace;
+    text-shadow:
+        1px 1px 0 #000,
+        -1px -1px 0 #000,
+        1px -1px 0 #000,
+        -1px 1px 0 #000;
+
+    pointer-events: none;
+    z-index: 2;
+}
+
+.qty {
+    background: rgba(0, 0, 0, 0.5);
+    padding: 0 4px;
+    border-radius: 3px;
+    min-width: 16px;
+    text-align: center;
+}

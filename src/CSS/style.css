@@ -59,3 +59,24 @@ body {
     z-index: 10;
     pointer-events: none;
 }
+
+#zone-tooltip {
+    position: fixed;
+    bottom: 200px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-size: 14px;
+}
+
+.sprite-icon {
+    width: 32px;
+    height: 32px;
+    background-repeat: no-repeat;
+    image-rendering: pixelated; /* mantém pixel art nítido */
+    transform: scale(2);
+    transform-origin: center;
+}
