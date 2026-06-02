@@ -1,5 +1,7 @@
 import { StorageSystem } from "../systems/StorageSystem";
 import { InventorySystem } from "../systems/InventorySystem";
+import type { InventorySlot } from "../types/InventoryTypes";
+import { renderItemIcon } from "../utils/renderItemIcon";
 
 type Selected = {
     container: "inventory" | "storage";
@@ -26,17 +28,22 @@ export class UI_StorageManager {
     }
 
     open() {
+        this.selected = null;
         document.getElementById("storage-overlay")?.classList.remove("hidden");
+        this.updateSelectionUI();
+        this.render();
     }
 
     close() {
+        this.selected = null;
         document.getElementById("storage-overlay")?.classList.add("hidden");
+        this.updateSelectionUI();
     }
 
     private bindSlots() {
         // bind only the inventory slots that live inside the storage overlay
         document
-            .querySelectorAll("#storage-overlay #inventory-overlay .slot")
+            .querySelectorAll<HTMLDivElement>("#storage-overlay #inventory-grid .slot")
             .forEach((slot) => {
                 slot.addEventListener("click", () => {
                     const index = Number(slot.getAttribute("data-slot"));
@@ -47,7 +54,7 @@ export class UI_StorageManager {
 
         // bind only the storage grid slots
         document
-            .querySelectorAll("#storage-overlay #storage-grid .slot")
+            .querySelectorAll<HTMLDivElement>("#storage-overlay #storage-grid .slot")
             .forEach((slot) => {
                 slot.addEventListener("click", () => {
                     const index = Number(slot.getAttribute("data-slot"));
@@ -105,7 +112,12 @@ export class UI_StorageManager {
         this.updateSelectionUI();
     }
 
-    private swapBetween(a: any[], aIndex: number, b: any[], bIndex: number) {
+    private swapBetween(
+        a: InventorySlot[],
+        aIndex: number,
+        b: InventorySlot[],
+        bIndex: number,
+    ) {
         const temp = a[aIndex];
         a[aIndex] = b[bIndex];
         b[bIndex] = temp;
@@ -116,7 +128,7 @@ export class UI_StorageManager {
         document.querySelectorAll("#storage-overlay .slot").forEach((slot) => {
             const index = Number(slot.getAttribute("data-slot"));
 
-            const inInventorySection = !!slot.closest("#inventory-overlay");
+            const inInventorySection = !!slot.closest("#inventory-grid");
             const inStorageSection = !!slot.closest("#storage-grid");
 
             let isSelected = false;
@@ -149,52 +161,35 @@ export class UI_StorageManager {
     private renderInventory() {
         // render only the inventory section inside the storage overlay
         document
-            .querySelectorAll("#storage-overlay #inventory-overlay .slot")
+            .querySelectorAll<HTMLElement>("#storage-overlay #inventory-grid .slot")
             .forEach((slot) => {
                 const index = Number(slot.getAttribute("data-slot"));
-
-                const item = this.inventory.slots[index];
-
-                slot.innerHTML = "";
-
-                if (!item) return;
-
-                const img = document.createElement("img");
-                img.src = `assets/items/${item.id}.png`;
-
-                slot.appendChild(img);
-
-                if (item.quantity > 1) {
-                    const qty = document.createElement("span");
-                    qty.textContent = String(item.quantity);
-                    slot.appendChild(qty);
-                }
+                this.renderSlot(slot, this.inventory.slots[index]);
             });
     }
 
     private renderStorage() {
         // render only the storage grid slots
         document
-            .querySelectorAll("#storage-overlay #storage-grid .slot")
+            .querySelectorAll<HTMLElement>("#storage-overlay #storage-grid .slot")
             .forEach((slot) => {
                 const index = Number(slot.getAttribute("data-slot"));
-
-                const item = this.storage.slots[index];
-
-                slot.innerHTML = "";
-
-                if (!item) return;
-
-                const img = document.createElement("img");
-                img.src = `assets/items/${item.id}.png`;
-
-                slot.appendChild(img);
-
-                if (item.quantity > 1) {
-                    const qty = document.createElement("span");
-                    qty.textContent = String(item.quantity);
-                    slot.appendChild(qty);
-                }
+                this.renderSlot(slot, this.storage.slots[index]);
             });
+    }
+
+    private renderSlot(slot: HTMLElement, item: InventorySlot) {
+        slot.innerHTML = "";
+
+        if (!item) return;
+
+        renderItemIcon(slot, item.id);
+
+        if (item.quantity > 1) {
+            const qty = document.createElement("span");
+            qty.className = "qty";
+            qty.textContent = String(item.quantity);
+            slot.appendChild(qty);
+        }
     }
 }
