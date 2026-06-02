@@ -1,0 +1,298 @@
+#radial-overlay {
+    position: fixed;
+    top: 42%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    width: 24em;
+    height: 24em;
+
+    border: 3px dashed var(--color-gold);
+    border-radius: 50%;
+
+    margin: 0;
+    padding: 0;
+
+    z-index: 1000;
+    pointer-events: auto;
+}
+
+#radial-overlay.hidden {
+    display: none;
+}
+
+#effect-radial-menu {
+    position: relative;
+
+    width: 100%;
+    height: 100%;
+
+    margin: 0;
+    padding: 0;
+}
+
+#effect-radial-menu li {
+    list-style: none;
+}
+
+/* =========================
+   BASE DOS BOTÕES
+========================= */
+
+#radial-overlay a.radial-item {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+
+    width: 8em;
+    height: 8em;
+    margin: -4em;
+
+    border-radius: 50%;
+    border: 3px solid var(--panel-border);
+
+    background: var(--panel-bg);
+    color: var(--color-cream);
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    gap: 0.25em;
+    padding: 0.65em;
+
+    text-align: center;
+    text-decoration: none;
+    box-sizing: border-box;
+
+    font-family: Georgia, serif;
+    font-weight: 700;
+    text-shadow: 1px 1px 0 var(--panel-shadow);
+
+    overflow: hidden;
+
+    transition:
+        opacity 0.15s,
+        transform 0.15s,
+        box-shadow 0.15s,
+        border-color 0.15s;
+}
+
+#radial-overlay a.radial-item:hover {
+    opacity: 0.9;
+    box-shadow:
+        inset 0 2px 4px rgba(0, 0, 0, 0.25),
+        0 0 12px var(--color-gold);
+}
+
+/* =========================
+   POSIÇÕES RADIAIS
+========================= */
+
+#radial-overlay a.speed {
+    transform: rotate(90deg) translate(12em) rotate(-90deg);
+}
+
+#radial-overlay a.damage {
+    transform: rotate(180deg) translate(12em) rotate(-180deg);
+}
+
+#radial-overlay a.growth {
+    transform: rotate(270deg) translate(12em) rotate(-270deg);
+}
+
+#radial-overlay a.seed_discount {
+    transform: rotate(360deg) translate(12em) rotate(-360deg);
+}
+
+/* =========================
+   CONTEÚDO DOS BOTÕES
+========================= */
+
+.radial-potion-icon {
+    width: 2em;
+    height: 2em;
+
+    object-fit: contain;
+    image-rendering: pixelated;
+
+    pointer-events: none;
+}
+
+.radial-potion-name {
+    display: block;
+
+    max-width: 100%;
+
+    color: var(--color-cream);
+
+    font-size: 0.68em;
+    font-weight: 700;
+    line-height: 1.05;
+
+    text-align: center;
+    white-space: normal;
+
+    pointer-events: none;
+}
+
+.radial-potion-duration {
+    display: block;
+
+    color: var(--color-gold);
+
+    font-size: 0.62em;
+    font-weight: 600;
+    line-height: 1;
+
+    pointer-events: none;
+}
+
+.radial-potion-price {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 0.25em;
+
+    color: var(--color-cream);
+
+    font-size: 0.65em;
+    font-weight: 700;
+    line-height: 1;
+
+    pointer-events: none;
+}
+
+.radial-currency-icon {
+    width: 1em;
+    height: 1em;
+
+    object-fit: contain;
+    image-rendering: pixelated;
+
+    pointer-events: none;
+}
+
+#radial-overlay a.radial-item * {
+    user-select: none;
+}
+
+/* =========================
+   FEEDBACK DE COMPRA
+========================= */
+
+#radial-overlay a.error {
+    border-color: #ff5a5a;
+    box-shadow:
+        inset 0 2px 4px rgba(0, 0, 0, 0.25),
+        0 0 12px #ff5a5a;
+
+    animation: radial-error 0.18s ease-in-out 2;
+}
+
+#radial-overlay a.bought {
+    border-color: var(--color-green);
+    box-shadow:
+        inset 0 2px 4px rgba(0, 0, 0, 0.25),
+        0 0 14px var(--color-green);
+}
+
+@keyframes radial-error {
+    0%,
+    100% {
+        filter: none;
+    }
+
+    50% {
+        filter: brightness(1.35);
+    }
+}
+
+/* =========================
+   TOAST DO EFEITO
+========================= */
+
+.effect-toast {
+    position: fixed;
+
+    top: 18%;
+    left: 50%;
+    transform: translateX(-50%);
+
+    padding: 0.75em 1.25em;
+
+    border-radius: 0.5em;
+
+    font-family: Georgia, serif;
+    font-weight: 700;
+
+    z-index: 1100;
+
+    color: var(--color-cream);
+    background: var(--panel-bg);
+    border: 2px solid var(--panel-border);
+
+    box-shadow: 0 4px 0 var(--panel-shadow);
+}
+
+.effect-toast.hidden {
+    display: none;
+}
+
+.effect-toast.success {
+    border-color: var(--color-green);
+}
+
+.effect-toast.error {
+    border-color: #ff5a5a;
+}
+
+/* =========================
+   RESPONSIVO SIMPLES
+========================= */
+
+@media (max-width: 700px) {
+    #radial-overlay {
+        width: 19em;
+        height: 19em;
+    }
+
+    #radial-overlay a.radial-item {
+        width: 6.5em;
+        height: 6.5em;
+        margin: -3.25em;
+        padding: 0.45em;
+    }
+
+    #radial-overlay a.speed {
+        transform: rotate(90deg) translate(9.5em) rotate(-90deg);
+    }
+
+    #radial-overlay a.damage {
+        transform: rotate(180deg) translate(9.5em) rotate(-180deg);
+    }
+
+    #radial-overlay a.growth {
+        transform: rotate(270deg) translate(9.5em) rotate(-270deg);
+    }
+
+    #radial-overlay a.seed_discount {
+        transform: rotate(360deg) translate(9.5em) rotate(-360deg);
+    }
+
+    .radial-potion-icon {
+        width: 1.6em;
+        height: 1.6em;
+    }
+
+    .radial-potion-name {
+        font-size: 0.58em;
+    }
+
+    .radial-potion-duration,
+    .radial-potion-price {
+        font-size: 0.55em;
+    }
+}

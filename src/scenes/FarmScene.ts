@@ -14,6 +14,9 @@ import { MapManager } from "../map/MapManager";
 import { UIMoneyManager } from "../UI/UI_MoneyManager";
 import { preloadUIImages } from "../utils/preloadUIImages";
 import { ITEM_IDS } from "../data/ItemDatabase";
+import { UI_EffectShopManager } from "../UI/UI_EffectShopManager";
+import { UI_ActiveEffectsManager } from "../UI/UI_ActiveEffectsManager";
+import { EffectSystem } from "../systems/EffectsSystem";
 
 export class FarmScene extends Phaser.Scene {
     public player!: Player;
@@ -21,6 +24,8 @@ export class FarmScene extends Phaser.Scene {
 
     private shopManager!: UI_ShopManager;
     private storageManager!: UI_StorageManager;
+    private radialMenu!: UI_EffectShopManager;
+    private effects = EffectSystem.getInstance();
 
     inventory = InventorySystem.getInstance();
 
@@ -45,6 +50,8 @@ export class FarmScene extends Phaser.Scene {
         new UI_Inventory();
         new UIInventoryManager();
         new UIMoneyManager();
+        this.radialMenu = new UI_EffectShopManager();
+        new UI_ActiveEffectsManager();
 
         this.shopManager = new UI_ShopManager();
         this.storageManager = new UI_StorageManager();
@@ -129,6 +136,10 @@ export class FarmScene extends Phaser.Scene {
             }
         });
 
+        this.input.keyboard?.on("keydown-Q", () => {
+            this.radialMenu.toggle();
+        });
+
         this.inventory.onSelectionChange(() => {
             this.updateHeldItem();
         });
@@ -152,6 +163,7 @@ export class FarmScene extends Phaser.Scene {
         }
 
         this.isInZone = false;
+        this.effects.update();
     }
 
     private fillBucket() {
