@@ -81,6 +81,11 @@ export class PreloaderScene extends Phaser.Scene {
         this.load.image("balde_vazio", "assets/images/tools/Balde_Vazio.png");
         this.load.image("foice", "assets/images/tools/Foice.png");
         this.load.image("balde_agua", "assets/images/tools/Balde_Agua.png");
+        this.load.image("espada_1", "assets/images/tools/Espada_1.png");
+        this.load.image("espada_2", "assets/images/tools/Espada_2.png");
+        this.load.image("espada_3", "assets/images/tools/Espada_3.png");
+        this.load.image("espada_4", "assets/images/tools/Espada_4.png");
+        this.load.image("espada_5", "assets/images/tools/Espada_5.png");
 
         // Tudo relacionado ao mapa farmscene
         this.load.tilemapTiledJSON("mapa", "assets/map/mapa.tmj");
@@ -105,6 +110,20 @@ export class PreloaderScene extends Phaser.Scene {
             "decoracao_boss",
             "assets/images/map_images/decoracao_boss.png",
         );
+
+        // Mobs
+        this.load.spritesheet("zombie", "assets/images/mobs/ZombieSheet.png", {
+            frameWidth: 32,
+            frameHeight: 32,
+        });
+        this.load.spritesheet("slime", "assets/images/mobs/SlimeSheet.png", {
+            frameWidth: 64,
+            frameHeight: 32,
+        });
+        this.load.spritesheet("bear", "assets/images/mobs/BearSheet.png", {
+            frameWidth: 32,
+            frameHeight: 32,
+        });
 
         // Relacionado a plantação
         this.load.spritesheet("frutas", "assets/images/Fruits.png", {

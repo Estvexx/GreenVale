@@ -40,6 +40,55 @@ export const ITEMS: Record<number, Item> = {
         maxSlots: 30,
         description: "Utilizado para lubrificar o terreno e regar as plantas",
     },
+    5: {
+        id: 5,
+        name: "Tesoura",
+        icon: "assets/images/tools/Espada_1.png",
+        maxStack: 1,
+        maxSlots: 1,
+        damage: 5,
+        description: "Arma básica. Causa 5 de dano.",
+    },
+
+    6: {
+        id: 6,
+        name: "Bastão",
+        icon: "assets/images/tools/Espada_2.png",
+        maxStack: 1,
+        maxSlots: 1,
+        damage: 10,
+        description: "Bastão resistente. Causa 10 de dano.",
+    },
+
+    7: {
+        id: 7,
+        name: "Taco de Basebol",
+        icon: "assets/images/tools/Espada_3.png",
+        maxStack: 1,
+        maxSlots: 1,
+        damage: 15,
+        description: "Taco forte. Causa 15 de dano.",
+    },
+
+    8: {
+        id: 8,
+        name: "Espada Dourada",
+        icon: "assets/images/tools/Espada_4.png",
+        maxStack: 1,
+        maxSlots: 1,
+        damage: 25,
+        description: "Espada rara. Causa 25 de dano.",
+    },
+
+    9: {
+        id: 9,
+        name: "Lança dos Deuses",
+        icon: "assets/images/tools/Espada_5.png",
+        maxStack: 1,
+        maxSlots: 1,
+        damage: 40,
+        description: "Arma lendária. Causa 40 de dano.",
+    },
 
     10: {
         id: 10,

@@ -91,4 +91,12 @@ export class EffectSystem {
     getSpeedMultiplier(): number {
         return this.hasEffect("speed") ? 10 : 1;
     }
+
+    getDamageMultiplier(): number {
+        if (this.hasEffect("damage")) {
+            return 1.2;
+        }
+
+        return 1;
+    }
 }

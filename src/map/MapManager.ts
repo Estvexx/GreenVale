@@ -96,4 +96,14 @@ export class MapManager {
 
         return this.map.getObjectLayer("Interactables")?.objects ?? [];
     }
+
+    getBossSpawns(): Phaser.Types.Tilemaps.TiledObject[] {
+        return this.map.getObjectLayer("BossSpawn")?.objects ?? [];
+    }
+
+    getBossSpawnByName(name: string): Phaser.Types.Tilemaps.TiledObject | null {
+        return (
+            this.getBossSpawns().find((spawn) => spawn.name === name) ?? null
+        );
+    }
 }
