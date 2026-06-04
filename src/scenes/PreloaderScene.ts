@@ -116,6 +116,10 @@ export class PreloaderScene extends Phaser.Scene {
             "decoracao_boss",
             "assets/images/map_images/decoracao_boss.png",
         );
+        this.load.image(
+            "particle_red",
+            "assets/images/effects/particle_red.png",
+        );
 
         // Mobs
         this.load.spritesheet("zombie", "assets/images/mobs/ZombieSheet.png", {

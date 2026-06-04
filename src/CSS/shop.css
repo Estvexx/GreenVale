@@ -1,7 +1,3 @@
-/* ============================================
-   LOJA - Overlay
-   ============================================ */
-
 #shop-overlay {
     position: fixed;
     inset: 0;
@@ -16,10 +12,6 @@
 #shop-overlay.hidden {
     display: none;
 }
-
-/* ============================================
-   PAINEL DA LOJA
-   ============================================ */
 
 .shop-panel {
     background: linear-gradient(
@@ -39,10 +31,6 @@
     width: 600px;
     height: 400px;
 }
-
-/* ============================================
-   CABEÇALHO
-   ============================================ */
 
 .shop-header {
     display: flex;
@@ -74,31 +62,24 @@
     color: #c8882a;
 }
 
-/* ============================================
-   ITENS - Horizontal com scroll
-   ============================================ */
-
 .shop-items-container {
     flex: 1;
 
-    /* Centra os items verticalmente nesse espaço */
     display: flex;
     flex-direction: row;
-    align-items: center; /* Horizontal */
+    align-items: center;
     gap: 12px;
     padding: 10px;
-    overflow-x: auto; /* Scroll horizontal */
+    overflow-x: auto;
     overflow-y: hidden;
 
-    cursor: grab; /* Mão aberta */
+    cursor: grab;
     user-select: none;
 
-    /* Estilo scroll */
     scrollbar-width: thin;
     scrollbar-color: var(--panel-border) var(--panel-bg-start);
 }
 
-/* Scrollbar para Chrome */
 .shop-items-container::-webkit-scrollbar {
     height: 8px;
 }
@@ -113,12 +94,8 @@
     border-radius: 4px;
 }
 
-/* ============================================
-   CADA ITEM DA LOJA
-   ============================================ */
-
 .shop-item {
-    flex: 0 0 auto; /* Não encolhe, tamanho fixo */
+    flex: 0 0 auto;
     width: 140px;
     background: var(--slot-bg);
     border: 2px solid var(--slot-border);
@@ -186,5 +163,5 @@
 
 .shop-items-container:active,
 .shop-items-container.active {
-    cursor: grabbing; /* Mão fechada ao arrastar */
+    cursor: grabbing;
 }

@@ -11,6 +11,7 @@ import { FarmFieldSystem } from "../systems/FarmFieldSystem";
 import { UIRoot } from "../UI/UIRoot";
 import { CollisionSystem } from "../systems/CollisionSystem";
 import { InteractionZoneSystem } from "../systems/InteractionZoneSystem";
+import type { ShopType } from "../types/ShopTypes";
 
 export class FarmScene extends Phaser.Scene {
     public player!: Player;
@@ -101,7 +102,7 @@ export class FarmScene extends Phaser.Scene {
         const { type, shopId, portalId } = zone;
 
         if ((type === "shop" || type === "sell") && shopId) {
-            UIRoot.shop.open(shopId);
+            UIRoot.shop.open(shopId as ShopType);
             return;
         }
 
