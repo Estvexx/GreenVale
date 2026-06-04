@@ -7,6 +7,7 @@ import { UI_EffectShopManager } from "./UI_EffectShopManager";
 import { UI_ActiveEffectsManager } from "./UI_ActiveEffectsManager";
 import { UI_ShopManager } from "./UI_ShopManager";
 import { UI_StorageManager } from "./UI_StorageManager";
+import { UI_ToastManager } from "./UI_ToastManager";
 
 export class UIRoot {
     private static initialized = false;
@@ -14,6 +15,7 @@ export class UIRoot {
     static effectShop: UI_EffectShopManager;
     static shop: UI_ShopManager;
     static storage: UI_StorageManager;
+    static toast: UI_ToastManager;
 
     static init() {
         if (this.initialized) return;
@@ -27,6 +29,7 @@ export class UIRoot {
         this.shop = new UI_ShopManager();
         this.storage = new UI_StorageManager();
         this.effectShop = new UI_EffectShopManager();
+        this.toast = new UI_ToastManager();
 
         new UI_ActiveEffectsManager();
 

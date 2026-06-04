@@ -1,15 +1,14 @@
 import { EffectShopSystem } from "../systems/EffetsShopSystem";
 import { EFFECT_SHOP_ITEMS } from "../data/shops/effectsShop";
+import { UIRoot } from "../UI/UIRoot";
 
 export class UI_EffectShopManager {
     private system = EffectShopSystem.getInstance();
 
     private overlay = document.getElementById("radial-overlay")!;
     private menu = document.getElementById("effect-radial-menu")!;
-    private toast = document.getElementById("effect-toast")!;
 
     private isOpen = false;
-    private toastTimeout?: ReturnType<typeof setTimeout>;
 
     private messages: Record<string, string> = {
         success: "Efeito comprado!",
@@ -80,7 +79,7 @@ export class UI_EffectShopManager {
                 const result = this.system.buy(action);
 
                 if (result !== "success") {
-                    this.showToast(this.messages[result], "error");
+                    UIRoot.toast.error(this.messages[result]);
                     button.classList.add("error");
 
                     setTimeout(() => {
@@ -90,7 +89,7 @@ export class UI_EffectShopManager {
                     return;
                 }
 
-                this.showToast(this.messages.success, "success");
+                UIRoot.toast.success(this.messages.success);
                 button.classList.add("bought");
 
                 setTimeout(() => {
@@ -100,17 +99,6 @@ export class UI_EffectShopManager {
 
             this.menu.appendChild(li);
         });
-    }
-
-    private showToast(message: string, type: "success" | "error") {
-        clearTimeout(this.toastTimeout);
-
-        this.toast.textContent = message;
-        this.toast.className = `effect-toast ${type}`;
-
-        this.toastTimeout = setTimeout(() => {
-            this.toast.classList.add("hidden");
-        }, 1800);
     }
 
     private formatDuration(shopItem: {

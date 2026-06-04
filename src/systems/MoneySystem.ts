@@ -1,67 +1,87 @@
-type Currency = "coins" | "bossTokens";
+export type Currency = "coins" | "bossTokens";
 
 type Listener = (currency: Currency, value: number) => void;
 
 export class MoneySystem {
     private static instance: MoneySystem;
 
-    private values: Record<Currency, number> = {
-        coins: 100,
-        bossTokens: 0,
-    };
+    private coins: number;
+    private bossTokens: number;
 
     private listeners: Listener[] = [];
 
     private constructor() {
-        const savedCoins = Number(localStorage.getItem("coins")) || 100;
-        const savedBoss = Number(localStorage.getItem("bossTokens")) || 0;
-
-        this.values.coins = savedCoins;
-        this.values.bossTokens = savedBoss;
+        this.coins = this.load("coins", 100);
+        this.bossTokens = this.load("bossTokens", 0);
     }
 
     static getInstance(): MoneySystem {
         if (!MoneySystem.instance) {
             MoneySystem.instance = new MoneySystem();
         }
+
         return MoneySystem.instance;
     }
 
     onChange(callback: Listener): void {
         this.listeners.push(callback);
 
-        callback("coins", this.values.coins);
-        callback("bossTokens", this.values.bossTokens);
-    }
-
-    private emit(currency: Currency) {
-        this.listeners.forEach((cb) => {
-            cb(currency, this.values[currency]);
-        });
+        callback("coins", this.coins);
+        callback("bossTokens", this.bossTokens);
     }
 
     get(currency: Currency): number {
-        return this.values[currency];
+        if (currency === "coins") return this.coins;
+
+        return this.bossTokens;
     }
 
     add(currency: Currency, amount: number): void {
-        this.values[currency] += amount;
+        if (amount <= 0) return;
 
-        localStorage.setItem(currency, String(this.values[currency]));
+        const current = this.get(currency);
+        const next = current + amount;
 
-        this.emit(currency);
+        this.set(currency, next);
     }
 
-    // Currency é o tipo de moeda que estou a utilizar
     spend(currency: Currency, amount: number): boolean {
-        if (this.values[currency] < amount) return false;
+        if (amount <= 0) return false;
 
-        this.values[currency] -= amount;
+        const current = this.get(currency);
 
-        localStorage.setItem(currency, String(this.values[currency]));
+        if (current < amount) return false;
 
-        this.emit(currency);
+        this.set(currency, current - amount);
 
         return true;
+    }
+
+    private set(currency: Currency, value: number): void {
+        if (currency === "coins") {
+            this.coins = value;
+        } else {
+            this.bossTokens = value;
+        }
+
+        localStorage.setItem(currency, String(value));
+
+        this.notify(currency);
+    }
+
+    private notify(currency: Currency): void {
+        const value = this.get(currency);
+
+        this.listeners.forEach((callback) => {
+            callback(currency, value);
+        });
+    }
+
+    private load(key: Currency, defaultValue: number): number {
+        const saved = localStorage.getItem(key);
+
+        if (saved === null) return defaultValue;
+
+        return Number(saved);
     }
 }

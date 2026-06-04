@@ -35,9 +35,9 @@ export class InteractionZoneSystem {
 
             this.scene.physics.add.existing(zone, true);
 
-            const type = this.getProp(obj, "type");
-            const shopId = this.getProp(obj, "shopId");
-            const portalId = this.getProp(obj, "portalId");
+            const type = this.getProperties(obj, "type");
+            const shopId = this.getProperties(obj, "shopId");
+            const portalId = this.getProperties(obj, "portalId");
 
             this.scene.physics.add.overlap(this.player, zone, () => {
                 if (!type) return;
@@ -69,7 +69,7 @@ export class InteractionZoneSystem {
         return this.currentZone !== null;
     }
 
-    private getProp(
+    private getProperties(
         obj: Phaser.Types.Tilemaps.TiledObject,
         name: string,
     ): string | undefined {
