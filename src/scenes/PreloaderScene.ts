@@ -82,7 +82,7 @@ export class PreloaderScene extends Phaser.Scene {
         this.load.image("foice", "assets/images/tools/Foice.png");
         this.load.image("balde_agua", "assets/images/tools/Balde_Agua.png");
 
-        // Tudo relacionado ao mapa
+        // Tudo relacionado ao mapa farmscene
         this.load.tilemapTiledJSON("mapa", "assets/map/mapa.tmj");
         this.load.image("barcos", "assets/images/map_images/boat.png");
         this.load.image("terras", "assets/images/map_images/dirt.png");
@@ -93,6 +93,17 @@ export class PreloaderScene extends Phaser.Scene {
         this.load.image(
             "arvores_e_poco",
             "assets/images/map_images/trees_and_well.png",
+        );
+
+        // Tudo relacionado ao mapa bossscene
+        this.load.tilemapTiledJSON("mapa_boss", "assets/map/mapa_boss.tmj");
+        this.load.image(
+            "terras_boss",
+            "assets/images/map_images/ground_boss.png",
+        );
+        this.load.image(
+            "decoracao_boss",
+            "assets/images/map_images/decoracao_boss.png",
         );
 
         // Relacionado a plantação

@@ -29,7 +29,11 @@ export class FarmScene extends Phaser.Scene {
 
     inventory = InventorySystem.getInstance();
 
-    private currentZone: { type: string; shopId: string } | null = null;
+    private currentZone: {
+        type: string;
+        shopId?: string;
+        portalId?: string;
+    } | null = null;
     private isInZone = false;
     private tooltip = document.getElementById("zone-tooltip")!;
 
@@ -60,8 +64,7 @@ export class FarmScene extends Phaser.Scene {
         InventorySystem.getInstance().addStartingItems();
         MoneySystem.getInstance();
 
-        const spawnPoint =
-            mapManager.map.getObjectLayer("SpawnPoint")?.objects[0];
+        const spawnPoint = mapManager.getSpawnPoint();
 
         this.player = new Player(
             this,
@@ -78,12 +81,7 @@ export class FarmScene extends Phaser.Scene {
 
         settingsUI.initMusic();
 
-        // -----------------------------
-        // COLLISIONS
-        // -----------------------------
-        const collisionLayer = mapManager.map.getObjectLayer("Collision");
-
-        collisionLayer?.objects.forEach((obj) => {
+        mapManager.getCollisionObjects().forEach((obj) => {
             const rect = this.add.rectangle(
                 obj.x! + obj.width! / 2,
                 obj.y! + obj.height! / 2,
@@ -95,9 +93,6 @@ export class FarmScene extends Phaser.Scene {
             this.physics.add.collider(this.player, rect);
         });
 
-        // -----------------------------
-        // INTERACTABLE ZONES
-        // -----------------------------
         mapManager.getInteractables().forEach((obj) => {
             const zone = this.add.zone(
                 obj.x! + obj.width! / 2,
@@ -113,9 +108,12 @@ export class FarmScene extends Phaser.Scene {
             const shopId = obj.properties?.find(
                 (p: any) => p.name === "shopId",
             )?.value;
+            const portalId = obj.properties?.find(
+                (p: any) => p.name === "portalId",
+            )?.value;
 
             this.physics.add.overlap(this.player, zone, () => {
-                this.currentZone = { type, shopId };
+                this.currentZone = { type, shopId, portalId };
                 this.isInZone = true;
             });
         });
@@ -123,7 +121,7 @@ export class FarmScene extends Phaser.Scene {
         this.input.keyboard?.on("keydown-F", () => {
             if (!this.currentZone) return;
 
-            const { type, shopId } = this.currentZone;
+            const { type, shopId, portalId } = this.currentZone;
             if (type === "shop") this.shopManager.open(shopId);
             if (type === "sell") this.shopManager.open(shopId);
             if (type === "well") {
@@ -133,6 +131,9 @@ export class FarmScene extends Phaser.Scene {
             if (type === "storage") {
                 console.log("Abrir armazém");
                 this.storageManager.open();
+            }
+            if (type === "portal" && portalId === "boss") {
+                this.scene.start("BossScene");
             }
         });
 
