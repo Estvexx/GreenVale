@@ -14,7 +14,159 @@
         "red": "Red",
         "purple": "Purple",
         "screen": "Screen",
-        "fullscreen": "Fullscreen",
-        "close": "✕"
+        "fullscreen": "Fullscreen"
+    },
+
+    "effectShop": {
+        "success": "Effect purchased!",
+        "noMoney": "Not enough boss tokens!",
+        "invalidEffect": "Effect unavailable."
+    },
+
+    "shop": {
+        "buy": "Buy",
+        "sell": "Sell",
+        "sellAll": "All",
+
+        "messages": {
+            "bought": "Purchased!",
+            "sold": "Sold!",
+            "noMoney": "Not enough money!",
+            "inventoryFull": "Inventory full!",
+            "maxSlots": "Limit reached!",
+            "noItem": "You don't have that item!"
+        },
+
+        "names": {
+            "ferragens": "Hardware",
+            "sementes": "Seeds",
+            "vendas": "Sale"
+        }
+    },
+
+    "effects": {
+        "speed": {
+            "name": "Speed Potion",
+            "description": "+20% speed"
+        },
+        "damage": {
+            "name": "Damage Potion",
+            "description": "+20% permanent damage"
+        },
+        "growth": {
+            "name": "Growth Potion",
+            "description": "+25% plant growth"
+        },
+        "seedDiscount": {
+            "name": "Seed Discount",
+            "description": "-15% on seeds"
+        }
+    },
+
+    "currency": {
+        "coins": "Coins",
+        "bossTokens": "Boss Tokens"
+    },
+
+    "common": {
+        "permanent": "Permanent",
+        "buy": "Buy",
+        "close": "Close"
+    },
+
+    "items": {
+        "hoe": {
+            "name": "Hoe",
+            "description": "Essential tool to prepare the soil before planting."
+        },
+        "scythe": {
+            "name": "Scythe",
+            "description": "Ideal for harvesting mature crops and clearing weeds from the field."
+        },
+        "bucketEmpty": {
+            "name": "Empty Bucket",
+            "description": "An empty bucket. Can be filled at the well to carry water."
+        },
+        "bucketWater": {
+            "name": "Water Bucket",
+            "description": "Bucket full of water. Useful for watering crops or refilling tools."
+        },
+        "scissors": {
+            "name": "Scissors",
+            "description": "An improvised and light weapon. Deals 5 damage."
+        },
+        "stick": {
+            "name": "Stick",
+            "description": "A sturdy stick, simple but effective against creatures. Deals 10 damage."
+        },
+        "baseballBat": {
+            "name": "Baseball Bat",
+            "description": "A heavy bat with good impact. Deals 15 damage."
+        },
+        "goldenSword": {
+            "name": "Golden Sword",
+            "description": "A rare and sharp sword, made to face bosses. Deals 25 damage."
+        },
+        "godSpear": {
+            "name": "Spear of the Gods",
+            "description": "A legendary weapon with divine power. Deals 40 damage."
+        },
+        "grapeSeed": {
+            "name": "Grape Seed",
+            "description": "Grape seed. Plant it in prepared soil to produce grapes."
+        },
+        "cucumberSeed": {
+            "name": "Cucumber Seed",
+            "description": "Cucumber seed. A good choice for a simple and profitable harvest."
+        },
+        "pepperSeed": {
+            "name": "Pepper Seed",
+            "description": "Pepper seed. Produces a spicy harvest with good selling value."
+        },
+        "greenBeanSeed": {
+            "name": "Green Bean Seed",
+            "description": "Green bean seed. Ideal for expanding agricultural production."
+        },
+        "pineappleSeed": {
+            "name": "Pineapple Seed",
+            "description": "Pineapple seed. Takes longer, but can yield a valuable harvest."
+        },
+        "greenPeaSeed": {
+            "name": "Green Pea Seed",
+            "description": "Green pea seed. Good for maintaining steady production."
+        },
+        "grapes": {
+            "name": "Grapes",
+            "description": "Fresh grapes harvested from the farm. Can be sold for coins."
+        },
+        "cucumber": {
+            "name": "Cucumber",
+            "description": "Freshly picked cucumber. Simple, fresh, and ready to sell."
+        },
+        "pepper": {
+            "name": "Pepper",
+            "description": "Intense and valuable pepper. A good harvest to earn coins."
+        },
+        "greenBean": {
+            "name": "Green Bean",
+            "description": "Fresh green bean from the farm. Can be sold or used in future recipes."
+        },
+        "pineapple": {
+            "name": "Pineapple",
+            "description": "Sweet and rare pineapple. A harvest with excellent selling value."
+        },
+        "greenPea": {
+            "name": "Green Pea",
+            "description": "Freshly picked green pea. A reliable agricultural product to sell."
+        }
+    },
+    "level": {
+        "up": "You leveled up to Farm Lv. {level}!"
+    },
+
+    "storage": {
+        "messages": {
+            "cannotMoveItem": "Limit for this item reached in inventory."
+        }
     }
 }

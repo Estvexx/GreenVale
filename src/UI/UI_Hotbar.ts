@@ -2,38 +2,41 @@ import { InventorySystem } from "../systems/InventorySystem";
 import { renderItemIcon } from "../utils/renderItemIcon";
 
 export class UI_HotBar {
-    private inventory: InventorySystem;
+    private inventory = InventorySystem.getInstance();
+
+    private slots: NodeListOf<HTMLElement>;
 
     constructor() {
-        this.inventory = InventorySystem.getInstance();
+        this.slots = document.querySelectorAll("#hotbar-container .slot");
 
-        // listeners
         this.inventory.onSelectionChange(() => {
-            this.updateHotbarSelection();
+            this.updateSelection();
         });
 
         this.inventory.onInventoryChange(() => {
-            this.updateHotbarItems();
+            this.render();
         });
 
-        // render inicial
-        this.updateHotbarSelection();
-        this.updateHotbarItems();
-
-        // clicks HTML
         this.bindSlotClicks();
+
+        this.updateSelection();
+        this.render();
     }
 
     private bindSlotClicks() {
-        document.querySelectorAll(".slot").forEach((slot, index) => {
+        this.slots.forEach((slot) => {
             slot.addEventListener("click", () => {
-                this.inventory.selectSlot(index); // Aqui eu posso chamar a funçao debaixo
+                const index = Number(slot.dataset.slot);
+
+                this.inventory.selectSlot(index);
             });
         });
     }
 
-    private updateHotbarSelection() {
-        document.querySelectorAll(".slot").forEach((slot, index) => {
+    private updateSelection() {
+        this.slots.forEach((slot) => {
+            const index = Number(slot.dataset.slot);
+
             slot.classList.toggle(
                 "active",
                 index === this.inventory.selectedSlot,
@@ -41,27 +44,31 @@ export class UI_HotBar {
         });
     }
 
-    private updateHotbarItems() {
-        document.querySelectorAll(".slot").forEach((slot) => {
-            const index = Number(slot.getAttribute("data-slot"));
+    private render() {
+        this.slots.forEach((slot) => {
+            const index = Number(slot.dataset.slot);
             const inventorySlot = this.inventory.slots[index];
-            let qty = slot.querySelector(".qty");
 
-            if (inventorySlot) {
-                renderItemIcon(slot as HTMLElement, inventorySlot.id);
+            this.clearSlot(slot);
 
-                if (!qty) {
-                    qty = document.createElement("span");
-                    qty.className = "qty";
-                    slot.appendChild(qty);
-                }
+            if (!inventorySlot) return;
 
+            renderItemIcon(slot, inventorySlot.id);
+
+            if (inventorySlot.quantity > 1) {
+                const qty = document.createElement("span");
+
+                qty.className = "qty";
                 qty.textContent = String(inventorySlot.quantity);
-            } else {
-                slot.querySelector("img")?.remove();
-                slot.querySelector(".sprite-icon")?.remove();
-                qty?.remove();
+
+                slot.appendChild(qty);
             }
         });
+    }
+
+    private clearSlot(slot: HTMLElement) {
+        slot.querySelector("img")?.remove();
+        slot.querySelector(".sprite-icon")?.remove();
+        slot.querySelector(".qty")?.remove();
     }
 }

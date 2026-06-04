@@ -2,6 +2,8 @@ import { StorageSystem } from "../systems/StorageSystem";
 import { InventorySystem } from "../systems/InventorySystem";
 import type { InventorySlot } from "../types/InventoryTypes";
 import { renderItemIcon } from "../utils/renderItemIcon";
+import { t } from "../i18n";
+import { UIRoot } from "./UIRoot";
 
 type Selected = {
     container: "inventory" | "storage";
@@ -43,7 +45,9 @@ export class UI_StorageManager {
     private bindSlots() {
         // bind only the inventory slots that live inside the storage overlay
         document
-            .querySelectorAll<HTMLDivElement>("#storage-overlay #inventory-grid .slot")
+            .querySelectorAll<HTMLDivElement>(
+                "#storage-overlay #inventory-grid .slot",
+            )
             .forEach((slot) => {
                 slot.addEventListener("click", () => {
                     const index = Number(slot.getAttribute("data-slot"));
@@ -54,7 +58,9 @@ export class UI_StorageManager {
 
         // bind only the storage grid slots
         document
-            .querySelectorAll<HTMLDivElement>("#storage-overlay #storage-grid .slot")
+            .querySelectorAll<HTMLDivElement>(
+                "#storage-overlay #storage-grid .slot",
+            )
             .forEach((slot) => {
                 slot.addEventListener("click", () => {
                     const index = Number(slot.getAttribute("data-slot"));
@@ -95,8 +101,24 @@ export class UI_StorageManager {
             );
         }
 
-        // STORAGE para INVENTORY
+        // STORAGE -> INVENTORY
         else {
+            const incomingSlot = this.storage.slots[from.index];
+
+            const canReceive = this.inventory.canReceiveSlotAt(
+                index,
+                incomingSlot,
+            );
+
+            if (!canReceive) {
+                UIRoot.toast.error(t("storage.messages.cannotMoveItem"));
+
+                this.selected = null;
+                this.updateSelectionUI();
+
+                return;
+            }
+
             this.swapBetween(
                 this.storage.slots,
                 from.index,
@@ -161,7 +183,9 @@ export class UI_StorageManager {
     private renderInventory() {
         // render only the inventory section inside the storage overlay
         document
-            .querySelectorAll<HTMLElement>("#storage-overlay #inventory-grid .slot")
+            .querySelectorAll<HTMLElement>(
+                "#storage-overlay #inventory-grid .slot",
+            )
             .forEach((slot) => {
                 const index = Number(slot.getAttribute("data-slot"));
                 this.renderSlot(slot, this.inventory.slots[index]);
@@ -171,7 +195,9 @@ export class UI_StorageManager {
     private renderStorage() {
         // render only the storage grid slots
         document
-            .querySelectorAll<HTMLElement>("#storage-overlay #storage-grid .slot")
+            .querySelectorAll<HTMLElement>(
+                "#storage-overlay #storage-grid .slot",
+            )
             .forEach((slot) => {
                 const index = Number(slot.getAttribute("data-slot"));
                 this.renderSlot(slot, this.storage.slots[index]);

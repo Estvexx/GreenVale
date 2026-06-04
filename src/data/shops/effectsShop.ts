@@ -20,8 +20,8 @@ export const EFFECT_SHOP_ITEMS: Record<string, EffectShopItem> = {
         currencyIcon: "assets/images/Boss_Coin.png",
         effect: {
             id: "speed",
-            name: "Poção de Velocidade",
-            description: "+20% velocidade",
+            nameKey: "effects.speed.name",
+            descriptionKey: "effects.speed.description",
             icon: "speed",
             permanent: false,
         },
@@ -35,8 +35,8 @@ export const EFFECT_SHOP_ITEMS: Record<string, EffectShopItem> = {
         currencyIcon: "assets/images/Boss_Coin.png",
         effect: {
             id: "damage",
-            name: "Poção de Dano",
-            description: "+20% dano permanente",
+            nameKey: "effects.damage.name",
+            descriptionKey: "effects.damage.description",
             icon: "damage",
             permanent: true,
         },
@@ -51,8 +51,8 @@ export const EFFECT_SHOP_ITEMS: Record<string, EffectShopItem> = {
         currencyIcon: "assets/images/Boss_Coin.png",
         effect: {
             id: "growth",
-            name: "Poção de Crescimento",
-            description: "+25% crescimento das plantas",
+            nameKey: "effects.growth.name",
+            descriptionKey: "effects.growth.description",
             icon: "growth",
             permanent: false,
         },
@@ -67,8 +67,8 @@ export const EFFECT_SHOP_ITEMS: Record<string, EffectShopItem> = {
         currencyIcon: "assets/images/Boss_Coin.png",
         effect: {
             id: "seed_discount",
-            name: "Desconto de Sementes",
-            description: "-15% em sementes",
+            nameKey: "effects.seedDiscount.name",
+            descriptionKey: "effects.seedDiscount.description",
             icon: "seed_discount",
             permanent: false,
         },

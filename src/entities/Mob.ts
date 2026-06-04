@@ -32,7 +32,7 @@ export class Mob extends Phaser.Physics.Arcade.Sprite {
 
         this.setScale(1.5);
 
-        this.setDepth(20);
+        this.setDepth(11);
         this.setImmovable(true);
 
         const body = this.body as Phaser.Physics.Arcade.Body;
@@ -47,7 +47,7 @@ export class Mob extends Phaser.Physics.Arcade.Sprite {
         });
 
         this.hpText.setOrigin(0.5);
-        this.hpText.setDepth(30);
+        this.hpText.setDepth(11);
 
         this.updateHpText();
     }

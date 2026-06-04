@@ -1,6 +1,5 @@
 import type { InventorySlot } from "../types/InventoryTypes";
 import { ITEMS } from "../data/ItemDatabase";
-import { StorageSystem } from "./StorageSystem";
 
 type Listener = () => void;
 
@@ -107,11 +106,7 @@ export class InventorySystem {
         const slot = this.slots[index];
         if (!slot) return;
 
-        slot.quantity--;
-
-        if (slot.quantity <= 0) {
-            this.slots[index] = null;
-        }
+        this.slots[index] = null;
 
         this.emitInventoryChange();
     }
@@ -184,7 +179,32 @@ export class InventorySystem {
         return true;
     }
 
+    canReceiveSlotAt(index: number, incomingSlot: InventorySlot): boolean {
+        if (!incomingSlot) return true;
+
+        const itemData = ITEMS[incomingSlot.id];
+        if (!itemData) return false;
+
+        if (incomingSlot.quantity > itemData.maxStack) return false;
+
+        if (itemData.maxSlots === undefined) return true;
+
+        const currentSlot = this.slots[index];
+
+        const currentCount = this.slots.filter((slot) => {
+            return slot?.id === incomingSlot.id;
+        }).length;
+
+        const targetAlreadyHasSameItem = currentSlot?.id === incomingSlot.id;
+
+        if (targetAlreadyHasSameItem) return true;
+
+        return currentCount < itemData.maxSlots;
+    }
+
     addStartingItems() {
+        if (this.getItemQuantity(1) > 0) return;
+
         this.addItem(1, 1);
     }
 
@@ -196,24 +216,6 @@ export class InventorySystem {
     closeInventory() {
         this.isInventoryOpen = false;
         this.emitInventoryChange();
-    }
-
-    moveItemToStorage(slotIndex: number): boolean {
-        const slot = this.slots[slotIndex];
-
-        if (!slot) return false;
-
-        const storage = StorageSystem.getInstance();
-
-        const success = storage.addItem(slot.id, slot.quantity);
-
-        if (!success) return false;
-
-        this.slots[slotIndex] = null;
-
-        this.emitInventoryChange();
-
-        return true;
     }
 
     forceRefresh() {

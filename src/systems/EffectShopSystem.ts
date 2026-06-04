@@ -22,7 +22,6 @@ export class EffectShopSystem {
         const shopItem = EFFECT_SHOP_ITEMS[action];
 
         if (!shopItem) {
-            console.warn("Efeito não encontrado:", action);
             return "invalid_effect";
         }
 

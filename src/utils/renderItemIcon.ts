@@ -22,7 +22,7 @@ export function renderItemIcon(element: HTMLElement, itemId: number) {
         itemData.row !== undefined
     ) {
         // spritesheet
-        img?.remove(); // remove img se existir
+        img?.remove();
 
         let sprite = element.querySelector(".sprite-icon") as HTMLElement;
 

@@ -1,6 +1,7 @@
 export interface Item {
     id: number;
     name: string;
+    nameKey?: string;
     icon?: string;
     spritesheet?: string;
     col?: number;
@@ -8,5 +9,6 @@ export interface Item {
     maxStack: number;
     maxSlots?: number;
     description?: string;
+    descriptionKey?: string;
     damage?: number;
 }

@@ -3,6 +3,7 @@ import { type Shop } from "../../types/ShopTypes";
 export const SEMENTES_SHOP: Shop = {
     id: "sementes",
     name: "Sementes",
+    nameKey: "shop.names.sementes",
     mode: "buy",
     items: [
         {

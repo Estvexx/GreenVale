@@ -14,7 +14,159 @@
         "red": "Vermelho",
         "purple": "Roxo",
         "screen": "Ecrã",
-        "fullscreen": "Ecrã Completo",
-        "close": "✕"
+        "fullscreen": "Ecrã Completo"
+    },
+
+    "effectShop": {
+        "success": "Efeito comprado!",
+        "noMoney": "Boss tokens insuficientes!",
+        "invalidEffect": "Efeito indisponível."
+    },
+
+    "shop": {
+        "buy": "Comprar",
+        "sell": "Vender",
+        "sellAll": "Tudo",
+
+        "messages": {
+            "bought": "Comprado!",
+            "sold": "Vendido!",
+            "noMoney": "Sem dinheiro!",
+            "inventoryFull": "Inventário cheio!",
+            "maxSlots": "Limite atingido!",
+            "noItem": "Não tens esse item!"
+        },
+
+        "names": {
+            "ferragens": "Ferragens",
+            "sementes": "Sementes",
+            "vendas": "Venda"
+        }
+    },
+
+    "effects": {
+        "speed": {
+            "name": "Poção de Velocidade",
+            "description": "+20% velocidade"
+        },
+        "damage": {
+            "name": "Poção de Dano",
+            "description": "+20% dano permanente"
+        },
+        "growth": {
+            "name": "Poção de Crescimento",
+            "description": "+25% crescimento das plantas"
+        },
+        "seedDiscount": {
+            "name": "Desconto de Sementes",
+            "description": "-15% em sementes"
+        }
+    },
+
+    "currency": {
+        "coins": "Moedas",
+        "bossTokens": "Boss Tokens"
+    },
+
+    "common": {
+        "permanent": "Permanente",
+        "buy": "Comprar",
+        "close": "Fechar"
+    },
+
+    "items": {
+        "hoe": {
+            "name": "Enxada",
+            "description": "Ferramenta essencial para preparar a terra antes de plantar."
+        },
+        "scythe": {
+            "name": "Foice",
+            "description": "Ideal para colher plantações maduras e limpar ervas do campo."
+        },
+        "bucketEmpty": {
+            "name": "Balde Vazio",
+            "description": "Um balde vazio. Pode ser enchido no poço para transportar água."
+        },
+        "bucketWater": {
+            "name": "Balde com Água",
+            "description": "Balde cheio de água. Útil para regar plantações ou abastecer ferramentas."
+        },
+        "scissors": {
+            "name": "Tesoura",
+            "description": "Uma arma improvisada e leve. Causa 5 de dano."
+        },
+        "stick": {
+            "name": "Bastão",
+            "description": "Um bastão resistente, simples mas eficaz contra criaturas. Causa 10 de dano."
+        },
+        "baseballBat": {
+            "name": "Taco de Basebol",
+            "description": "Um taco pesado com bom impacto. Causa 15 de dano."
+        },
+        "goldenSword": {
+            "name": "Espada Dourada",
+            "description": "Uma espada rara e afiada, feita para enfrentar bosses. Causa 25 de dano."
+        },
+        "godSpear": {
+            "name": "Lança dos Deuses",
+            "description": "Uma arma lendária com poder divino. Causa 40 de dano."
+        },
+        "grapeSeed": {
+            "name": "Semente de Uvas",
+            "description": "Semente de uvas. Planta-a em terra preparada para produzir uvas."
+        },
+        "cucumberSeed": {
+            "name": "Semente de Pepino",
+            "description": "Semente de pepino. Uma boa escolha para uma colheita simples e rentável."
+        },
+        "pepperSeed": {
+            "name": "Semente de Pimenta",
+            "description": "Semente de pimenta. Produz uma colheita picante com bom valor de venda."
+        },
+        "greenBeanSeed": {
+            "name": "Semente de Vagem",
+            "description": "Semente de vagem. Ideal para expandir a produção agrícola."
+        },
+        "pineappleSeed": {
+            "name": "Semente de Ananás",
+            "description": "Semente de ananás. Demora mais, mas pode render uma colheita valiosa."
+        },
+        "greenPeaSeed": {
+            "name": "Semente de Feijão Verde",
+            "description": "Semente de feijão verde. Boa para manter uma produção constante."
+        },
+        "grapes": {
+            "name": "Uvas",
+            "description": "Uvas frescas colhidas da quinta. Podem ser vendidas por moedas."
+        },
+        "cucumber": {
+            "name": "Pepino",
+            "description": "Pepino acabado de colher. Simples, fresco e pronto para vender."
+        },
+        "pepper": {
+            "name": "Pimenta",
+            "description": "Pimenta intensa e valiosa. Uma boa colheita para ganhar moedas."
+        },
+        "greenBean": {
+            "name": "Vagem",
+            "description": "Vagem fresca da quinta. Pode ser vendida ou usada em futuras receitas."
+        },
+        "pineapple": {
+            "name": "Ananás",
+            "description": "Ananás doce e raro. Uma colheita com excelente valor de venda."
+        },
+        "greenPea": {
+            "name": "Feijão Verde",
+            "description": "Feijão verde acabado de colher. Um produto agrícola fiável para vender."
+        }
+    },
+    "level": {
+        "up": "Subiste para Farm Lv. {level}!"
+    },
+
+    "storage": {
+        "messages": {
+            "cannotMoveItem": "Limite desse item atingido no inventário."
+        }
     }
 }

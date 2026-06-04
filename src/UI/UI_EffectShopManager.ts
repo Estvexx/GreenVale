@@ -1,6 +1,10 @@
-import { EffectShopSystem } from "../systems/EffetsShopSystem";
+import {
+    EffectShopSystem,
+    type EffectBuyResult,
+} from "../systems/EffectShopSystem";
 import { EFFECT_SHOP_ITEMS } from "../data/shops/effectsShop";
-import { UIRoot } from "../UI/UIRoot";
+import { UIRoot } from "./UIRoot";
+import { t } from "../i18n/index";
 
 export class UI_EffectShopManager {
     private system = EffectShopSystem.getInstance();
@@ -10,10 +14,10 @@ export class UI_EffectShopManager {
 
     private isOpen = false;
 
-    private messages: Record<string, string> = {
-        success: "Efeito comprado!",
-        no_money: "Boss tokens insuficientes!",
-        invalid_effect: "Efeito indisponivel.",
+    private messages: Record<EffectBuyResult, string> = {
+        success: "effectShop.success",
+        no_money: "effectShop.noMoney",
+        invalid_effect: "effectShop.invalidEffect",
     };
 
     constructor() {
@@ -45,16 +49,16 @@ export class UI_EffectShopManager {
                 <a class="${shopItem.action} radial-item" href="#" data-action="${shopItem.action}">
                     <img
                         src="${shopItem.potionIcon}"
-                        alt="${shopItem.effect.name}"
+                        alt="${t(shopItem.effect.nameKey)}"
                         class="radial-potion-icon"
                     />
 
                     <span class="radial-potion-name">
-                        ${shopItem.effect.name}
+                        ${t(shopItem.effect.nameKey)}
                     </span>
 
                     <span class="radial-potion-duration">
-                        ${this.formatDuration(shopItem)}
+                        ${this.formatDuration(shopItem.durationMs, shopItem.effect.permanent)}
                     </span>
 
                     <span class="radial-potion-price">
@@ -79,41 +83,25 @@ export class UI_EffectShopManager {
                 const result = this.system.buy(action);
 
                 if (result !== "success") {
-                    UIRoot.toast.error(this.messages[result]);
-                    button.classList.add("error");
-
-                    setTimeout(() => {
-                        button.classList.remove("error");
-                    }, 500);
-
+                    UIRoot.toast.error(t(this.messages[result]));
                     return;
                 }
 
-                UIRoot.toast.success(this.messages.success);
-                button.classList.add("bought");
-
-                setTimeout(() => {
-                    button.classList.remove("bought");
-                }, 500);
+                UIRoot.toast.success(t(this.messages[result]));
             });
 
             this.menu.appendChild(li);
         });
     }
 
-    private formatDuration(shopItem: {
-        durationMs?: number;
-        effect: { permanent: boolean };
-    }): string {
-        if (shopItem.effect.permanent) {
-            return "Permanente";
-        }
+    private formatDuration(
+        durationMs: number | undefined,
+        permanent: boolean,
+    ): string {
+        if (permanent) return t("common.permanent");
+        if (!durationMs) return "";
 
-        if (!shopItem.durationMs) {
-            return "";
-        }
-
-        const totalSeconds = Math.floor(shopItem.durationMs / 1000);
+        const totalSeconds = Math.floor(durationMs / 1000);
         const minutes = Math.floor(totalSeconds / 60);
         const seconds = totalSeconds % 60;
 
