@@ -1,40 +1,26 @@
 import Phaser from "phaser";
 import { Player } from "../entities/Player";
 import { InventorySystem } from "../systems/InventorySystem";
-import { MoneySystem } from "../systems/MoneySystem";
 import { SettingsUI } from "../UI/UI_Settings";
-import { UI_ShopManager } from "../UI/UI_ShopManager";
-import { UI_StorageManager } from "../UI/UI_StorageManager";
-import { UI_HotBar } from "../UI/UI_Hotbar";
-import { UI_Inventory } from "../UI/UI_Inventory";
-import { UIInventoryManager } from "../UI/UI_InventoryManager";
 import { InputManager } from "../input/inputManager";
 import { CameraManager } from "../camera/CameraManager";
 import { MapManager } from "../map/MapManager";
-import { UIMoneyManager } from "../UI/UI_MoneyManager";
-import { preloadUIImages } from "../utils/preloadUIImages";
 import { ITEM_IDS } from "../data/ItemDatabase";
-import { UI_EffectShopManager } from "../UI/UI_EffectShopManager";
-import { UI_ActiveEffectsManager } from "../UI/UI_ActiveEffectsManager";
 import { EffectSystem } from "../systems/EffectsSystem";
+import { FarmFieldSystem } from "../systems/FarmFieldSystem";
+import { UIRoot } from "../UI/UIRoot";
+import { CollisionSystem } from "../systems/CollisionSystem";
+import { InteractionZoneSystem } from "../systems/InteractionZoneSystem";
 
 export class FarmScene extends Phaser.Scene {
     public player!: Player;
     public bgMusic!: Phaser.Sound.BaseSound;
+    private interactionZones!: InteractionZoneSystem;
+    private farmFields!: FarmFieldSystem;
 
-    private shopManager!: UI_ShopManager;
-    private storageManager!: UI_StorageManager;
-    private radialMenu!: UI_EffectShopManager;
+    private inventory = InventorySystem.getInstance();
     private effects = EffectSystem.getInstance();
 
-    inventory = InventorySystem.getInstance();
-
-    private currentZone: {
-        type: string;
-        shopId?: string;
-        portalId?: string;
-    } | null = null;
-    private isInZone = false;
     private tooltip = document.getElementById("zone-tooltip")!;
 
     constructor() {
@@ -42,27 +28,14 @@ export class FarmScene extends Phaser.Scene {
     }
 
     create() {
-        preloadUIImages();
-
         const mapManager = new MapManager(this);
+        this.farmFields = new FarmFieldSystem(this, mapManager.map);
 
-        InventorySystem.getInstance().addStartingItems();
-        MoneySystem.getInstance();
+        new InputManager(this, () => {
+            this.handleInteraction();
+        });
 
-        new InputManager(this);
-        new UI_HotBar();
-        new UI_Inventory();
-        new UIInventoryManager();
-        new UIMoneyManager();
-        this.radialMenu = new UI_EffectShopManager();
-        new UI_ActiveEffectsManager();
-
-        this.shopManager = new UI_ShopManager();
-        this.storageManager = new UI_StorageManager();
         const settingsUI = new SettingsUI(this);
-
-        InventorySystem.getInstance().addStartingItems();
-        MoneySystem.getInstance();
 
         const spawnPoint = mapManager.getSpawnPoint();
 
@@ -72,6 +45,14 @@ export class FarmScene extends Phaser.Scene {
             spawnPoint?.y ?? 496,
         );
 
+        this.interactionZones = new InteractionZoneSystem(
+            this,
+            this.player,
+            mapManager,
+        );
+
+        new CollisionSystem(this, this.player, mapManager);
+
         new CameraManager(this, this.player, mapManager.map);
 
         this.bgMusic = this.sound.add("bgMusic", {
@@ -80,105 +61,65 @@ export class FarmScene extends Phaser.Scene {
         });
 
         settingsUI.initMusic();
-
-        mapManager.getCollisionObjects().forEach((obj) => {
-            const rect = this.add.rectangle(
-                obj.x! + obj.width! / 2,
-                obj.y! + obj.height! / 2,
-                obj.width!,
-                obj.height!,
-            );
-
-            this.physics.add.existing(rect, true);
-            this.physics.add.collider(this.player, rect);
-        });
-
-        mapManager.getInteractables().forEach((obj) => {
-            const zone = this.add.zone(
-                obj.x! + obj.width! / 2,
-                obj.y! + obj.height! / 2,
-                obj.width!,
-                obj.height!,
-            );
-            this.physics.add.existing(zone, true);
-
-            const type = obj.properties?.find(
-                (p: any) => p.name === "type",
-            )?.value;
-            const shopId = obj.properties?.find(
-                (p: any) => p.name === "shopId",
-            )?.value;
-            const portalId = obj.properties?.find(
-                (p: any) => p.name === "portalId",
-            )?.value;
-
-            this.physics.add.overlap(this.player, zone, () => {
-                this.currentZone = { type, shopId, portalId };
-                this.isInZone = true;
-            });
-        });
-
-        this.input.keyboard?.on("keydown-F", () => {
-            if (!this.currentZone) return;
-
-            const { type, shopId, portalId } = this.currentZone;
-            if (type === "shop") this.shopManager.open(shopId);
-            if (type === "sell") this.shopManager.open(shopId);
-            if (type === "well") {
-                console.log("Zona", this.currentZone);
-                this.fillBucket();
-            }
-            if (type === "storage") {
-                console.log("Abrir armazém");
-                this.storageManager.open();
-            }
-            if (type === "portal" && portalId === "boss") {
-                this.scene.start("BossScene");
-            }
-            if (type === "trash") {
-                this.inventory.removeItem(this.inventory.selectedSlot);
-            }
-        });
-
-        this.input.keyboard?.on("keydown-Q", () => {
-            this.radialMenu.toggle();
-        });
-
-        this.inventory.onSelectionChange(() => {
-            this.updateHeldItem();
-        });
-
-        this.updateHeldItem();
-    }
-
-    updateHeldItem() {
-        this.inventory.getCurrentItem();
-        //const item = this.inventory.getCurrentItem();
-        //console.log("Item na mão agora:", item);
     }
 
     update(time: number) {
         this.player.update(time);
 
-        this.tooltip.classList.toggle("hidden", !this.isInZone);
+        this.interactionZones.update();
 
-        if (!this.isInZone) {
-            this.currentZone = null;
-        }
+        this.tooltip.classList.toggle(
+            "hidden",
+            !this.interactionZones.isInsideZone(),
+        );
 
-        this.isInZone = false;
         this.effects.update();
     }
 
     private fillBucket() {
-        console.log("Chamei a funçao");
         const item = this.inventory.getCurrentItem();
 
         if (!item) return;
-
         if (item.id !== ITEM_IDS.BUCKET_EMPTY) return;
-        console.log("Ola boi");
-        this.inventory.convertOneCurrentItem(ITEM_IDS.BUCKET_WATER);
-        console.log("Balde cheio!");
+
+        const converted = this.inventory.convertOneCurrentItem(
+            ITEM_IDS.BUCKET_WATER,
+        );
+
+        if (!converted) {
+            console.log("Não foi possível encher o balde.");
+        }
+    }
+
+    private handleInteraction() {
+        const zone = this.interactionZones.getCurrentZone();
+
+        if (!zone) return;
+
+        const { type, shopId, portalId } = zone;
+
+        if ((type === "shop" || type === "sell") && shopId) {
+            UIRoot.shop.open(shopId);
+            return;
+        }
+
+        if (type === "well") {
+            this.fillBucket();
+            return;
+        }
+
+        if (type === "storage") {
+            UIRoot.storage.open();
+            return;
+        }
+
+        if (type === "portal" && portalId === "boss") {
+            this.scene.start("BossScene");
+            return;
+        }
+
+        if (type === "trash") {
+            this.inventory.removeItem(this.inventory.selectedSlot);
+        }
     }
 }

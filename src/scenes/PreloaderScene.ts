@@ -1,10 +1,16 @@
 import Phaser from "phaser";
+import { UIRoot } from "../UI/UIRoot";
+import { preloadUIImages } from "../utils/preloadUIImages";
 
 export class PreloaderScene extends Phaser.Scene {
     private logo!: Phaser.GameObjects.Image;
 
     constructor() {
         super("PreloaderScene");
+    }
+
+    create() {
+        UIRoot.init();
     }
     preload() {
         const width = this.scale.width;
@@ -138,5 +144,7 @@ export class PreloaderScene extends Phaser.Scene {
 
         // Musica e sons
         this.load.audio("bgMusic", "assets/audio/apple_cider.ogg");
+
+        preloadUIImages();
     }
 }

@@ -1,37 +1,55 @@
 .money-hud {
     position: absolute;
-    top: 30px;
+    top: 120px;
     left: 30px;
     display: flex;
     flex-direction: column;
     gap: 10px;
     pointer-events: auto;
-    z-index: 2;
+    z-index: 10;
 }
 
 .money-item {
     display: flex;
     align-items: center;
-    gap: 8px;
-    background: rgba(107, 68, 35, 0.6);
-    border: 2px solid var(--panel-border);
-    border-radius: 8px;
-    padding: 6px 12px;
+    gap: 10px;
+
+    width: 180px; /* Largura fixa como farm-level */
+    padding: 10px 14px;
+
+    background: rgba(25, 18, 10, 0.85); /* Fundo escuro igual */
+    border: 2px solid var(--color-gold); /* Borda dourada */
+    border-radius: 10px;
+
+    color: var(--color-cream);
+    font-family: Georgia, serif;
+
+    box-shadow: 0 4px 0 var(--panel-shadow);
 }
 
 .money-icon {
-    width: 40px;
-    height: 40px;
+    width: 32px;
+    height: 32px;
     image-rendering: pixelated;
     pointer-events: none;
+    filter: drop-shadow(1px 1px 0 rgba(0, 0, 0, 0.5));
 }
 
 .money-item span {
-    color: var(--color-cream);
-    font-family: "Courier New", monospace;
     font-size: 16px;
     font-weight: 700;
+    color: var(--color-cream);
     text-shadow: 1px 1px 0 var(--panel-shadow);
+    font-family: "Courier New", monospace;
+}
+
+.money-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 700;
+    font-size: 14px;
+    margin-bottom: 4px;
 }
 
 .hidden {

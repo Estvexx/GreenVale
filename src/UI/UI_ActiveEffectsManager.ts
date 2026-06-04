@@ -14,6 +14,7 @@ export class UI_ActiveEffectsManager {
     };
 
     constructor() {
+        this.panel.classList.remove("hidden");
         this.effects.onChange(() => {
             this.render();
         });

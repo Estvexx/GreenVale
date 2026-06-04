@@ -7,6 +7,7 @@ export type MobData = {
 
     bossCoinDropChance: number;
     bossCoinBonusChance: number;
+    animKey: string;
 };
 
 export const MOBS: Record<string, MobData> = {
@@ -15,6 +16,7 @@ export const MOBS: Record<string, MobData> = {
         name: "Zombie",
         frame: 0,
         texture: "zombie",
+        animKey: "zombie_idle",
         hp: 50,
         bossCoinDropChance: 0.2,
         bossCoinBonusChance: 0.05,
@@ -24,6 +26,7 @@ export const MOBS: Record<string, MobData> = {
         name: "Bear",
         frame: 0,
         texture: "bear",
+        animKey: "bear_idle",
         hp: 500,
         bossCoinDropChance: 0.4,
         bossCoinBonusChance: 0.5,
@@ -33,6 +36,7 @@ export const MOBS: Record<string, MobData> = {
         name: "Slime",
         frame: 0,
         texture: "slime",
+        animKey: "slime_idle",
         hp: 1000,
         bossCoinDropChance: 0.6,
         bossCoinBonusChance: 0.6,

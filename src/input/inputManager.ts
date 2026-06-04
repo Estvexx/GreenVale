@@ -1,6 +1,8 @@
 import Phaser from "phaser";
 import { InventorySystem } from "../systems/InventorySystem";
 import { MoneySystem } from "../systems/MoneySystem";
+import { UIRoot } from "../UI/UIRoot";
+import { LevelSystem } from "../systems/LevelSystem";
 
 const SLOT_KEYS = [
     Phaser.Input.Keyboard.KeyCodes.ONE,
@@ -17,12 +19,19 @@ export class InputManager {
     private scene: Phaser.Scene;
     private inventory = InventorySystem.getInstance();
     private money = MoneySystem.getInstance();
+    private level = LevelSystem.getInstance();
 
-    constructor(scene: Phaser.Scene) {
+    private onInteract?: () => void;
+
+    constructor(scene: Phaser.Scene, onInteract?: () => void) {
         this.scene = scene;
+        this.onInteract = onInteract;
         this.registerInventoryKeys();
         this.addMoneyTestKeys();
         this.addItemTestKeys();
+        this.OpenRadialMenuKey();
+        this.addXP();
+        this.registerInteractionKey();
     }
 
     private registerInventoryKeys() {
@@ -40,7 +49,11 @@ export class InputManager {
             this.inventory.closeInventory();
         });
     }
-
+    private OpenRadialMenuKey() {
+        this.scene.input.keyboard?.on("keydown-Q", () => {
+            UIRoot.effectShop.toggle();
+        });
+    }
     private addMoneyTestKeys() {
         this.scene.input.keyboard?.on("keydown-P", () => {
             this.money.add("coins", 100);
@@ -53,10 +66,23 @@ export class InputManager {
         });
     }
 
+    private addXP() {
+        this.scene.input.keyboard?.on("keydown-U", () => {
+            this.level.addXp(100);
+            console.log("+100 XP");
+        });
+    }
+
     private addItemTestKeys() {
         this.scene.input.keyboard?.on("keydown-I", () => {
             this.inventory.addItem(20, 1);
             console.log("+1 item vendavel");
+        });
+    }
+
+    private registerInteractionKey() {
+        this.scene.input.keyboard?.on("keydown-F", () => {
+            this.onInteract?.();
         });
     }
 }
