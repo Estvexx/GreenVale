@@ -14,6 +14,8 @@
         <link rel="stylesheet" href="/src/CSS/radial_menu.css" />
         <link rel="stylesheet" href="/src/CSS/toast.css" />
         <link rel="stylesheet" href="/src/CSS/effects.css" />
+        <link rel="stylesheet" href="/src/CSS/level.css" />
+
         <link
             href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined"
             rel="stylesheet"
@@ -337,25 +339,6 @@
                 </div>
             </div>
 
-            <div class="money-hud hidden" id="money-hud">
-                <div class="money-item">
-                    <img
-                        src="assets/images/Coin.png"
-                        alt="Moedas"
-                        class="money-icon"
-                    />
-                    <span id="coins">0</span>
-                </div>
-                <div class="money-item">
-                    <img
-                        src="assets/images/Boss_Coin.png"
-                        alt="Tokens"
-                        class="money-icon"
-                    />
-                    <span id="bossTokens">0</span>
-                </div>
-            </div>
-
             <div id="shop-overlay" class="hidden">
                 <div class="shop-panel">
                     <div class="shop-header">
@@ -472,6 +455,38 @@
                 <div id="active-effects-list"></div>
             </div>
             <div id="effect-toast" class="effect-toast hidden"></div>
+
+            <div class="money-hud hidden" id="money-hud">
+                <div class="money-item">
+                    <img
+                        src="assets/images/Coin.png"
+                        alt="Moedas"
+                        class="money-icon"
+                    />
+                    <span id="coins">0</span>
+                </div>
+                <div class="money-item">
+                    <img
+                        src="assets/images/Boss_Coin.png"
+                        alt="Tokens"
+                        class="money-icon"
+                    />
+                    <span id="bossTokens">0</span>
+                </div>
+            </div>
+
+            <div id="farm-level-hud" class="farm-level-hud">
+                <div class="farm-level-header">
+                    <span class="farm-icon">🌾</span>
+                    <span id="farm-level-text">Farm Lv. 1</span>
+                </div>
+
+                <div class="farm-xp-bar">
+                    <div id="farm-xp-fill" class="farm-xp-fill"></div>
+                </div>
+
+                <div id="farm-xp-text" class="farm-xp-text">0 / 100 XP</div>
+            </div>
             <!-- ======================================== Aqui acaba a UI-LAYER ======================================== -->
         </div>
 

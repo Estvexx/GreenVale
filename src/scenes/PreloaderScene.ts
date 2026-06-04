@@ -1,10 +1,15 @@
 import Phaser from "phaser";
+import { UIRoot } from "../UI/UIRoot";
 
 export class PreloaderScene extends Phaser.Scene {
     private logo!: Phaser.GameObjects.Image;
 
     constructor() {
         super("PreloaderScene");
+    }
+
+    create() {
+        UIRoot.init();
     }
     preload() {
         const width = this.scale.width;

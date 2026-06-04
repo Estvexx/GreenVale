@@ -5,18 +5,13 @@ import { MoneySystem } from "../systems/MoneySystem";
 import { SettingsUI } from "../UI/UI_Settings";
 import { UI_ShopManager } from "../UI/UI_ShopManager";
 import { UI_StorageManager } from "../UI/UI_StorageManager";
-import { UI_HotBar } from "../UI/UI_Hotbar";
-import { UI_Inventory } from "../UI/UI_Inventory";
-import { UIInventoryManager } from "../UI/UI_InventoryManager";
 import { InputManager } from "../input/inputManager";
 import { CameraManager } from "../camera/CameraManager";
 import { MapManager } from "../map/MapManager";
-import { UIMoneyManager } from "../UI/UI_MoneyManager";
 import { preloadUIImages } from "../utils/preloadUIImages";
 import { ITEM_IDS } from "../data/ItemDatabase";
-import { UI_EffectShopManager } from "../UI/UI_EffectShopManager";
-import { UI_ActiveEffectsManager } from "../UI/UI_ActiveEffectsManager";
 import { EffectSystem } from "../systems/EffectsSystem";
+import { FarmFieldSystem } from "../systems/FarmFieldSystem";
 
 export class FarmScene extends Phaser.Scene {
     public player!: Player;
@@ -24,7 +19,7 @@ export class FarmScene extends Phaser.Scene {
 
     private shopManager!: UI_ShopManager;
     private storageManager!: UI_StorageManager;
-    private radialMenu!: UI_EffectShopManager;
+    private farmFields!: FarmFieldSystem;
     private effects = EffectSystem.getInstance();
 
     inventory = InventorySystem.getInstance();
@@ -50,15 +45,9 @@ export class FarmScene extends Phaser.Scene {
         MoneySystem.getInstance();
 
         new InputManager(this);
-        new UI_HotBar();
-        new UI_Inventory();
-        new UIInventoryManager();
-        new UIMoneyManager();
-        this.radialMenu = new UI_EffectShopManager();
-        new UI_ActiveEffectsManager();
-
         this.shopManager = new UI_ShopManager();
         this.storageManager = new UI_StorageManager();
+        this.farmFields = new FarmFieldSystem(this, mapManager.map);
         const settingsUI = new SettingsUI(this);
 
         InventorySystem.getInstance().addStartingItems();
@@ -138,10 +127,6 @@ export class FarmScene extends Phaser.Scene {
             if (type === "trash") {
                 this.inventory.removeItem(this.inventory.selectedSlot);
             }
-        });
-
-        this.input.keyboard?.on("keydown-Q", () => {
-            this.radialMenu.toggle();
         });
 
         this.inventory.onSelectionChange(() => {
