@@ -135,6 +135,9 @@ export class FarmScene extends Phaser.Scene {
             if (type === "portal" && portalId === "boss") {
                 this.scene.start("BossScene");
             }
+            if (type === "trash") {
+                this.inventory.removeItem(this.inventory.selectedSlot);
+            }
         });
 
         this.input.keyboard?.on("keydown-Q", () => {
