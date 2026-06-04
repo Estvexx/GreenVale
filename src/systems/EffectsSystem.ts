@@ -87,4 +87,8 @@ export class EffectSystem {
 
         return Math.max(0, Math.floor((effect.expiresAt - Date.now()) / 1000));
     }
+
+    getSpeedMultiplier(): number {
+        return this.hasEffect("speed") ? 10 : 1;
+    }
 }

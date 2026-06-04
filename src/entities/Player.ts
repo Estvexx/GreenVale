@@ -1,8 +1,12 @@
 import Phaser from "phaser";
+import { EffectSystem } from "../systems/EffectsSystem";
 
 const AVAILABLE_SKINS = ["skin_a", "skin_b", "skin_c", "skin_d"];
 
 export class Player extends Phaser.Physics.Arcade.Sprite {
+    private effects = EffectSystem.getInstance();
+    private static readonly BASE_SPEED = 200;
+
     private cursorKeys: Phaser.Types.Input.Keyboard.CursorKeys;
     private wasdKeys!: {
         W: Phaser.Input.Keyboard.Key;
@@ -68,7 +72,8 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
     }
 
     private handleMovement() {
-        const speed = 200;
+        const speed = Player.BASE_SPEED * this.effects.getSpeedMultiplier();
+
         this.setVelocity(0);
 
         if (this.controlScheme === "wasd") {
