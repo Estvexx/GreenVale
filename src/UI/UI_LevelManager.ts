@@ -3,11 +3,13 @@ import { LevelSystem } from "../systems/LevelSystem";
 export class UI_LevelManager {
     private levelSystem = LevelSystem.getInstance();
 
+    private container = document.getElementById("farm-level-hud")!;
     private levelText = document.getElementById("farm-level-text")!;
     private xpText = document.getElementById("farm-xp-text")!;
     private xpFill = document.getElementById("farm-xp-fill")!;
 
     constructor() {
+        this.container.classList.remove("hidden");
         this.levelSystem.onChange(() => {
             this.render();
         });

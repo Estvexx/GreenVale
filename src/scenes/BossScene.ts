@@ -4,25 +4,24 @@ import { CameraManager } from "../camera/CameraManager";
 import { MapManager } from "../map/MapManager";
 import { Mob } from "../entities/Mob";
 import { MOBS } from "../data/MobDatabase";
-import { UI_ActiveEffectsManager } from "../UI/UI_ActiveEffectsManager";
-import { UI_EffectShopManager } from "../UI/UI_EffectShopManager";
 import { InventorySystem } from "../systems/InventorySystem";
-import { UIInventoryManager } from "../UI/UI_InventoryManager";
-import { UI_Inventory } from "../UI/UI_Inventory";
-import { UI_HotBar } from "../UI/UI_Hotbar";
 import { InputManager } from "../input/inputManager";
 import { EffectSystem } from "../systems/EffectsSystem";
+import { UIRoot } from "../UI/UIRoot";
+import { CollisionSystem } from "../systems/CollisionSystem";
+import { InteractionZoneSystem } from "../systems/InteractionZoneSystem";
+import { createMobAnimations } from "../animations/MobAnimations";
 
 export class BossScene extends Phaser.Scene {
     public player!: Player;
 
-    private currentPortalId: string | null = null;
-    private isInPortal = false;
     private tooltip = document.getElementById("zone-tooltip");
     private mobs!: Phaser.Physics.Arcade.Group;
-    private radialMenu!: UI_EffectShopManager;
+
     private effects = EffectSystem.getInstance();
     private inventory = InventorySystem.getInstance();
+
+    private interactionZones!: InteractionZoneSystem;
 
     constructor() {
         super("BossScene");
@@ -32,12 +31,9 @@ export class BossScene extends Phaser.Scene {
         const mapManager = new MapManager(this, "boss");
         const spawnPoint = mapManager.getSpawnPoint();
 
-        new InputManager(this);
-        new UI_HotBar();
-        new UI_Inventory();
-        new UIInventoryManager();
-        this.radialMenu = new UI_EffectShopManager();
-        new UI_ActiveEffectsManager();
+        new InputManager(this, () => {
+            this.handleInteraction();
+        });
 
         this.player = new Player(
             this,
@@ -47,96 +43,15 @@ export class BossScene extends Phaser.Scene {
 
         new CameraManager(this, this.player, mapManager.map, "boss");
 
-        mapManager.getCollisionObjects().forEach((obj) => {
-            if (
-                !obj.width ||
-                !obj.height ||
-                obj.width <= 0 ||
-                obj.height <= 0
-            ) {
-                return;
-            }
+        new CollisionSystem(this, this.player, mapManager);
 
-            const rect = this.add.rectangle(
-                obj.x! + obj.width / 2,
-                obj.y! + obj.height / 2,
-                obj.width,
-                obj.height,
-            );
+        this.interactionZones = new InteractionZoneSystem(
+            this,
+            this.player,
+            mapManager,
+        );
 
-            this.physics.add.existing(rect, true);
-            this.physics.add.collider(this.player, rect);
-        });
-
-        mapManager.getInteractables().forEach((obj) => {
-            if (
-                !obj.width ||
-                !obj.height ||
-                obj.width <= 0 ||
-                obj.height <= 0
-            ) {
-                return;
-            }
-
-            const zone = this.add.zone(
-                obj.x! + obj.width / 2,
-                obj.y! + obj.height / 2,
-                obj.width,
-                obj.height,
-            );
-
-            this.physics.add.existing(zone, true);
-
-            const type = obj.properties?.find(
-                (p: any) => p.name === "type",
-            )?.value;
-            const portalId = obj.properties?.find(
-                (p: any) => p.name === "portalId",
-            )?.value;
-
-            this.physics.add.overlap(this.player, zone, () => {
-                if (type === "portal") {
-                    this.currentPortalId = portalId ?? null;
-                    this.isInPortal = true;
-                }
-            });
-        });
-
-        this.input.keyboard?.on("keydown-F", () => {
-            if (this.currentPortalId === "farm") {
-                this.scene.start("FarmScene");
-            }
-        });
-        // =========== Spawn Mobs ============
-        this.anims.create({
-            key: "zombie_idle",
-            frames: [
-                { key: "zombie", frame: 0 },
-                { key: "zombie", frame: 1 },
-            ],
-            frameRate: 3,
-            repeat: -1,
-        });
-
-        this.anims.create({
-            key: "slime_idle",
-            frames: [
-                { key: "slime", frame: 0 },
-                { key: "slime", frame: 1 },
-            ],
-            frameRate: 3,
-            repeat: -1,
-        });
-
-        this.anims.create({
-            key: "bear_idle",
-            frames: [
-                { key: "bear", frame: 0 },
-                { key: "bear", frame: 1 },
-            ],
-            frameRate: 3,
-            repeat: -1,
-        });
+        createMobAnimations(this);
 
         this.mobs = this.physics.add.group();
 
@@ -155,16 +70,11 @@ export class BossScene extends Phaser.Scene {
                 mobData.bossCoinDropChance,
                 mobData.bossCoinBonusChance,
             );
-            console.log(
-                `Spawned mob: ${mobData.name} at (${spawn.x}, ${spawn.y})`,
-            );
-            if (mobData.texture === "zombie") {
-                mob.play("zombie_idle");
-            } else if (mobData.texture === "slime") {
-                mob.play("slime_idle");
-            } else if (mobData.texture === "bear") {
-                mob.play("bear_idle");
+
+            if (mobData.animKey) {
+                mob.play(mobData.animKey);
             }
+
             mob.setInteractive();
 
             mob.on("pointerdown", () => {
@@ -181,35 +91,37 @@ export class BossScene extends Phaser.Scene {
                 }
 
                 const damageMultiplier = this.effects.getDamageMultiplier();
-
                 const finalDamage = Math.floor(item.damage * damageMultiplier);
 
                 mob.takeDamage(finalDamage);
 
-                console.log(`${item.name} causou ${item.damage} de dano`);
+                console.log(`${item.name} causou ${finalDamage} de dano`);
             });
 
             this.mobs.add(mob);
-        });
-
-        this.input.keyboard?.on("keydown-Q", () => {
-            this.radialMenu.toggle();
         });
     }
 
     update(time: number) {
         this.player.update(time);
 
-        if (this.tooltip) {
-            this.tooltip.classList.toggle("hidden", !this.isInPortal);
-        }
+        this.interactionZones.update();
 
-        if (!this.isInPortal) {
-            this.currentPortalId = null;
-        }
-
-        this.isInPortal = false;
+        this.tooltip?.classList.toggle(
+            "hidden",
+            !this.interactionZones.isInsideZone(),
+        );
 
         this.effects.update();
+    }
+
+    private handleInteraction() {
+        const zone = this.interactionZones.getCurrentZone();
+
+        if (!zone) return;
+
+        if (zone.type === "portal" && zone.portalId === "farm") {
+            this.scene.start("FarmScene");
+        }
     }
 }

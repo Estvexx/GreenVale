@@ -21,13 +21,17 @@ export class InputManager {
     private money = MoneySystem.getInstance();
     private level = LevelSystem.getInstance();
 
-    constructor(scene: Phaser.Scene) {
+    private onInteract?: () => void;
+
+    constructor(scene: Phaser.Scene, onInteract?: () => void) {
         this.scene = scene;
+        this.onInteract = onInteract;
         this.registerInventoryKeys();
         this.addMoneyTestKeys();
         this.addItemTestKeys();
         this.OpenRadialMenuKey();
         this.addXP();
+        this.registerInteractionKey();
     }
 
     private registerInventoryKeys() {
@@ -73,6 +77,12 @@ export class InputManager {
         this.scene.input.keyboard?.on("keydown-I", () => {
             this.inventory.addItem(20, 1);
             console.log("+1 item vendavel");
+        });
+    }
+
+    private registerInteractionKey() {
+        this.scene.input.keyboard?.on("keydown-F", () => {
+            this.onInteract?.();
         });
     }
 }
