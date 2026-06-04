@@ -7,13 +7,14 @@ import { MOBS } from "../data/MobDatabase";
 import { InventorySystem } from "../systems/InventorySystem";
 import { InputManager } from "../input/inputManager";
 import { EffectSystem } from "../systems/EffectsSystem";
-import { UIRoot } from "../UI/UIRoot";
 import { CollisionSystem } from "../systems/CollisionSystem";
 import { InteractionZoneSystem } from "../systems/InteractionZoneSystem";
 import { createMobAnimations } from "../animations/MobAnimations";
+import { BossEnvironmentFX } from "../camera/BossEnvironmentFX";
 
 export class BossScene extends Phaser.Scene {
     public player!: Player;
+    private environmentFX!: BossEnvironmentFX;
 
     private tooltip = document.getElementById("zone-tooltip");
     private mobs!: Phaser.Physics.Arcade.Group;
@@ -42,6 +43,7 @@ export class BossScene extends Phaser.Scene {
         );
 
         new CameraManager(this, this.player, mapManager.map, "boss");
+        this.environmentFX = new BossEnvironmentFX(this);
 
         new CollisionSystem(this, this.player, mapManager);
 

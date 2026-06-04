@@ -1,14 +1,8 @@
-/* ============================================
-   ROOT - Variáveis padronizadas
-   ============================================ */
-
 :root {
-    /* Cores base */
     --color-primary: #4a7c59;
     --color-cream: #f5e6d3;
     --color-muted: #d4c4b5;
 
-    /* Slots */
     --slot-bg: #7a6a5a;
     --slot-border: #5a4a35;
     --slot-hover: #9b7f5e;
@@ -17,22 +11,16 @@
     --slot-shadow: #4a3a2a;
     --slot-active-shadow: #8a7a3a;
 
-    /* Teclas */
     --key-bg: #f5e6d3;
     --key-border: #c4b5a0;
     --key-shadow: #b0a08a;
     --key-text: #5a4a3a;
 
-    /* Painéis */
     --panel-bg-start: #6b4423;
     --panel-bg-end: #5a3a1f;
     --panel-border: #4a3520;
     --panel-shadow: #3d2b18;
 }
-
-/* ============================================
-   HOTBAR (jogo)
-   ============================================ */
 
 .hotbar-container {
     position: absolute;
@@ -51,10 +39,6 @@
 .hotbar-container.hidden {
     display: none;
 }
-
-/* ============================================
-   SLOT BASE (reutilizado em todos os sítios)
-   ============================================ */
 
 .slot {
     width: 70px;
@@ -106,10 +90,6 @@
     pointer-events: none;
 }
 
-/* ============================================
-   TECLAS (hotkey) - Estilo teclado antigo
-   ============================================ */
-
 .hotkey {
     position: absolute;
     top: -20px;
@@ -132,20 +112,12 @@
     pointer-events: none;
 }
 
-/* ============================================
-   SEPARADOR
-   ============================================ */
-
 .separator {
     width: 3px;
     height: 44px;
     margin: 0 6px;
     align-self: center;
 }
-
-/* ============================================
-   BOTÃO MOCHILA (hotbar)
-   ============================================ */
 
 .inventory-btn {
     width: 70px;
@@ -188,14 +160,9 @@
     pointer-events: none;
 }
 
-/* Tecla E na mochila */
 .inventory-btn .hotkey {
     min-width: 30px;
 }
-
-/* ============================================
-   INVENTÁRIO / MOCHILA - Overlay
-   ============================================ */
 
 #inventory-overlay {
     position: fixed;
@@ -230,7 +197,6 @@
     min-width: 320px;
 }
 
-/* Cabeçalho */
 .inventory-header {
     display: flex;
     justify-content: space-between;
@@ -261,15 +227,10 @@
     color: #c8882a;
 }
 
-/* ============================================
-   GRIDS
-   ============================================ */
-
 .inventory-grid {
     display: grid;
     grid-template-columns: repeat(5, 1fr);
     gap: 20px;
-    /*padding: 10px;*/
     padding: 20px 0px 10px 0px;
     border-radius: 8px;
     border: 2px solid var(--panel-border);
@@ -284,10 +245,6 @@
     padding: 20px 0px 10px 0px;
     border-radius: 8px;
 }
-
-/* ============================================
-   SLOTS DO INVENTÁRIO (herdam .slot base)
-   ============================================ */
 
 .inventory-grid .slot,
 .hotbar-inside-inventory .slot {

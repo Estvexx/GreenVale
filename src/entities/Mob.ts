@@ -89,6 +89,7 @@ export class Mob extends Phaser.Physics.Arcade.Sprite {
         this.setFrame(15);
 
         this.updateHpText();
+        this.scene.cameras.main.shake(180, 0.006);
 
         this.disableInteractive();
 
