@@ -1,4 +1,4 @@
-d{ "compressionlevel":-1,
+{ "compressionlevel":-1,
  "height":70,
  "infinite":false,
  "layers":[
@@ -912,7 +912,7 @@ d{ "compressionlevel":-1,
                 }],
          "opacity":1,
          "type":"objectgroup",
-         "visible":false,
+         "visible":true,
          "x":0,
          "y":0
         }, 
