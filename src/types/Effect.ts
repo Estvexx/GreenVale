@@ -1,15 +1,8 @@
-import type { EffectType } from "./EffectType";
-
 export type Effect = {
-    id: EffectType;
-
-    name: string;
-
-    description: string;
-
+    id: string;
+    nameKey: string;
+    descriptionKey: string;
     icon: string;
-
     permanent: boolean;
-
     expiresAt?: number;
 };

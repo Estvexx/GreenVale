@@ -1,7 +1,7 @@
 {
     "ui": {
         "title": "GreenVale",
-        "settings": "Configuración",
+        "settings": "Ajustes",
         "language": "Idioma",
         "controls": "Controles",
         "arrows": "Flechas",
@@ -12,9 +12,161 @@
         "classic": "Clásico",
         "blue": "Azul",
         "red": "Rojo",
-        "purple": "Púrpura",
+        "purple": "Morado",
         "screen": "Pantalla",
-        "fullscreen": "Pantalla completa",
-        "close": "✕"
+        "fullscreen": "Pantalla Completa"
+    },
+
+    "effectShop": {
+        "success": "¡Efecto comprado!",
+        "noMoney": "¡No hay suficientes boss tokens!",
+        "invalidEffect": "Efecto no disponible."
+    },
+
+    "shop": {
+        "buy": "Comprar",
+        "sell": "Vender",
+        "sellAll": "Todo",
+
+        "messages": {
+            "bought": "¡Comprado!",
+            "sold": "¡Vendido!",
+            "noMoney": "¡Sin dinero!",
+            "inventoryFull": "¡Inventario lleno!",
+            "maxSlots": "¡Límite alcanzado!",
+            "noItem": "¡No tienes ese objeto!"
+        },
+
+        "names": {
+            "ferragens": "Ferretería",
+            "sementes": "Semillas",
+            "vendas": "Venta"
+        }
+    },
+
+    "effects": {
+        "speed": {
+            "name": "Poción de Velocidad",
+            "description": "+20% velocidad"
+        },
+        "damage": {
+            "name": "Poción de Daño",
+            "description": "+20% daño permanente"
+        },
+        "growth": {
+            "name": "Poción de Crecimiento",
+            "description": "+25% crecimiento de las plantas"
+        },
+        "seedDiscount": {
+            "name": "Descuento en Semillas",
+            "description": "-15% en semillas"
+        }
+    },
+
+    "currency": {
+        "coins": "Monedas",
+        "bossTokens": "Boss Tokens"
+    },
+
+    "common": {
+        "permanent": "Permanente",
+        "buy": "Comprar",
+        "close": "Cerrar"
+    },
+
+    "items": {
+        "hoe": {
+            "name": "Azada",
+            "description": "Herramienta esencial para preparar la tierra antes de plantar."
+        },
+        "scythe": {
+            "name": "Guadaña",
+            "description": "Ideal para cosechar cultivos maduros y limpiar maleza del campo."
+        },
+        "bucketEmpty": {
+            "name": "Cubo Vacío",
+            "description": "Un cubo vacío. Puede llenarse en el pozo para transportar agua."
+        },
+        "bucketWater": {
+            "name": "Cubo con Agua",
+            "description": "Cubo lleno de agua. Útil para regar cultivos o reabastecer herramientas."
+        },
+        "scissors": {
+            "name": "Tijeras",
+            "description": "Un arma improvisada y ligera. Causa 5 de daño."
+        },
+        "stick": {
+            "name": "Palo",
+            "description": "Un palo resistente, simple pero eficaz contra criaturas. Causa 10 de daño."
+        },
+        "baseballBat": {
+            "name": "Bate de Béisbol",
+            "description": "Un bate pesado con buen impacto. Causa 15 de daño."
+        },
+        "goldenSword": {
+            "name": "Espada Dorada",
+            "description": "Una espada rara y afilada, hecha para enfrentar bosses. Causa 25 de daño."
+        },
+        "godSpear": {
+            "name": "Lanza de los Dioses",
+            "description": "Un arma legendaria con poder divino. Causa 40 de daño."
+        },
+        "grapeSeed": {
+            "name": "Semilla de Uva",
+            "description": "Semilla de uva. Plántala en tierra preparada para producir uvas."
+        },
+        "cucumberSeed": {
+            "name": "Semilla de Pepino",
+            "description": "Semilla de pepino. Una buena elección para una cosecha simple y rentable."
+        },
+        "pepperSeed": {
+            "name": "Semilla de Pimiento",
+            "description": "Semilla de pimiento. Produce una cosecha picante con buen valor de venta."
+        },
+        "greenBeanSeed": {
+            "name": "Semilla de Judía Verde",
+            "description": "Semilla de judía verde. Ideal para expandir la producción agrícola."
+        },
+        "pineappleSeed": {
+            "name": "Semilla de Piña",
+            "description": "Semilla de piña. Tarda más, pero puede dar una cosecha valiosa."
+        },
+        "greenPeaSeed": {
+            "name": "Semilla de Guisante Verde",
+            "description": "Semilla de guisante verde. Buena para mantener una producción constante."
+        },
+        "grapes": {
+            "name": "Uvas",
+            "description": "Uvas frescas cosechadas de la granja. Se pueden vender por monedas."
+        },
+        "cucumber": {
+            "name": "Pepino",
+            "description": "Pepino recién recogido. Simple, fresco y listo para vender."
+        },
+        "pepper": {
+            "name": "Pimiento",
+            "description": "Pimiento intenso y valioso. Una buena cosecha para ganar monedas."
+        },
+        "greenBean": {
+            "name": "Judía Verde",
+            "description": "Judía verde fresca de la granja. Se puede vender o usar en futuras recetas."
+        },
+        "pineapple": {
+            "name": "Piña",
+            "description": "Piña dulce y rara. Una cosecha con excelente valor de venta."
+        },
+        "greenPea": {
+            "name": "Guisante Verde",
+            "description": "Guisante verde recién recogido. Un producto agrícola fiable para vender."
+        }
+    },
+    "level": {
+        "up": "¡Subiste a Farm Lv. {level}!"
+    },
+
+    "storage": {
+        "messages": {
+            "cannotMoveItem": "Límite de este objeto alcanzado en el inventario."
+        }
     }
 }

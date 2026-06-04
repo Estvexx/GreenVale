@@ -57,26 +57,26 @@ export class InputManager {
     private addMoneyTestKeys() {
         this.scene.input.keyboard?.on("keydown-P", () => {
             this.money.add("coins", 100);
-            console.log("+100 coins");
+            UIRoot.toast.show("+100 coins");
         });
 
         this.scene.input.keyboard?.on("keydown-O", () => {
             this.money.add("bossTokens", 1);
-            console.log("+1 boss token");
+            UIRoot.toast.show("+1 boss token");
         });
     }
 
     private addXP() {
         this.scene.input.keyboard?.on("keydown-U", () => {
             this.level.addXp(100);
-            console.log("+100 XP");
+            UIRoot.toast.show("+100 XP");
         });
     }
 
     private addItemTestKeys() {
         this.scene.input.keyboard?.on("keydown-I", () => {
             this.inventory.addItem(20, 1);
-            console.log("+1 item vendavel");
+            UIRoot.toast.show("+1 uva");
         });
     }
 

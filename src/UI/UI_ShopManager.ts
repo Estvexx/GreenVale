@@ -1,7 +1,9 @@
 import { ITEMS } from "../data/ItemDatabase";
 import { ShopSystem } from "../systems/ShopSystem";
-import type { ShopItem } from "../types/ShopTypes";
+import type { Shop, ShopItem, ShopType } from "../types/ShopTypes";
 import { renderItemIcon } from "../utils/renderItemIcon";
+import { UIRoot } from "./UIRoot";
+import { t } from "../i18n/index";
 
 export class UI_ShopManager {
     private system = ShopSystem.getInstance();
@@ -11,14 +13,16 @@ export class UI_ShopManager {
     private closeBtn = document.getElementById("shop-close")!;
     private title = document.getElementById("shop-title")!;
 
-    BUY_MESSAGES: Record<string, string> = {
-        no_money: "Sem dinheiro!",
-        inventory_full: "Inventário cheio!",
-        max_slots: "Limite atingido!",
-        no_item: "Nao tens esse item!",
+    private readonly messages: Record<string, string> = {
+        success_buy: "shop.messages.bought",
+        success_sell: "shop.messages.sold",
+        no_money: "shop.messages.noMoney",
+        inventory_full: "shop.messages.inventoryFull",
+        max_slots: "shop.messages.maxSlots",
+        no_item: "shop.messages.noItem",
     };
 
-    CURRENCY_ICONS: Record<string, string> = {
+    private readonly currencyIcons: Record<string, string> = {
         coins: "assets/images/Coin.png",
         bossTokens: "assets/images/Boss_Coin.png",
     };
@@ -28,16 +32,14 @@ export class UI_ShopManager {
         this.activateDragScroll();
     }
 
-    open(type: any) {
-        console.log("Shop Aberta", type);
+    open(type: ShopType) {
         const shop = this.system.open(type);
 
         if (!shop) return;
 
         this.overlay.classList.remove("hidden");
 
-        // título da loja
-        this.title.textContent = shop.name;
+        this.title.textContent = shop.nameKey ? t(shop.nameKey) : shop.name;
 
         this.render(shop);
     }
@@ -48,9 +50,8 @@ export class UI_ShopManager {
         this.container.innerHTML = "";
     }
 
-    private render(shop: any) {
-        const shopItems = this.container;
-        shopItems.innerHTML = "";
+    private render(shop: Shop) {
+        this.container.innerHTML = "";
 
         shop.items.forEach((item: ShopItem) => {
             const itemData = ITEMS[item.id];
@@ -59,98 +60,103 @@ export class UI_ShopManager {
             const div = document.createElement("div");
             div.className = "shop-item";
 
-            // icon
             const iconWrapper = document.createElement("div");
             iconWrapper.className = "shop-item-icon";
             renderItemIcon(iconWrapper, item.id);
 
+            const itemName = itemData.nameKey
+                ? t(itemData.nameKey)
+                : itemData.name;
+
             div.innerHTML = `
-            <div class="shop-item-info">
-                <div class="shop-item-name">${itemData.name}</div>
-                <div class="shop-item-price">
-                    <img src="${this.CURRENCY_ICONS[item.currency]}" alt="${item.currency}" class="price-icon">
-                    ${item.price}
+                <div class="shop-item-info">
+                    <div class="shop-item-name">${itemName}</div>
+
+                    <div class="shop-item-price">
+                        <img
+                            src="${this.currencyIcons[item.currency]}"
+                            alt="${item.currency}"
+                            class="price-icon"
+                        />
+                        ${item.price}
+                    </div>
                 </div>
-            </div>
-            ${
-                shop.mode === "sell"
-                    ? `
-                        <button class="shop-item-btn sell-one-btn">Vender</button>
-                        <button class="shop-item-btn sell-all-btn">Tudo</button>
-                    `
-                    : `<button class="shop-item-btn buy-btn">Comprar</button>`
-            }
-        `;
+
+                ${
+                    shop.mode === "sell"
+                        ? `
+                            <button class="shop-item-btn sell-one-btn">
+                                ${t("shop.sell")}
+                            </button>
+
+                            <button class="shop-item-btn sell-all-btn">
+                                ${t("shop.sellAll")}
+                            </button>
+                        `
+                        : `
+                            <button class="shop-item-btn buy-btn">
+                                ${t("shop.buy")}
+                            </button>
+                        `
+                }
+            `;
 
             div.prepend(iconWrapper);
 
-            const buyBtn = div.querySelector(".buy-btn");
-            const sellOneBtn = div.querySelector(".sell-one-btn");
-            const sellAllBtn = div.querySelector(".sell-all-btn");
+            const buyBtn = div.querySelector<HTMLButtonElement>(".buy-btn");
+            const sellOneBtn =
+                div.querySelector<HTMLButtonElement>(".sell-one-btn");
+            const sellAllBtn =
+                div.querySelector<HTMLButtonElement>(".sell-all-btn");
 
             buyBtn?.addEventListener("click", () => {
                 const result = this.system.buy(item.id);
 
                 if (result !== "success") {
-                    buyBtn.textContent = this.BUY_MESSAGES[result];
-                    buyBtn.classList.add("disabled");
-
-                    setTimeout(() => {
-                        buyBtn.textContent = "Comprar";
-                        buyBtn.classList.remove("disabled");
-                    }, 1200);
-
+                    this.showError(result);
                     return;
                 }
 
-                buyBtn.textContent = "Comprado!";
-                setTimeout(() => (buyBtn.textContent = "Comprar"), 800);
+                UIRoot.toast.success(t(this.messages.success_buy));
             });
 
             sellOneBtn?.addEventListener("click", () => {
                 const result = this.system.sell(item.id);
 
                 if (result !== "success") {
-                    sellOneBtn.textContent = this.BUY_MESSAGES[result];
-                    sellOneBtn.classList.add("disabled");
-
-                    setTimeout(() => {
-                        sellOneBtn.textContent = "Vender";
-                        sellOneBtn.classList.remove("disabled");
-                    }, 1200);
-
+                    this.showError(result);
                     return;
                 }
 
-                sellOneBtn.textContent = "Vendido!";
-                setTimeout(() => (sellOneBtn.textContent = "Vender"), 800);
+                UIRoot.toast.success(t(this.messages.success_sell));
             });
 
             sellAllBtn?.addEventListener("click", () => {
                 const result = this.system.sellAll(item.id);
 
                 if (result !== "success") {
-                    sellAllBtn.textContent = this.BUY_MESSAGES[result];
-                    sellAllBtn.classList.add("disabled");
-
-                    setTimeout(() => {
-                        sellAllBtn.textContent = "Tudo";
-                        sellAllBtn.classList.remove("disabled");
-                    }, 1200);
-
+                    this.showError(result);
                     return;
                 }
 
-                sellAllBtn.textContent = "Vendido!";
-                setTimeout(() => (sellAllBtn.textContent = "Tudo"), 800);
+                UIRoot.toast.success(t(this.messages.success_sell));
             });
 
-            shopItems.appendChild(div);
+            this.container.appendChild(div);
         });
     }
 
+    private showError(result: string) {
+        const messageKey = this.messages[result];
+
+        UIRoot.toast.error(messageKey ? t(messageKey) : result);
+    }
+
     private activateDragScroll() {
-        const container = document.querySelector(".shop-items-container");
+        const container = document.querySelector<HTMLElement>(
+            ".shop-items-container",
+        );
+
         if (!container) return;
 
         let isDown = false;
@@ -160,9 +166,9 @@ export class UI_ShopManager {
         container.addEventListener("mousedown", (e) => {
             isDown = true;
             container.classList.add("active");
-            startX =
-                (e as MouseEvent).pageX - (container as HTMLElement).offsetLeft;
-            scrollLeft = (container as HTMLElement).scrollLeft;
+
+            startX = e.pageX - container.offsetLeft;
+            scrollLeft = container.scrollLeft;
         });
 
         container.addEventListener("mouseleave", () => {
@@ -177,11 +183,13 @@ export class UI_ShopManager {
 
         container.addEventListener("mousemove", (e) => {
             if (!isDown) return;
+
             e.preventDefault();
-            const x =
-                (e as MouseEvent).pageX - (container as HTMLElement).offsetLeft;
+
+            const x = e.pageX - container.offsetLeft;
             const walk = (x - startX) * 2;
-            (container as HTMLElement).scrollLeft = scrollLeft - walk;
+
+            container.scrollLeft = scrollLeft - walk;
         });
     }
 }

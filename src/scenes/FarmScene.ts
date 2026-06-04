@@ -61,6 +61,8 @@ export class FarmScene extends Phaser.Scene {
         });
 
         settingsUI.initMusic();
+
+        this.inventory.addStartingItems();
     }
 
     update(time: number) {

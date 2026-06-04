@@ -3,6 +3,7 @@ import { type Shop } from "../../types/ShopTypes";
 export const FERRAGENS_SHOP: Shop = {
     id: "ferragens",
     name: "Ferragens",
+    nameKey: "shop.names.ferragens",
     mode: "buy",
     items: [
         {

@@ -40,7 +40,6 @@ export class FarmFieldSystem {
             const objectLayer = this.map.getObjectLayer(field.layer);
 
             if (!objectLayer) {
-                console.log(`Layer não encontrada: ${field.layer}`);
                 return;
             }
 
@@ -59,7 +58,7 @@ export class FarmFieldSystem {
                     0.65,
                 );
 
-                overlay.setDepth(100);
+                overlay.setDepth(9);
                 overlay.setVisible(false);
 
                 this.cells.push({

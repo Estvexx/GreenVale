@@ -1,4 +1,4 @@
-.effect-toast {
+.toast {
     position: fixed;
     top: 3%;
     left: 50%;
@@ -6,7 +6,7 @@
     z-index: 2;
     padding: 12px 18px;
     background: var(--bg-panel);
-    border: 3px;
+    border: 3px solid var(--color-cream);
     border-radius: 8px;
     color: var(--color-cream);
     font-family: Georgia, serif;
@@ -20,15 +20,18 @@
     pointer-events: none;
 }
 
-.effect-toast.hidden {
+.toast.hidden {
     display: none;
 }
 
-.effect-toast.success {
+.toast.success {
     border-color: var(--color-green);
 }
 
-.effect-toast.error {
+.toast.error {
+    border-color: #ff5a5a;
+}
+
+.toast.info {
     border-color: var(--color-gold);
-    color: var(--color-gold);
 }

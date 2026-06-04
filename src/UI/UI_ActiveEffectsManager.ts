@@ -1,4 +1,6 @@
 import { EffectSystem } from "../systems/EffectsSystem";
+import type { Effect } from "../types/Effect";
+import { t } from "../i18n/index";
 
 export class UI_ActiveEffectsManager {
     private effects = EffectSystem.getInstance();
@@ -6,7 +8,7 @@ export class UI_ActiveEffectsManager {
     private panel = document.getElementById("active-effects-panel")!;
     private list = document.getElementById("active-effects-list")!;
 
-    private effectIcons: Record<string, string> = {
+    private icons: Record<string, string> = {
         speed: "assets/images/potions/Potion_of_speed.png",
         damage: "assets/images/potions/Potion_of_damage.png",
         growth: "assets/images/potions/Potion_of_growth.png",
@@ -14,10 +16,7 @@ export class UI_ActiveEffectsManager {
     };
 
     constructor() {
-        this.panel.classList.remove("hidden");
-        this.effects.onChange(() => {
-            this.render();
-        });
+        this.effects.onChange(() => this.render());
 
         this.render();
 
@@ -39,58 +38,50 @@ export class UI_ActiveEffectsManager {
         this.panel.classList.remove("effects-empty");
 
         effects.forEach((effect) => {
-            const div = document.createElement("div");
-            div.className = "active-effect-item";
-
-            div.innerHTML = `
-                <img
-                    src="${this.getEffectIcon(effect.icon)}"
-                    alt="${effect.name}"
-                    class="active-effect-icon"
-                />
-
-                <div class="active-effect-info">
-                    <span class="active-effect-name">
-                        ${effect.name}
-                    </span>
-
-                    <span class="active-effect-time">
-                        ${this.getEffectTime(effect)}
-                    </span>
-                </div>
-            `;
-
-            this.list.appendChild(div);
+            this.list.appendChild(this.createEffectElement(effect));
         });
     }
 
-    private getEffectIcon(icon: string): string {
-        return this.effectIcons[icon] ?? icon;
+    private createEffectElement(effect: Effect): HTMLElement {
+        const div = document.createElement("div");
+
+        div.className = "active-effect-item";
+
+        div.innerHTML = `
+            <img
+                src="${this.getIcon(effect.icon)}"
+                alt="${t(effect.nameKey)}"
+                class="active-effect-icon"
+            />
+
+            <div class="active-effect-info">
+                <span class="active-effect-name">
+                    ${t(effect.nameKey)}
+                </span>
+
+                <span class="active-effect-time">
+                    ${this.getTimeText(effect)}
+                </span>
+            </div>
+        `;
+
+        return div;
     }
 
-    private getEffectTime(effect: {
-        id: string;
-        permanent: boolean;
-        expiresAt?: number;
-    }): string {
+    private getIcon(icon: string): string {
+        return this.icons[icon] ?? icon;
+    }
+
+    private getTimeText(effect: Effect): string {
         if (effect.permanent) {
-            return "Permanente";
+            return t("common.permanent");
         }
 
-        if (!effect.expiresAt) {
-            return "";
-        }
+        const seconds = this.effects.getRemainingSeconds(effect.id);
 
-        const remainingMs = effect.expiresAt - Date.now();
+        const minutes = Math.floor(seconds / 60);
+        const remainingSeconds = seconds % 60;
 
-        if (remainingMs <= 0) {
-            return "00:00";
-        }
-
-        const totalSeconds = Math.floor(remainingMs / 1000);
-        const minutes = Math.floor(totalSeconds / 60);
-        const seconds = totalSeconds % 60;
-
-        return `${minutes}:${seconds.toString().padStart(2, "0")}`;
+        return `${minutes}:${remainingSeconds.toString().padStart(2, "0")}`;
     }
 }

@@ -5,14 +5,17 @@ import { FERRAGENS_SHOP } from "../data/shops/ferragensShop";
 import { SEMENTES_SHOP } from "../data/shops/sementesShop";
 import { MERCADO_SHOP } from "../data/shops/mercadoShop";
 
-type BuyResult = "success" | "no_money" | "inventory_full" | "max_slots";
-type SellResult = "success" | "no_item";
+export type BuyResult = "success" | "no_money" | "inventory_full";
+export type SellResult = "success" | "no_item";
 
 export class ShopSystem {
     private static instance: ShopSystem;
 
-    static getInstance() {
-        if (!this.instance) this.instance = new ShopSystem();
+    static getInstance(): ShopSystem {
+        if (!this.instance) {
+            this.instance = new ShopSystem();
+        }
+
         return this.instance;
     }
 
@@ -24,9 +27,8 @@ export class ShopSystem {
 
     private currentShop: Shop | null = null;
 
-    open(type: ShopType) {
-        console.log("Loja aberta: ", type);
-        this.currentShop = this.shops[type];
+    open(type: ShopType): Shop | null {
+        this.currentShop = this.shops[type] ?? null;
         return this.currentShop;
     }
 
@@ -34,24 +36,24 @@ export class ShopSystem {
         this.currentShop = null;
     }
 
-    getCurrentShop() {
+    getCurrentShop(): Shop | null {
         return this.currentShop;
     }
 
-    // TODO: melhorar a funçao, devido ao reembolso desnecessário
     buy(itemId: number): BuyResult {
-        if (!this.currentShop) return "inventory_full";
+        const item = this.currentShop?.items.find((i) => i.id === itemId);
 
-        const item = this.currentShop.items.find((i) => i.id === itemId);
         if (!item) return "inventory_full";
 
         const money = MoneySystem.getInstance();
-        const inv = InventorySystem.getInstance();
+        const inventory = InventorySystem.getInstance();
 
-        const spent = money.spend(item.currency, item.price);
-        if (!spent) return "no_money";
+        const paid = money.spend(item.currency, item.price);
 
-        const added = inv.addItem(item.id, item.amount);
+        if (!paid) return "no_money";
+
+        const added = inventory.addItem(item.id, item.amount);
+
         if (!added) {
             money.add(item.currency, item.price);
             return "inventory_full";
@@ -61,37 +63,40 @@ export class ShopSystem {
     }
 
     sell(itemId: number): SellResult {
-        if (!this.currentShop) return "no_item";
+        const item = this.currentShop?.items.find((i) => i.id === itemId);
 
-        const item = this.currentShop.items.find((i) => i.id === itemId);
         if (!item) return "no_item";
 
-        const inv = InventorySystem.getInstance();
+        const inventory = InventorySystem.getInstance();
         const money = MoneySystem.getInstance();
 
-        const removed = inv.removeItemById(item.id, item.amount);
+        const removed = inventory.removeItemById(item.id, item.amount);
+
         if (!removed) return "no_item";
 
         money.add(item.currency, item.price);
+
         return "success";
     }
 
     sellAll(itemId: number): SellResult {
-        if (!this.currentShop) return "no_item";
+        const item = this.currentShop?.items.find((i) => i.id === itemId);
 
-        const item = this.currentShop.items.find((i) => i.id === itemId);
         if (!item) return "no_item";
 
-        const inv = InventorySystem.getInstance();
+        const inventory = InventorySystem.getInstance();
         const money = MoneySystem.getInstance();
 
-        const quantity = inv.getItemQuantity(item.id);
+        const quantity = inventory.getItemQuantity(item.id);
+
         if (quantity <= 0) return "no_item";
 
-        const removed = inv.removeItemById(item.id, quantity);
+        const removed = inventory.removeItemById(item.id, quantity);
+
         if (!removed) return "no_item";
 
         money.add(item.currency, item.price * quantity);
+
         return "success";
     }
 }

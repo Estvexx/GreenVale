@@ -8,6 +8,7 @@ export type ShopItem = {
 export type Shop = {
     id: string;
     name: string;
+    nameKey?: string;
     mode: "buy" | "sell";
     items: ShopItem[];
 };

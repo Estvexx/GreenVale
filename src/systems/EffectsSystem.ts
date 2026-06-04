@@ -56,6 +56,7 @@ export class EffectSystem {
         return this.effects.find((e) => e.id === id);
     }
 
+    // Aqui mostro na UI os efeitos ativos, os "..."cria um array copia
     getEffects(): Effect[] {
         return [...this.effects];
     }
@@ -85,18 +86,25 @@ export class EffectSystem {
             return 0;
         }
 
+        // Aqui calculo a diferenca em milissegundos e converto para segundos
+        // Max nao deixa ser negativo e Math.floor arredonda para baixo
         return Math.max(0, Math.floor((effect.expiresAt - Date.now()) / 1000));
     }
 
     getSpeedMultiplier(): number {
-        return this.hasEffect("speed") ? 10 : 1;
+        return this.hasEffect("speed") ? 2 : 1;
     }
 
     getDamageMultiplier(): number {
-        if (this.hasEffect("damage")) {
-            return 1.2;
-        }
+        return this.hasEffect("damage") ? 1.2 : 1;
+    }
 
-        return 1;
+    // VASCO FAZ ISTO A TUA MANEIRA
+    getGrowthMultiplier(): number {
+        return this.hasEffect("growth") ? 1.25 : 1;
+    }
+
+    getSeedDiscountMultiplier(): number {
+        return this.hasEffect("seed_discount") ? 0.85 : 1;
     }
 }
