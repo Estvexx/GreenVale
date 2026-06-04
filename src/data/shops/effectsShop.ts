@@ -36,7 +36,7 @@ export const EFFECT_SHOP_ITEMS: Record<string, EffectShopItem> = {
         effect: {
             id: "damage",
             name: "Poção de Dano",
-            description: "+10% dano permanente",
+            description: "+20% dano permanente",
             icon: "damage",
             permanent: true,
         },

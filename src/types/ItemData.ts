@@ -8,4 +8,5 @@ export interface Item {
     maxStack: number;
     maxSlots?: number;
     description?: string;
+    damage?: number;
 }
