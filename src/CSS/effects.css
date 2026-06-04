@@ -1,0 +1,90 @@
+#active-effects-panel {
+    position: fixed;
+    top: 35%;
+    left: 0;
+
+    width: 48px;
+
+    padding: 8px;
+
+    background: rgba(20, 20, 20, 0.85);
+    border: 2px solid var(--panel-border);
+    border-left: none;
+    border-radius: 0 10px 10px 0;
+
+    z-index: 1000;
+
+    transition:
+        width 0.22s ease,
+        background-color 0.22s ease,
+        box-shadow 0.22s ease;
+
+    overflow: hidden;
+    pointer-events: auto;
+}
+
+#active-effects-panel:hover {
+    width: 260px;
+    background: var(--bg-panel);
+    box-shadow:
+        0 5px 0 var(--panel-shadow),
+        0 10px 24px rgba(0, 0, 0, 0.4);
+}
+
+#active-effects-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.active-effect-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    width: 244px;
+    min-height: 32px;
+
+    color: var(--color-cream);
+    font-family: Georgia, serif;
+    font-size: 13px;
+}
+
+.active-effect-icon {
+    width: 32px;
+    height: 32px;
+
+    flex-shrink: 0;
+
+    object-fit: contain;
+    image-rendering: pixelated;
+}
+
+.active-effect-info {
+    display: flex;
+    flex-direction: column;
+    opacity: 0;
+    transform: translateX(-6px);
+    transition:
+        opacity 0.18s ease,
+        transform 0.18s ease;
+    white-space: nowrap;
+}
+
+#active-effects-panel:hover .active-effect-info {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.active-effect-name {
+    font-weight: 700;
+}
+
+.active-effect-time {
+    color: var(--color-gold);
+    font-size: 12px;
+}
+
+#active-effects-panel.effects-empty {
+    display: none;
+}
