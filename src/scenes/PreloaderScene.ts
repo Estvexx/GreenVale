@@ -147,7 +147,14 @@ export class PreloaderScene extends Phaser.Scene {
         });
 
         // Musica e sons
-        this.load.audio("bgMusic", "assets/audio/apple_cider.ogg");
+        this.load.audio("farmScene_music", "assets/audio/farmscene_music.ogg");
+        this.load.audio("bossscene_music", "assets/audio/bossscene_music.ogg");
+        this.load.audio("click_sound", "assets/audio/click.ogg");
+        this.load.audio("error_sound", "assets/audio/error.ogg");
+        this.load.audio("fire_sound", "assets/audio/fire_sound.ogg");
+        this.load.audio("inventory_sound", "assets/audio/inventory.ogg");
+        this.load.audio("punch_sound", "assets/audio/punch_sound.ogg");
+        this.load.audio("setpdirt_sound", "assets/audio/setpdirt.ogg");
 
         preloadUIImages();
     }

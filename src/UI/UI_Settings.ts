@@ -1,4 +1,6 @@
 import { FarmScene } from "../scenes/FarmScene.ts";
+import { MusicManager } from "../sounds/MusicManager.ts";
+import { SoundManager } from "../sounds/SoundsManager.ts";
 
 export class SettingsUI {
     private scene: FarmScene;
@@ -16,27 +18,21 @@ export class SettingsUI {
     private init(): void {
         document.getElementById("btnDefinicoes")!.onclick = () => this.open();
         document.getElementById("close-settings")!.onclick = () => this.close();
-        this.scene.input.keyboard?.on("keydown-ESC", () => this.close());
 
         document.getElementById("toggle-music")!.onchange = (e) => {
             const target = e.target as HTMLInputElement;
             localStorage.setItem("musicEnabled", String(target.checked));
 
             if (target.checked) {
-                if (!this.scene.bgMusic.isPlaying) {
-                    this.scene.bgMusic.play();
-                } else {
-                    this.scene.bgMusic.resume();
-                }
+                MusicManager.resume();
             } else {
-                this.scene.bgMusic.pause();
+                MusicManager.pause();
             }
         };
 
         document.getElementById("toggle-sounds")!.onchange = (e) => {
             const target = e.target as HTMLInputElement;
-            localStorage.setItem("soundsEnabled", String(target.checked));
-            this.scene.sound.mute = !target.checked;
+            SoundManager.setEnabled(target.checked);
         };
 
         document.querySelectorAll(".lang-btn").forEach((btn) => {
@@ -87,12 +83,14 @@ export class SettingsUI {
     }
 
     open(): void {
+        SoundManager.play("click_sound");
         this.menu.classList.remove("hidden");
         this.syncFullscreenToggle();
         this.scene.scene.pause();
     }
 
     close(): void {
+        SoundManager.play("click_sound");
         this.menu.classList.add("hidden");
         this.scene.player.applySkin();
         this.scene.player.controlScheme =
@@ -101,6 +99,7 @@ export class SettingsUI {
     }
 
     private setLang(btn: HTMLElement): void {
+        SoundManager.play("click_sound");
         document
             .querySelectorAll(".lang-btn")
             .forEach((b) => b.classList.remove("active"));
@@ -115,6 +114,7 @@ export class SettingsUI {
     }
 
     private setControlKeys(card: HTMLElement): void {
+        SoundManager.play("click_sound");
         document
             .querySelectorAll(".control-card")
             .forEach((c) => c.classList.remove("active"));
@@ -125,6 +125,7 @@ export class SettingsUI {
     }
 
     private setSkin(card: HTMLElement, skinKey: string): void {
+        SoundManager.play("click_sound");
         document
             .querySelectorAll(".skin-card")
             .forEach((c) => c.classList.remove("active"));
@@ -133,6 +134,7 @@ export class SettingsUI {
     }
 
     private syncFullscreenToggle(): void {
+        SoundManager.play("click_sound");
         const checkbox = document.getElementById(
             "toggle-fullscreen",
         ) as HTMLInputElement;
@@ -167,12 +169,5 @@ export class SettingsUI {
         const soundsEnabled = localStorage.getItem("soundsEnabled") !== "false";
         (document.getElementById("toggle-sounds") as HTMLInputElement).checked =
             soundsEnabled;
-    }
-
-    initMusic(): void {
-        const musicEnabled = localStorage.getItem("musicEnabled") !== "false";
-        if (musicEnabled) {
-            this.scene.bgMusic.play();
-        }
     }
 }

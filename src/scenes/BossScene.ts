@@ -11,9 +11,14 @@ import { CollisionSystem } from "../systems/CollisionSystem";
 import { InteractionZoneSystem } from "../systems/InteractionZoneSystem";
 import { createMobAnimations } from "../animations/MobAnimations";
 import { BossEnvironmentFX } from "../camera/BossEnvironmentFX";
+import { MusicManager } from "../sounds/MusicManager";
+import { SoundManager } from "../sounds/SoundsManager";
+import { UIRoot } from "../UI/UIRoot";
+import { t } from "../i18n";
 
 export class BossScene extends Phaser.Scene {
     public player!: Player;
+    private fireSound?: Phaser.Sound.BaseSound;
     private environmentFX!: BossEnvironmentFX;
 
     private tooltip = document.getElementById("zone-tooltip");
@@ -31,6 +36,15 @@ export class BossScene extends Phaser.Scene {
     create() {
         const mapManager = new MapManager(this, "boss");
         const spawnPoint = mapManager.getSpawnPoint();
+
+        MusicManager.play(this, "bossscene_music", 0.3);
+        this.fireSound = this.sound.add("fire_sound", {
+            loop: true,
+            volume: 0.8,
+        });
+
+        this.fireSound.play();
+        SoundManager.setScene(this);
 
         new InputManager(this, () => {
             this.handleInteraction();
@@ -83,12 +97,14 @@ export class BossScene extends Phaser.Scene {
                 const item = this.inventory.getCurrentItem();
 
                 if (!item) {
-                    console.log("Não tens item na mão.");
+                    UIRoot.toast.error(t("combat.noItemInHand"));
+                    SoundManager.play("error_sound");
                     return;
                 }
 
                 if (!item.damage) {
-                    console.log("Este item não causa dano.");
+                    UIRoot.toast.error(t("combat.itemHasNoDamage"));
+                    SoundManager.play("error_sound");
                     return;
                 }
 
@@ -96,11 +112,16 @@ export class BossScene extends Phaser.Scene {
                 const finalDamage = Math.floor(item.damage * damageMultiplier);
 
                 mob.takeDamage(finalDamage);
-
-                console.log(`${item.name} causou ${finalDamage} de dano`);
+                SoundManager.play("punch_sound");
             });
 
             this.mobs.add(mob);
+        });
+
+        this.events.once(Phaser.Scenes.Events.SHUTDOWN, () => {
+            this.fireSound?.stop();
+            this.fireSound?.destroy();
+            this.fireSound = undefined;
         });
     }
 

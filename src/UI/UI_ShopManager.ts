@@ -4,6 +4,7 @@ import type { Shop, ShopItem, ShopType } from "../types/ShopTypes";
 import { renderItemIcon } from "../utils/renderItemIcon";
 import { UIRoot } from "./UIRoot";
 import { t } from "../i18n/index";
+import { SoundManager } from "../sounds/SoundsManager";
 
 export class UI_ShopManager {
     private system = ShopSystem.getInstance();
@@ -33,6 +34,7 @@ export class UI_ShopManager {
     }
 
     open(type: ShopType) {
+        SoundManager.play("click_sound");
         const shop = this.system.open(type);
 
         if (!shop) return;
@@ -45,6 +47,7 @@ export class UI_ShopManager {
     }
 
     close() {
+        SoundManager.play("click_sound");
         this.system.close();
         this.overlay.classList.add("hidden");
         this.container.innerHTML = "";
@@ -110,6 +113,7 @@ export class UI_ShopManager {
                 div.querySelector<HTMLButtonElement>(".sell-all-btn");
 
             buyBtn?.addEventListener("click", () => {
+                SoundManager.play("click_sound");
                 const result = this.system.buy(item.id);
 
                 if (result !== "success") {
@@ -121,6 +125,7 @@ export class UI_ShopManager {
             });
 
             sellOneBtn?.addEventListener("click", () => {
+                SoundManager.play("click_sound");
                 const result = this.system.sell(item.id);
 
                 if (result !== "success") {
@@ -132,6 +137,7 @@ export class UI_ShopManager {
             });
 
             sellAllBtn?.addEventListener("click", () => {
+                SoundManager.play("click_sound");
                 const result = this.system.sellAll(item.id);
 
                 if (result !== "success") {
@@ -150,6 +156,7 @@ export class UI_ShopManager {
         const messageKey = this.messages[result];
 
         UIRoot.toast.error(messageKey ? t(messageKey) : result);
+        SoundManager.play("error_sound");
     }
 
     private activateDragScroll() {

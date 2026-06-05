@@ -5,6 +5,7 @@ const AVAILABLE_SKINS = ["skin_a", "skin_b", "skin_c", "skin_d"];
 
 export class Player extends Phaser.Physics.Arcade.Sprite {
     private effects = EffectSystem.getInstance();
+    private footstepSound: Phaser.Sound.BaseSound;
     private static readonly BASE_SPEED = 200;
 
     private cursorKeys: Phaser.Types.Input.Keyboard.CursorKeys;
@@ -51,6 +52,16 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 
         this.body!.setSize(40, 16); // TAMANHO DA HITbx
         this.body!.setOffset(20, 100); // Posiçao da mesma
+
+        this.footstepSound = scene.sound.add("setpdirt_sound", {
+            loop: true,
+            volume: 0.25,
+        });
+
+        scene.events.once(Phaser.Scenes.Events.SHUTDOWN, () => {
+            this.footstepSound.stop();
+            this.footstepSound.destroy();
+        });
     }
 
     static getSavedSkin(): string {
@@ -69,6 +80,7 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
         this.handleMovement();
         this.updateAnimation(time);
         this.shadow.setPosition(this.x, this.y + 22);
+        this.updateFootstepSound();
     }
 
     private handleMovement() {
@@ -104,6 +116,23 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
         } else {
             this.walkFrame = 0;
             this.setTexture(this.idleTexture);
+        }
+    }
+
+    private updateFootstepSound() {
+        const isMoving =
+            this.body!.velocity.x !== 0 || this.body!.velocity.y !== 0;
+
+        const soundsEnabled = localStorage.getItem("soundsEnabled") !== "false";
+
+        if (isMoving && soundsEnabled) {
+            if (!this.footstepSound.isPlaying) {
+                this.footstepSound.play();
+            }
+        } else {
+            if (this.footstepSound.isPlaying) {
+                this.footstepSound.stop();
+            }
         }
     }
 }
