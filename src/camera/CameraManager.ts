@@ -26,10 +26,21 @@ export class CameraManager {
             camera.setZoom(1.3);
         }
 
-        scene.scale.on("resize", (gameSize: Phaser.Structs.Size) => {
-            camera.setSize(gameSize.width, gameSize.height);
+        const handleResize = (gameSize: Phaser.Structs.Size) => {
+            if (!camera.scene || !(camera as unknown as { _bounds?: unknown })._bounds) {
+                removeResizeListener();
+                return;
+            }
 
-            camera.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
-        });
+            camera.setSize(gameSize.width, gameSize.height);
+        };
+
+        const removeResizeListener = () => {
+            scene.scale.off("resize", handleResize);
+        };
+
+        scene.scale.on("resize", handleResize);
+        scene.events.once(Phaser.Scenes.Events.SHUTDOWN, removeResizeListener);
+        scene.events.once(Phaser.Scenes.Events.DESTROY, removeResizeListener);
     }
 }

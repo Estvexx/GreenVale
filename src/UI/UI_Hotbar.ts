@@ -1,3 +1,4 @@
+import { SoundManager } from "../sounds/SoundsManager";
 import { InventorySystem } from "../systems/InventorySystem";
 import { renderItemIcon } from "../utils/renderItemIcon";
 
@@ -26,6 +27,7 @@ export class UI_HotBar {
     private bindSlotClicks() {
         this.slots.forEach((slot) => {
             slot.addEventListener("click", () => {
+                SoundManager.play("click_sound");
                 const index = Number(slot.dataset.slot);
 
                 this.inventory.selectSlot(index);

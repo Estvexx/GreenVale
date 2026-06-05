@@ -4,6 +4,7 @@ import type { InventorySlot } from "../types/InventoryTypes";
 import { renderItemIcon } from "../utils/renderItemIcon";
 import { t } from "../i18n";
 import { UIRoot } from "./UIRoot";
+import { SoundManager } from "../sounds/SoundsManager";
 
 type Selected = {
     container: "inventory" | "storage";
@@ -30,6 +31,7 @@ export class UI_StorageManager {
     }
 
     open() {
+        SoundManager.play("click_sound");
         this.selected = null;
         document.getElementById("storage-overlay")?.classList.remove("hidden");
         this.updateSelectionUI();
@@ -37,6 +39,7 @@ export class UI_StorageManager {
     }
 
     close() {
+        SoundManager.play("click_sound");
         this.selected = null;
         document.getElementById("storage-overlay")?.classList.add("hidden");
         this.updateSelectionUI();
@@ -50,6 +53,7 @@ export class UI_StorageManager {
             )
             .forEach((slot) => {
                 slot.addEventListener("click", () => {
+                    SoundManager.play("click_sound");
                     const index = Number(slot.getAttribute("data-slot"));
 
                     this.handleClick("inventory", index);
@@ -63,6 +67,7 @@ export class UI_StorageManager {
             )
             .forEach((slot) => {
                 slot.addEventListener("click", () => {
+                    SoundManager.play("click_sound");
                     const index = Number(slot.getAttribute("data-slot"));
 
                     this.handleClick("storage", index);
@@ -71,6 +76,7 @@ export class UI_StorageManager {
     }
 
     private handleClick(container: "inventory" | "storage", index: number) {
+        SoundManager.play("click_sound");
         if (!this.selected) {
             this.selected = { container, index };
             this.updateSelectionUI();
@@ -82,8 +88,10 @@ export class UI_StorageManager {
         if (from.container === container) {
             if (container === "inventory") {
                 this.inventory.swapItems(from.index, index);
+                SoundManager.play("inventory_sound");
             } else {
                 this.storage.swap(from.index, index);
+                SoundManager.play("inventory_sound");
             }
 
             this.selected = null;
@@ -99,6 +107,7 @@ export class UI_StorageManager {
                 this.storage.slots,
                 index,
             );
+            SoundManager.play("inventory_sound");
         }
 
         // STORAGE -> INVENTORY
@@ -112,7 +121,7 @@ export class UI_StorageManager {
 
             if (!canReceive) {
                 UIRoot.toast.error(t("storage.messages.cannotMoveItem"));
-
+                SoundManager.play("error_sound");
                 this.selected = null;
                 this.updateSelectionUI();
 
@@ -125,6 +134,7 @@ export class UI_StorageManager {
                 this.inventory.slots,
                 index,
             );
+            SoundManager.play("inventory_sound");
         }
 
         this.inventory.forceRefresh();

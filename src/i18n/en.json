@@ -168,5 +168,9 @@
         "messages": {
             "cannotMoveItem": "Limit for this item reached in inventory."
         }
+    },
+    "combat": {
+        "noItemInHand": "You have no item equipped.",
+        "itemHasNoDamage": "This item does not deal damage."
     }
 }

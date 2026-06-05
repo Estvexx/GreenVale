@@ -5,6 +5,7 @@ import {
 import { EFFECT_SHOP_ITEMS } from "../data/shops/effectsShop";
 import { UIRoot } from "./UIRoot";
 import { t } from "../i18n/index";
+import { SoundManager } from "../sounds/SoundsManager";
 
 export class UI_EffectShopManager {
     private system = EffectShopSystem.getInstance();
@@ -26,12 +27,14 @@ export class UI_EffectShopManager {
     }
 
     open() {
+        SoundManager.play("click_sound");
         this.isOpen = true;
         this.overlay.classList.remove("hidden");
     }
 
     close() {
         this.isOpen = false;
+        SoundManager.play("click_sound");
         this.overlay.classList.add("hidden");
     }
 
@@ -84,6 +87,7 @@ export class UI_EffectShopManager {
 
                 if (result !== "success") {
                     UIRoot.toast.error(t(this.messages[result]));
+                    SoundManager.play("error_sound");
                     return;
                 }
 
