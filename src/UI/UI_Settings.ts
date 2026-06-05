@@ -1,13 +1,18 @@
-import { FarmScene } from "../scenes/FarmScene.ts";
+import Phaser from "phaser";
 import { MusicManager } from "../sounds/MusicManager.ts";
 import { SoundManager } from "../sounds/SoundsManager.ts";
+import type { Player } from "../entities/Player.ts";
+
+type SettingsScene = Phaser.Scene & {
+    player?: Player;
+};
 
 export class SettingsUI {
-    private scene: FarmScene;
+    private scene: SettingsScene;
     private menu: HTMLElement;
     private container = document.getElementById("btnDefinicoes")!;
 
-    constructor(scene: FarmScene) {
+    constructor(scene: SettingsScene) {
         this.container.classList.remove("hidden");
         this.scene = scene;
         this.menu = document.getElementById("settings-menu")!;
@@ -92,9 +97,11 @@ export class SettingsUI {
     close(): void {
         SoundManager.play("click_sound");
         this.menu.classList.add("hidden");
-        this.scene.player.applySkin();
-        this.scene.player.controlScheme =
-            localStorage.getItem("controlScheme") || "wasd";
+        if (this.scene.player) {
+            this.scene.player.applySkin();
+            this.scene.player.controlScheme =
+                localStorage.getItem("controlScheme") || "wasd";
+        }
         this.scene.scene.resume();
     }
 

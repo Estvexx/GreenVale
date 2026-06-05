@@ -19,7 +19,7 @@ export class FarmScene extends Phaser.Scene {
     public player!: Player;
     public bgMusic!: Phaser.Sound.BaseSound;
     private interactionZones!: InteractionZoneSystem;
-    private farmFields!: FarmFieldSystem;
+    public farmFields!: FarmFieldSystem;
 
     private inventory = InventorySystem.getInstance();
     private effects = EffectSystem.getInstance();

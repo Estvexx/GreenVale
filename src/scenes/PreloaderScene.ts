@@ -1,5 +1,4 @@
 import Phaser from "phaser";
-import { UIRoot } from "../UI/UIRoot";
 import { preloadUIImages } from "../utils/preloadUIImages";
 
 export class PreloaderScene extends Phaser.Scene {
@@ -9,9 +8,7 @@ export class PreloaderScene extends Phaser.Scene {
         super("PreloaderScene");
     }
 
-    create() {
-        UIRoot.init();
-    }
+    create() {}
     preload() {
         const width = this.scale.width;
         const height = this.scale.height;
@@ -61,9 +58,9 @@ export class PreloaderScene extends Phaser.Scene {
         this.load.on("complete", () => {
             loadingText.setText("Pronto!");
 
-            this.time.delayedCall(500, () => {
-                console.log("A iniciar FarmScene...");
-                this.scene.start("FarmScene");
+            this.time.delayedCall(100, () => {
+                console.log("A iniciar MainMenuScene...");
+                this.scene.start("MainMenuScene");
             });
         });
 

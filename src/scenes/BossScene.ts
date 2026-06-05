@@ -19,7 +19,7 @@ import { t } from "../i18n";
 export class BossScene extends Phaser.Scene {
     public player!: Player;
     private fireSound?: Phaser.Sound.BaseSound;
-    private environmentFX!: BossEnvironmentFX;
+    public environmentFX!: BossEnvironmentFX;
 
     private tooltip = document.getElementById("zone-tooltip");
     private mobs!: Phaser.Physics.Arcade.Group;
