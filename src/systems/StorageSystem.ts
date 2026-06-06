@@ -79,4 +79,16 @@ export class StorageSystem {
     forceRefresh() {
         this.emitChange();
     }
+
+    getSaveData() {
+        return {
+            slots: this.slots,
+        };
+    }
+
+    loadSaveData(data: { slots: InventorySlot[] }) {
+        this.slots = data.slots;
+
+        this.emitChange();
+    }
 }

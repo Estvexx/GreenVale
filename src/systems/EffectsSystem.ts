@@ -107,4 +107,17 @@ export class EffectSystem {
     getSeedDiscountMultiplier(): number {
         return this.hasEffect("seed_discount") ? 0.85 : 1;
     }
+
+    getSaveData() {
+        return {
+            active: [...this.effects],
+        };
+    }
+
+    loadSaveData(data: { active: Effect[] }) {
+        this.effects = [...data.active];
+
+        this.update();
+        this.emitChange();
+    }
 }
