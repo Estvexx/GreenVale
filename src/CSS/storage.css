@@ -135,8 +135,8 @@
 
 #inventory-grid .slot img,
 #storage-grid .slot img {
-    width: 48px;
-    height: 48px;
+    max-width: 48px;
+    max-height: 48px;
     image-rendering: pixelated;
     pointer-events: none;
 }
