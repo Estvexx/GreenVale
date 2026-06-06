@@ -57,7 +57,6 @@ export class BossEnvironmentFX {
             removeResizeListener,
         );
         this.scene.events.once(Phaser.Scenes.Events.DESTROY, removeResizeListener);
-    }
 
     private createLavaParticles() {
         const width = this.scene.scale.width;
