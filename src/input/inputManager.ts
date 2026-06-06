@@ -33,6 +33,7 @@ export class InputManager {
         this.OpenRadialMenuKey();
         this.addXP();
         this.registerInteractionKey();
+        this.ExportAllData();
         this.LoadAllData();
         this.SaveAllData();
     }
@@ -91,7 +92,15 @@ export class InputManager {
 
     private SaveAllData() {
         this.scene.input.keyboard?.on("keydown-K", () => {
+            UIRoot.toast.show("Jogo guardado com sucesso");
             SaveSystem.save();
+        });
+    }
+
+    private ExportAllData() {
+        this.scene.input.keyboard?.on("keydown-M", () => {
+            SaveSystem.downloadSaveFile();
+            UIRoot.toast.show("Save exportado");
         });
     }
 

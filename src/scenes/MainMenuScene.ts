@@ -7,6 +7,7 @@ import { SaveSystem } from "../systems/SaveSystem";
 
 export class MainMenuScene extends Phaser.Scene {
     private menuElement?: HTMLElement;
+    private importInput?: HTMLInputElement;
 
     constructor() {
         super("MainMenuScene");
@@ -20,6 +21,10 @@ export class MainMenuScene extends Phaser.Scene {
 
         uiLayer.insertAdjacentHTML("afterbegin", menuHtml);
         this.menuElement = document.getElementById("main-menu") ?? undefined;
+        this.importInput =
+            (document.getElementById(
+                "main-menu-import-input",
+            ) as HTMLInputElement | null) ?? undefined;
 
         new SettingsUI(this);
 
@@ -37,24 +42,21 @@ export class MainMenuScene extends Phaser.Scene {
             this.scene.start("FarmScene");
         };
 
-        document.getElementById("main-menu-upload")!.onchange = (event) => {
+        document.getElementById("main-menu-import")!.onclick = () => {
+            this.importInput?.click();
+        };
+
+        this.importInput?.addEventListener("change", async (event) => {
             const input = event.target as HTMLInputElement;
             const file = input.files?.[0];
 
             if (!file) return;
 
-            const reader = new FileReader();
-            reader.onload = () => {
-                const imported = SaveSystem.importJson(String(reader.result));
+            const imported = await SaveSystem.importSaveFile(file);
 
-                if (imported) {
-                    SoundManager.play("click_sound");
-                } else {
-                    SoundManager.play("error_sound");
-                }
-            };
-            reader.readAsText(file);
-        };
+            SoundManager.play(imported ? "click_sound" : "error_sound");
+            input.value = "";
+        });
 
         document.getElementById("main-menu-exit")!.onclick = () => {
             SoundManager.play("click_sound");
