@@ -207,7 +207,11 @@ export class InventorySystem {
     addStartingItems() {
         if (this.getItemQuantity(1) > 0) return;
 
-        this.addItem(1, 1);
+        this.addItem(1, 1);   // Enxada
+        this.addItem(2, 1);   // Foice
+        this.addItem(3, 1);   // Balde Vazio
+        this.addItem(4, 5);   // Balde com Água
+        this.addItem(10, 5);  // Sementes de Uvas (para teste)
     }
 
     toggleInventory() {

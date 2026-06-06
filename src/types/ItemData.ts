@@ -11,4 +11,8 @@ export interface Item {
     description?: string;
     descriptionKey?: string;
     damage?: number;
+    isSeed?: boolean;
+    cropKey?: string;   // nome da pasta em assets/images/crops/
+    growTime?: number;  // ms por stage de crescimento
+    harvestId?: number; // ID do item colhido
 }
