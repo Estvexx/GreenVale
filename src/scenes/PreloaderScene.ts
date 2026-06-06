@@ -139,11 +139,16 @@ export class PreloaderScene extends Phaser.Scene {
             frameHeight: 32,
         });
 
-        //VASCO esta e tua spriteSheet para as plantas, tem 4 linhas (uma para cada tipo de planta) e 8 colunas (uma para cada estágio de crescimento)
-        this.load.spritesheet("stages", "assets/images/Stages.png", {
-            frameWidth: 32,
-            frameHeight: 37,
-        });
+        const cropTypes = ["grapes", "cucumber", "pepper", "greenbeans", "pineapple", "pumpkin"];
+        for (const crop of cropTypes) {
+            for (let stage = 0; stage < 4; stage++) {
+                this.load.image(`crop_${crop}_${stage}`, `assets/images/crops/${crop}/stage_${stage}.png`);
+            }
+        }
+
+        this.load.image("icon_water", "assets/images/tools/Balde_Agua.png");
+        this.load.image("icon_scythe", "assets/images/tools/Foice.png");
+        this.load.image("icon_hoe", "assets/images/tools/Enxada.png");
 
         // Musica e sons
         this.load.audio("farmScene_music", "assets/audio/farmscene_music.ogg");

@@ -16,6 +16,7 @@ import { SettingsUI } from "../UI/UI_Settings";
 import { SoundManager } from "../sounds/SoundsManager";
 import { FarmEnvironmentFX } from "../camera/FarmEnvironmentFX";
 import { changeScene } from "../utils/changeScene";
+import { FarmingSystem } from "../systems/FarmingSystem";
 import { RealLightSystem } from "../lights/RealLightSystem";
 
 export class FarmScene extends Phaser.Scene {
@@ -23,6 +24,7 @@ export class FarmScene extends Phaser.Scene {
     public bgMusic!: Phaser.Sound.BaseSound;
     private interactionZones!: InteractionZoneSystem;
     public farmFields!: FarmFieldSystem;
+    private farmingSystem!: FarmingSystem;
     private environmentFX!: FarmEnvironmentFX;
     private inventory = InventorySystem.getInstance();
     private effects = EffectSystem.getInstance();
@@ -41,8 +43,10 @@ export class FarmScene extends Phaser.Scene {
         //this.scene.lights.setAmbientColor(0x888888);
         this.cameras.main.fadeIn(500, 0, 0, 0);
         const mapManager = new MapManager(this);
-        this.farmFields = new FarmFieldSystem(this, mapManager.map);
         this.realLights = new RealLightSystem(this, mapManager);
+        this.farmFields = new FarmFieldSystem(this, mapManager.map);
+        this.farmingSystem = new FarmingSystem(this, this.farmFields);
+
         new InputManager(this, () => {
             this.handleInteraction();
         });
@@ -88,6 +92,7 @@ export class FarmScene extends Phaser.Scene {
         );
 
         this.effects.update();
+        this.farmingSystem.update(time);
     }
 
     private fillBucket() {
@@ -108,35 +113,39 @@ export class FarmScene extends Phaser.Scene {
     private handleInteraction() {
         const zone = this.interactionZones.getCurrentZone();
 
-        if (!zone) return;
+        if (zone) {
+            const { type, shopId, portalId } = zone;
 
-        const { type, shopId, portalId } = zone;
-
-        if ((type === "shop" || type === "sell") && shopId) {
-            UIRoot.shop.open(shopId as ShopType);
-            return;
-        }
-
-        if (type === "well") {
-            this.fillBucket();
-            return;
-        }
-
-        if (type === "storage") {
-            UIRoot.storage.open();
-            return;
-        }
-
-        if (type === "portal" && portalId === "boss") {
-            if (!this.isChangingScene) {
-                this.isChangingScene = true;
-                changeScene(this, "BossScene");
+            if ((type === "shop" || type === "sell") && shopId) {
+                UIRoot.shop.open(shopId as ShopType);
+                return;
             }
-            return;
+
+            if (type === "well") {
+                this.fillBucket();
+                return;
+            }
+
+            if (type === "storage") {
+                UIRoot.storage.open();
+                return;
+            }
+
+            if (type === "portal" && portalId === "boss") {
+                if (!this.isChangingScene) {
+                    this.isChangingScene = true;
+                    changeScene(this, "BossScene");
+                }
+                return;
+            }
+
+            if (type === "trash") {
+                this.inventory.removeItem(this.inventory.selectedSlot);
+                return;
+            }
         }
 
-        if (type === "trash") {
-            this.inventory.removeItem(this.inventory.selectedSlot);
-        }
+        // Interação no campo (plantar, regar, colher) — funciona sem zona
+        this.farmingSystem.interact(this.player.x, this.player.y);
     }
 }
