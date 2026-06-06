@@ -72,10 +72,15 @@
     align-items: center;
     justify-content: center;
     box-sizing: border-box;
+    cursor: pointer;
 }
 
 .main-menu__button--file input {
-    display: none;
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+    pointer-events: none;
 }
 
 .main-menu__button--exit {
@@ -85,4 +90,3 @@
 .main-menu--closed .main-menu__content {
     display: none;
 }
-
