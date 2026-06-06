@@ -84,4 +84,22 @@ export class MoneySystem {
 
         return Number(saved);
     }
+
+    getSaveData() {
+        return {
+            coins: this.coins,
+            bossTokens: this.bossTokens,
+        };
+    }
+
+    loadSaveData(data: { coins: number; bossTokens: number }) {
+        this.coins = data.coins;
+        this.bossTokens = data.bossTokens;
+
+        localStorage.setItem("coins", String(this.coins));
+        localStorage.setItem("bossTokens", String(this.bossTokens));
+
+        this.notify("coins");
+        this.notify("bossTokens");
+    }
 }

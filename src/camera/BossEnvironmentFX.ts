@@ -38,10 +38,25 @@ export class BossEnvironmentFX {
             repeat: -1,
         });
 
-        this.scene.scale.on("resize", (gameSize: Phaser.Structs.Size) => {
+        const handleResize = (gameSize: Phaser.Structs.Size) => {
+            if (!this.overlay.scene) {
+                removeResizeListener();
+                return;
+            }
+
             this.overlay.setSize(gameSize.width, gameSize.height);
-        });
-    }
+        };
+
+        const removeResizeListener = () => {
+            this.scene.scale.off("resize", handleResize);
+        };
+
+        this.scene.scale.on("resize", handleResize);
+        this.scene.events.once(
+            Phaser.Scenes.Events.SHUTDOWN,
+            removeResizeListener,
+        );
+        this.scene.events.once(Phaser.Scenes.Events.DESTROY, removeResizeListener);
 
     private createLavaParticles() {
         const width = this.scene.scale.width;

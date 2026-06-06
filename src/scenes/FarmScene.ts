@@ -1,7 +1,6 @@
 import Phaser from "phaser";
 import { Player } from "../entities/Player";
 import { InventorySystem } from "../systems/InventorySystem";
-import { SettingsUI } from "../UI/UI_Settings";
 import { InputManager } from "../input/inputManager";
 import { CameraManager } from "../camera/CameraManager";
 import { MapManager } from "../map/MapManager";
@@ -12,12 +11,15 @@ import { UIRoot } from "../UI/UIRoot";
 import { CollisionSystem } from "../systems/CollisionSystem";
 import { InteractionZoneSystem } from "../systems/InteractionZoneSystem";
 import type { ShopType } from "../types/ShopTypes";
+import { MusicManager } from "../sounds/MusicManager";
+import { SettingsUI } from "../UI/UI_Settings";
+import { SoundManager } from "../sounds/SoundsManager";
 
 export class FarmScene extends Phaser.Scene {
     public player!: Player;
     public bgMusic!: Phaser.Sound.BaseSound;
     private interactionZones!: InteractionZoneSystem;
-    private farmFields!: FarmFieldSystem;
+    public farmFields!: FarmFieldSystem;
 
     private inventory = InventorySystem.getInstance();
     private effects = EffectSystem.getInstance();
@@ -36,7 +38,7 @@ export class FarmScene extends Phaser.Scene {
             this.handleInteraction();
         });
 
-        const settingsUI = new SettingsUI(this);
+        new SettingsUI(this);
 
         const spawnPoint = mapManager.getSpawnPoint();
 
@@ -56,12 +58,8 @@ export class FarmScene extends Phaser.Scene {
 
         new CameraManager(this, this.player, mapManager.map);
 
-        this.bgMusic = this.sound.add("bgMusic", {
-            loop: true,
-            volume: 0.1,
-        });
-
-        settingsUI.initMusic();
+        MusicManager.play(this, "farmScene_music", 0.05);
+        SoundManager.setScene(this);
 
         this.inventory.addStartingItems();
     }

@@ -3,6 +3,7 @@ import { InventorySystem } from "../systems/InventorySystem";
 import { MoneySystem } from "../systems/MoneySystem";
 import { UIRoot } from "../UI/UIRoot";
 import { LevelSystem } from "../systems/LevelSystem";
+import { SaveSystem } from "../systems/SaveSystem";
 
 const SLOT_KEYS = [
     Phaser.Input.Keyboard.KeyCodes.ONE,
@@ -32,6 +33,8 @@ export class InputManager {
         this.OpenRadialMenuKey();
         this.addXP();
         this.registerInteractionKey();
+        this.LoadAllData();
+        this.SaveAllData();
     }
 
     private registerInventoryKeys() {
@@ -83,6 +86,18 @@ export class InputManager {
     private registerInteractionKey() {
         this.scene.input.keyboard?.on("keydown-F", () => {
             this.onInteract?.();
+        });
+    }
+
+    private SaveAllData() {
+        this.scene.input.keyboard?.on("keydown-K", () => {
+            SaveSystem.save();
+        });
+    }
+
+    private LoadAllData() {
+        this.scene.input.keyboard?.on("keydown-L", () => {
+            SaveSystem.load();
         });
     }
 }

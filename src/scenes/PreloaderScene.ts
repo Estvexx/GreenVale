@@ -1,5 +1,4 @@
 import Phaser from "phaser";
-import { UIRoot } from "../UI/UIRoot";
 import { preloadUIImages } from "../utils/preloadUIImages";
 
 export class PreloaderScene extends Phaser.Scene {
@@ -9,9 +8,7 @@ export class PreloaderScene extends Phaser.Scene {
         super("PreloaderScene");
     }
 
-    create() {
-        UIRoot.init();
-    }
+    create() {}
     preload() {
         const width = this.scale.width;
         const height = this.scale.height;
@@ -61,9 +58,9 @@ export class PreloaderScene extends Phaser.Scene {
         this.load.on("complete", () => {
             loadingText.setText("Pronto!");
 
-            this.time.delayedCall(500, () => {
-                console.log("A iniciar FarmScene...");
-                this.scene.start("FarmScene");
+            this.time.delayedCall(100, () => {
+                console.log("A iniciar MainMenuScene...");
+                this.scene.start("MainMenuScene");
             });
         });
 
@@ -147,7 +144,14 @@ export class PreloaderScene extends Phaser.Scene {
         });
 
         // Musica e sons
-        this.load.audio("bgMusic", "assets/audio/apple_cider.ogg");
+        this.load.audio("farmScene_music", "assets/audio/farmscene_music.ogg");
+        this.load.audio("bossscene_music", "assets/audio/bossscene_music.ogg");
+        this.load.audio("click_sound", "assets/audio/click.ogg");
+        this.load.audio("error_sound", "assets/audio/error.ogg");
+        this.load.audio("fire_sound", "assets/audio/fire_sound.ogg");
+        this.load.audio("inventory_sound", "assets/audio/inventory.ogg");
+        this.load.audio("punch_sound", "assets/audio/punch_sound.ogg");
+        this.load.audio("setpdirt_sound", "assets/audio/setpdirt.ogg");
 
         preloadUIImages();
     }

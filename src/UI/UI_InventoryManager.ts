@@ -1,6 +1,7 @@
 import { InventorySystem } from "../systems/InventorySystem";
 import { ITEMS } from "../data/ItemDatabase";
 import { t } from "../i18n/index";
+import { SoundManager } from "../sounds/SoundsManager";
 
 export class UIInventoryManager {
     private inventory = InventorySystem.getInstance();
@@ -33,6 +34,7 @@ export class UIInventoryManager {
     }
 
     private closeInventory() {
+        SoundManager.play("click_sound");
         if (!this.inventory.isInventoryOpen) return;
 
         this.inventory.toggleInventory();
@@ -40,7 +42,7 @@ export class UIInventoryManager {
 
     private bindSlots() {
         const slots = this.getSlots();
-
+        SoundManager.play("click_sound");
         slots.forEach((slot) => {
             slot.addEventListener("click", () => {
                 const index = Number(slot.dataset.slot);
@@ -71,6 +73,7 @@ export class UIInventoryManager {
     }
 
     private onSlotClick(index: number) {
+        SoundManager.play("click_sound");
         if (this.selectedSlot === null) {
             this.selectedSlot = index;
             this.updateSelectionUI();
@@ -84,6 +87,7 @@ export class UIInventoryManager {
         }
 
         this.inventory.swapItems(this.selectedSlot, index);
+        SoundManager.play("inventory_sound");
 
         this.selectedSlot = null;
         this.updateSelectionUI();
