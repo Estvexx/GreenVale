@@ -6,7 +6,8 @@ import { FarmScene } from "./scenes/FarmScene";
 import { BossScene } from "./scenes/BossScene";
 
 const config: Phaser.Types.Core.GameConfig = {
-    type: Phaser.AUTO,
+    //type: Phaser.AUTO,
+    type: Phaser.WEBGL,
 
     width: window.innerWidth,
     height: window.innerHeight,
@@ -15,6 +16,7 @@ const config: Phaser.Types.Core.GameConfig = {
 
     backgroundColor: "#1d212d",
     pixelArt: true,
+    roundPixels: true,
 
     scale: {
         mode: Phaser.Scale.RESIZE,
@@ -24,7 +26,7 @@ const config: Phaser.Types.Core.GameConfig = {
     physics: {
         default: "arcade",
         arcade: {
-            debug: false,
+            debug: true,
         },
     },
 

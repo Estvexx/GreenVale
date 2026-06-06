@@ -5717,7 +5717,7 @@
          "draworder":"topdown",
          "id":17,
          "locked":true,
-         "name":"Light",
+         "name":"Lights",
          "objects":[
                 {
                  "height":0,

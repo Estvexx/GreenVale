@@ -102,6 +102,7 @@ export class PreloaderScene extends Phaser.Scene {
             "arvores_e_poco",
             "assets/images/map_images/trees_and_well.png",
         );
+        this.load.image("postes", "assets/images/map_images/Postes_luz.png");
 
         // Tudo relacionado ao mapa bossscene
         this.load.tilemapTiledJSON("mapa_boss", "assets/map/mapa_boss.tmj");

@@ -15,7 +15,6 @@ export class CameraManager {
         const followLerp = profile === "boss" ? 0.08 : 0.05;
 
         camera.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
-
         camera.startFollow(player, true, followLerp, followLerp);
 
         camera.roundPixels = true;
@@ -23,11 +22,14 @@ export class CameraManager {
         if (profile === "boss") {
             camera.setZoom(2);
         } else {
-            camera.setZoom(1.3);
+            camera.setZoom(1.4);
         }
 
         const handleResize = (gameSize: Phaser.Structs.Size) => {
-            if (!camera.scene || !(camera as unknown as { _bounds?: unknown })._bounds) {
+            if (
+                !camera.scene ||
+                !(camera as unknown as { _bounds?: unknown })._bounds
+            ) {
                 removeResizeListener();
                 return;
             }
