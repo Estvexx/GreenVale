@@ -9,6 +9,7 @@ import { UI_ShopManager } from "./UI_ShopManager";
 import { UI_StorageManager } from "./UI_StorageManager";
 import { UI_ToastManager } from "./UI_ToastManager";
 import { UI_TimeManager } from "./UI_TimeManager";
+import { UI_SeedPicker } from "./UI_SeedPicker";
 
 export class UIRoot {
     private static initialized = false;
@@ -17,6 +18,7 @@ export class UIRoot {
     static shop: UI_ShopManager;
     static storage: UI_StorageManager;
     static toast: UI_ToastManager;
+    static seedPicker: UI_SeedPicker;
 
     static init() {
         if (this.initialized) return;
@@ -34,6 +36,7 @@ export class UIRoot {
         new UI_TimeManager();
 
         new UI_ActiveEffectsManager();
+        this.seedPicker = new UI_SeedPicker();
 
         this.initialized = true;
     }
