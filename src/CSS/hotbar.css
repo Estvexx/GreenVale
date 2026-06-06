@@ -83,9 +83,16 @@
 }
 
 /* Imagem nos slots */
-.slot img {
-    width: 70px;
-    height: 70px;
+.hotbar-container .slot img {
+    max-width: 64px;
+    max-height: 64px;
+    image-rendering: pixelated;
+    pointer-events: none;
+}
+
+#inventory-overlay .slot img {
+    max-width: 48px;
+    max-height: 48px;
     image-rendering: pixelated;
     pointer-events: none;
 }

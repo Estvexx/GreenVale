@@ -32,6 +32,7 @@ export class FarmScene extends Phaser.Scene {
     private isChangingScene = false;
 
     private tooltip = document.getElementById("zone-tooltip")!;
+    private tooltipVisible = false;
 
     constructor() {
         super("FarmScene");
@@ -83,7 +84,8 @@ export class FarmScene extends Phaser.Scene {
 
         this.environmentFX.update(delta);
 
-        this.interactionZones.update();
+        this.updateInteractionTooltip();
+
         this.realLights.update();
 
         this.tooltip.classList.toggle(
@@ -147,5 +149,19 @@ export class FarmScene extends Phaser.Scene {
 
         // Interação no campo (plantar, regar, colher) — funciona sem zona
         this.farmingSystem.interact(this.player.x, this.player.y);
+    }
+
+    private updateInteractionTooltip() {
+        const isInsideZone = this.interactionZones.isInsideZone();
+
+        if (this.tooltipVisible === isInsideZone) return;
+
+        this.tooltipVisible = isInsideZone;
+
+        if (isInsideZone) {
+            this.tooltip.classList.remove("hidden");
+        } else {
+            this.tooltip.classList.add("hidden");
+        }
     }
 }

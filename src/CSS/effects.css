@@ -1,6 +1,6 @@
 #active-effects-panel {
     position: fixed;
-    top: 35%;
+    top: 50%;
     left: 0;
 
     width: 48px;
@@ -88,3 +88,4 @@
 #active-effects-panel.effects-empty {
     display: none;
 }
+
