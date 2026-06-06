@@ -59,6 +59,7 @@ export class TimeSystem {
         return `${hour}:${minute}`;
     }
 
+    // VASCO ve aqui para o crescimento das plantas
     getDarkness(): number {
         const hour = this.getHour() + this.getMinute() / 60;
 

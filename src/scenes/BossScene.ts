@@ -16,6 +16,7 @@ import { SoundManager } from "../sounds/SoundsManager";
 import { UIRoot } from "../UI/UIRoot";
 import { t } from "../i18n";
 import { TimeSystem } from "../systems/TimeSystem";
+import { changeScene } from "../utils/changeScene";
 
 export class BossScene extends Phaser.Scene {
     public player!: Player;
@@ -30,12 +31,14 @@ export class BossScene extends Phaser.Scene {
     private timeSystem = TimeSystem.getInstance();
 
     private interactionZones!: InteractionZoneSystem;
+    private isChangingScene = false;
 
     constructor() {
         super("BossScene");
     }
 
     create() {
+        this.cameras.main.fadeIn(500, 0, 0, 0);
         const mapManager = new MapManager(this, "boss");
         const spawnPoint = mapManager.getSpawnPoint();
 
@@ -148,7 +151,10 @@ export class BossScene extends Phaser.Scene {
         if (!zone) return;
 
         if (zone.type === "portal" && zone.portalId === "farm") {
-            this.scene.start("FarmScene");
+            if (!this.isChangingScene) {
+                this.isChangingScene = true;
+                changeScene(this, "FarmScene");
+            }
         }
     }
 }

@@ -15,6 +15,7 @@ import { MusicManager } from "../sounds/MusicManager";
 import { SettingsUI } from "../UI/UI_Settings";
 import { SoundManager } from "../sounds/SoundsManager";
 import { FarmEnvironmentFX } from "../camera/FarmEnvironmentFX";
+import { changeScene } from "../utils/changeScene";
 
 export class FarmScene extends Phaser.Scene {
     public player!: Player;
@@ -24,6 +25,7 @@ export class FarmScene extends Phaser.Scene {
     private environmentFX!: FarmEnvironmentFX;
     private inventory = InventorySystem.getInstance();
     private effects = EffectSystem.getInstance();
+    private isChangingScene = false;
 
     private tooltip = document.getElementById("zone-tooltip")!;
 
@@ -32,6 +34,7 @@ export class FarmScene extends Phaser.Scene {
     }
 
     create() {
+        this.cameras.main.fadeIn(500, 0, 0, 0);
         const mapManager = new MapManager(this);
         this.farmFields = new FarmFieldSystem(this, mapManager.map);
 
@@ -119,7 +122,10 @@ export class FarmScene extends Phaser.Scene {
         }
 
         if (type === "portal" && portalId === "boss") {
-            this.scene.start("BossScene");
+            if (!this.isChangingScene) {
+                this.isChangingScene = true;
+                changeScene(this, "BossScene");
+            }
             return;
         }
 

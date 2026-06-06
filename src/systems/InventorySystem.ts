@@ -43,6 +43,7 @@ export class InventorySystem {
         this.emitSelectionChange();
     }
 
+    // VASCO quando coletares a fruta das addItem aqui
     addItem(id: number, quantity: number = 1): boolean {
         const itemData = ITEMS[id];
         if (!itemData) return false;
@@ -149,6 +150,7 @@ export class InventorySystem {
         this.emitInventoryChange();
     }
 
+    // VASCO VE AQUI, opara verifcar qual é o item que tens na mao
     getCurrentItem() {
         const slot = this.slots[this.selectedSlot];
         if (!slot) return null;
