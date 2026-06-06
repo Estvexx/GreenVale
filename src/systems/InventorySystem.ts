@@ -221,4 +221,19 @@ export class InventorySystem {
     forceRefresh() {
         this.emitInventoryChange();
     }
+
+    getSaveData() {
+        return {
+            slots: this.slots,
+            selectedSlot: this.selectedSlot,
+        };
+    }
+
+    loadSaveData(data: { slots: InventorySlot[]; selectedSlot: number }) {
+        this.slots = data.slots;
+        this.selectedSlot = data.selectedSlot;
+
+        this.emitInventoryChange();
+        this.emitSelectionChange();
+    }
 }

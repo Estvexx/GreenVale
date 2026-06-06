@@ -61,4 +61,19 @@ export class LevelSystem {
         localStorage.setItem("farmLevel", String(this.level));
         localStorage.setItem("farmXp", String(this.xp));
     }
+
+    getSaveData() {
+        return {
+            level: this.level,
+            xp: this.xp,
+        };
+    }
+
+    loadSaveData(data: { level: number; xp: number }) {
+        this.level = data.level;
+        this.xp = data.xp;
+
+        this.save();
+        this.emitChange();
+    }
 }

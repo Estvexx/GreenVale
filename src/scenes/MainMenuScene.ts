@@ -3,6 +3,7 @@ import menuHtml from "../html/main-menu.html?raw";
 import { SettingsUI } from "../UI/UI_Settings";
 import { SoundManager } from "../sounds/SoundsManager";
 import { UIRoot } from "../UI/UIRoot";
+import { SaveSystem } from "../systems/SaveSystem";
 
 export class MainMenuScene extends Phaser.Scene {
     private menuElement?: HTMLElement;
@@ -24,6 +25,14 @@ export class MainMenuScene extends Phaser.Scene {
 
         document.getElementById("main-menu-play")!.onclick = () => {
             UIRoot.init();
+            SaveSystem.load();
+            SoundManager.play("click_sound");
+            this.scene.start("FarmScene");
+        };
+
+        document.getElementById("main-menu-new-game")!.onclick = () => {
+            UIRoot.init();
+            SaveSystem.newGame();
             SoundManager.play("click_sound");
             this.scene.start("FarmScene");
         };
@@ -36,14 +45,11 @@ export class MainMenuScene extends Phaser.Scene {
 
             const reader = new FileReader();
             reader.onload = () => {
-                try {
-                    JSON.parse(String(reader.result));
-                    localStorage.setItem(
-                        "uploadedSaveJson",
-                        String(reader.result),
-                    );
+                const imported = SaveSystem.importJson(String(reader.result));
+
+                if (imported) {
                     SoundManager.play("click_sound");
-                } catch {
+                } else {
                     SoundManager.play("error_sound");
                 }
             };
@@ -62,4 +68,3 @@ export class MainMenuScene extends Phaser.Scene {
         });
     }
 }
-
