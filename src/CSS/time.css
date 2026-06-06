@@ -1,0 +1,24 @@
+.time-hud {
+    position: absolute;
+    top: 250px;
+    left: 30px;
+    padding: 10px 14px;
+    width: 180px;
+
+    background: rgba(25, 18, 10, 0.85);
+    border: 2px solid var(--color-gold);
+    border-radius: 8px;
+
+    color: var(--color-cream);
+    font-family: Georgia, serif;
+    font-weight: 700;
+
+    z-index: 9999;
+
+    box-shadow: 0 4px 0 var(--panel-shadow);
+}
+
+#time-clock {
+    color: var(--color-gold);
+    font-size: 18px;
+}

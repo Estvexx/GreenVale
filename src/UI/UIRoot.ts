@@ -8,6 +8,7 @@ import { UI_ActiveEffectsManager } from "./UI_ActiveEffectsManager";
 import { UI_ShopManager } from "./UI_ShopManager";
 import { UI_StorageManager } from "./UI_StorageManager";
 import { UI_ToastManager } from "./UI_ToastManager";
+import { UI_TimeManager } from "./UI_TimeManager";
 
 export class UIRoot {
     private static initialized = false;
@@ -30,6 +31,7 @@ export class UIRoot {
         this.storage = new UI_StorageManager();
         this.effectShop = new UI_EffectShopManager();
         this.toast = new UI_ToastManager();
+        new UI_TimeManager();
 
         new UI_ActiveEffectsManager();
 

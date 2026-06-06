@@ -173,5 +173,8 @@
     "combat": {
         "noItemInHand": "Não tens nenhum item na mão.",
         "itemHasNoDamage": "Este item não causa dano."
+    },
+    "time": {
+        "day": "Dia {day}"
     }
 }

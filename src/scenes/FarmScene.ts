@@ -14,13 +14,14 @@ import type { ShopType } from "../types/ShopTypes";
 import { MusicManager } from "../sounds/MusicManager";
 import { SettingsUI } from "../UI/UI_Settings";
 import { SoundManager } from "../sounds/SoundsManager";
+import { FarmEnvironmentFX } from "../camera/FarmEnvironmentFX";
 
 export class FarmScene extends Phaser.Scene {
     public player!: Player;
     public bgMusic!: Phaser.Sound.BaseSound;
     private interactionZones!: InteractionZoneSystem;
     public farmFields!: FarmFieldSystem;
-
+    private environmentFX!: FarmEnvironmentFX;
     private inventory = InventorySystem.getInstance();
     private effects = EffectSystem.getInstance();
 
@@ -57,6 +58,7 @@ export class FarmScene extends Phaser.Scene {
         new CollisionSystem(this, this.player, mapManager);
 
         new CameraManager(this, this.player, mapManager.map);
+        this.environmentFX = new FarmEnvironmentFX(this);
 
         MusicManager.play(this, "farmScene_music", 0.05);
         SoundManager.setScene(this);
@@ -64,8 +66,10 @@ export class FarmScene extends Phaser.Scene {
         this.inventory.addStartingItems();
     }
 
-    update(time: number) {
+    update(time: number, delta: number) {
         this.player.update(time);
+
+        this.environmentFX.update(delta);
 
         this.interactionZones.update();
 
