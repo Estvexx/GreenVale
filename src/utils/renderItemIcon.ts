@@ -36,4 +36,6 @@ export function renderItemIcon(element: HTMLElement, itemId: number) {
         sprite.style.backgroundPosition = `-${itemData.col * 32}px -${itemData.row * 32}px`;
         sprite.title = itemData.name;
     }
+
+    // VASCO // opcional caso precises/ criar um novo else aqui porque a tua spriteSheet é 32 por 37
 }

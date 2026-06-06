@@ -41,6 +41,7 @@ export class LevelSystem {
         return this.level * 100;
     }
 
+    // VASCO quando coletars frutas das addXP, quando arares addXP, quando regares addXP, etc
     addXp(amount: number) {
         this.xp += amount;
 

@@ -138,7 +138,8 @@ export class PreloaderScene extends Phaser.Scene {
             frameHeight: 32,
         });
 
-        this.load.spritesheet("frutas", "assets/images/Stages.png", {
+        //VASCO esta e tua spriteSheet para as plantas, tem 4 linhas (uma para cada tipo de planta) e 8 colunas (uma para cada estágio de crescimento)
+        this.load.spritesheet("stages", "assets/images/Stages.png", {
             frameWidth: 32,
             frameHeight: 37,
         });

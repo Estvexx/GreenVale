@@ -56,7 +56,11 @@ export class BossEnvironmentFX {
             Phaser.Scenes.Events.SHUTDOWN,
             removeResizeListener,
         );
-        this.scene.events.once(Phaser.Scenes.Events.DESTROY, removeResizeListener);
+        this.scene.events.once(
+            Phaser.Scenes.Events.DESTROY,
+            removeResizeListener,
+        );
+    }
 
     private createLavaParticles() {
         const width = this.scene.scale.width;
@@ -89,3 +93,4 @@ export class BossEnvironmentFX {
         this.particles.setDepth(10000);
     }
 }
+    

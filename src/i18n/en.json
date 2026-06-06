@@ -172,5 +172,8 @@
     "combat": {
         "noItemInHand": "You have no item equipped.",
         "itemHasNoDamage": "This item does not deal damage."
+    },
+    "time": {
+        "day": "Day {day}"
     }
 }
