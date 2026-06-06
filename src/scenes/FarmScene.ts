@@ -17,6 +17,7 @@ import { SoundManager } from "../sounds/SoundsManager";
 import { FarmEnvironmentFX } from "../camera/FarmEnvironmentFX";
 import { changeScene } from "../utils/changeScene";
 import { FarmingSystem } from "../systems/FarmingSystem";
+import { RealLightSystem } from "../lights/RealLightSystem";
 
 export class FarmScene extends Phaser.Scene {
     public player!: Player;
@@ -27,6 +28,7 @@ export class FarmScene extends Phaser.Scene {
     private environmentFX!: FarmEnvironmentFX;
     private inventory = InventorySystem.getInstance();
     private effects = EffectSystem.getInstance();
+    private realLights!: RealLightSystem;
     private isChangingScene = false;
 
     private tooltip = document.getElementById("zone-tooltip")!;
@@ -36,8 +38,12 @@ export class FarmScene extends Phaser.Scene {
     }
 
     create() {
+        this.isChangingScene = false;
+
+        //this.scene.lights.setAmbientColor(0x888888);
         this.cameras.main.fadeIn(500, 0, 0, 0);
         const mapManager = new MapManager(this);
+        this.realLights = new RealLightSystem(this, mapManager);
         this.farmFields = new FarmFieldSystem(this, mapManager.map);
         this.farmingSystem = new FarmingSystem(this, this.farmFields);
 
@@ -78,6 +84,7 @@ export class FarmScene extends Phaser.Scene {
         this.environmentFX.update(delta);
 
         this.interactionZones.update();
+        this.realLights.update();
 
         this.tooltip.classList.toggle(
             "hidden",

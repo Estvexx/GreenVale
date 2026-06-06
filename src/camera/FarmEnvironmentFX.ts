@@ -22,7 +22,7 @@ export class FarmEnvironmentFX {
             camera.width,
             camera.height,
             0x000022,
-            1,
+            0,
         );
 
         this.overlay.setOrigin(0);

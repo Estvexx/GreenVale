@@ -4,13 +4,18 @@ export type MapType = "farm" | "boss";
 
 export class MapManager {
     map: Phaser.Tilemaps.Tilemap;
+
+    public lightLayers: Phaser.Tilemaps.TilemapLayer[] = [];
+
     private mapType: MapType;
 
     constructor(scene: Phaser.Scene, mapType: MapType = "farm") {
         this.mapType = mapType;
+
         this.map = scene.make.tilemap({
             key: this.mapType === "farm" ? "mapa" : "mapa_boss",
         });
+
         this.createLayers();
     }
 
@@ -23,12 +28,26 @@ export class MapManager {
         this.createFarmLayers();
     }
 
+    private addLayer(
+        name: string,
+        tileset: Phaser.Tilemaps.Tileset | Phaser.Tilemaps.Tileset[],
+        depth: number,
+    ) {
+        const layer = this.map.createLayer(name, tileset);
+
+        if (!layer) return;
+
+        layer.setDepth(depth);
+
+        this.lightLayers.push(layer as Phaser.Tilemaps.TilemapLayer);
+    }
+
     private createFarmLayers() {
         const tsGround = this.map.addTilesetImage("TileSet_Ground", "chao")!;
-        this.map.createLayer("Ground", tsGround)?.setDepth(0);
+        this.addLayer("Ground", tsGround, 0);
 
         const tsFarmable = this.map.addTilesetImage("Terras_Aradas", "terras")!;
-        this.map.createLayer("Farmable Layer", tsFarmable)?.setDepth(1);
+        this.addLayer("Farmable Layer", tsFarmable, 1);
 
         const tsFence = this.map.addTilesetImage("Fence", "cercas")!;
         const tsBoat = this.map.addTilesetImage("boat", "barcos")!;
@@ -38,22 +57,23 @@ export class MapManager {
             "arvores_e_poco",
         )!;
 
-        this.map
-            .createLayer("Decoration", [
-                tsFence,
-                tsBoat,
-                tsRocks,
-                tsPlantsandWell,
-            ])
-            ?.setDepth(2);
-        this.map.createLayer("Trees", tsPlantsandWell)?.setDepth(3);
-        this.map.createLayer("Trees2", tsPlantsandWell)?.setDepth(4);
-        this.map.createLayer("Trees3", tsPlantsandWell)?.setDepth(5);
+        const tsPoles = this.map.addTilesetImage("Postes_luz", "postes")!;
+
+        this.addLayer(
+            "Decoration",
+            [tsFence, tsBoat, tsRocks, tsPlantsandWell],
+            2,
+        );
+
+        this.addLayer("Trees", tsPlantsandWell, 3);
+        this.addLayer("Trees2", tsPlantsandWell, 4);
+        this.addLayer("Trees3", tsPlantsandWell, 5);
 
         const tsBuildings = this.map.addTilesetImage("Shops", "lojas")!;
-        this.map
-            .createLayer("Buildings", [tsBuildings, tsPlantsandWell])
-            ?.setDepth(3);
+
+        this.addLayer("Buildings", [tsBuildings, tsPlantsandWell], 3);
+
+        this.addLayer("LightPostsVisual", tsPoles, 11);
     }
 
     private createBossLayers() {
@@ -61,13 +81,15 @@ export class MapManager {
             "ground_boss",
             "terras_boss",
         )!;
-        this.map.createLayer("Ground", tsGroundBoss)?.setDepth(0);
+
+        this.addLayer("Ground", tsGroundBoss, 0);
 
         const tsDecorationBoss = this.map.addTilesetImage(
             "Decoracao_boss",
             "decoracao_boss",
         )!;
-        this.map.createLayer("Decoration", tsDecorationBoss)?.setDepth(1);
+
+        this.addLayer("Decoration", tsDecorationBoss, 1);
     }
 
     getSpawnPoint(): Phaser.Types.Tilemaps.TiledObject | undefined {
@@ -105,5 +127,13 @@ export class MapManager {
         return (
             this.getBossSpawns().find((spawn) => spawn.name === name) ?? null
         );
+    }
+
+    getLightObjects(): Phaser.Types.Tilemaps.TiledObject[] {
+        return this.map.getObjectLayer("Lights")?.objects ?? [];
+    }
+
+    getBossLightObjects(): Phaser.Types.Tilemaps.TiledObject[] {
+        return this.map.getObjectLayer("Lights_Bosses")?.objects ?? [];
     }
 }

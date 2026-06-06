@@ -17,6 +17,7 @@ import { UIRoot } from "../UI/UIRoot";
 import { t } from "../i18n";
 import { TimeSystem } from "../systems/TimeSystem";
 import { changeScene } from "../utils/changeScene";
+import { BossLightSystem } from "../lights/BossLightSystem";
 
 export class BossScene extends Phaser.Scene {
     public player!: Player;
@@ -33,11 +34,15 @@ export class BossScene extends Phaser.Scene {
     private interactionZones!: InteractionZoneSystem;
     private isChangingScene = false;
 
+    private bossLights!: BossLightSystem;
+
     constructor() {
         super("BossScene");
     }
 
     create() {
+        this.isChangingScene = false;
+
         this.cameras.main.fadeIn(500, 0, 0, 0);
         const mapManager = new MapManager(this, "boss");
         const spawnPoint = mapManager.getSpawnPoint();
@@ -63,6 +68,7 @@ export class BossScene extends Phaser.Scene {
 
         new CameraManager(this, this.player, mapManager.map, "boss");
         this.environmentFX = new BossEnvironmentFX(this);
+        this.bossLights = new BossLightSystem(this, mapManager);
 
         new CollisionSystem(this, this.player, mapManager);
 
@@ -131,6 +137,7 @@ export class BossScene extends Phaser.Scene {
     }
 
     update(time: number, delta: number) {
+        this.bossLights.update();
         this.player.update(time);
 
         this.timeSystem.update(delta);
