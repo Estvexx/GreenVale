@@ -6,9 +6,10 @@ import { LevelSystem } from "./LevelSystem";
 import { TimeSystem } from "./TimeSystem";
 import { UIRoot } from "../UI/UIRoot";
 
-const TOOL_SCYTHE       = 2;
-const TOOL_BUCKET_WATER = 4;
 const TOOL_HOE          = 1;
+const TOOL_SCYTHE       = 2;
+const TOOL_BUCKET_EMPTY = 3;
+const TOOL_BUCKET_WATER = 4;
 
 // À noite as plantas crescem 3x mais devagar
 const NIGHT_GROW_MULTIPLIER = 3;
@@ -16,11 +17,15 @@ const NIGHT_GROW_MULTIPLIER = 3;
 type PlantedCrop = {
     sprite: Phaser.GameObjects.Image;
     icon: Phaser.GameObjects.Image;
+    iconBubble: Phaser.GameObjects.Arc;
     seedId: number;
     stage: number;
     watered: boolean;
     lastGrowTime: number;
 };
+
+const TILE_SIZE = 32;
+const MAX_PLANT_DISTANCE = 80;
 
 export class FarmingSystem {
     private scene: Phaser.Scene;
@@ -33,9 +38,28 @@ export class FarmingSystem {
     private pendingPlantX = 0;
     private pendingPlantY = 0;
 
+    private tileCursor: Phaser.GameObjects.Rectangle;
+
     constructor(scene: Phaser.Scene, farmFields: FarmFieldSystem) {
         this.scene = scene;
         this.farmFields = farmFields;
+
+        this.tileCursor = scene.add.rectangle(0, 0, TILE_SIZE, TILE_SIZE)
+            .setStrokeStyle(2, 0xffffff, 0.8)
+            .setFillStyle(0xffffff, 0.15)
+            .setDepth(15)
+            .setVisible(false);
+
+        scene.input.on("pointerdown", (pointer: Phaser.Input.Pointer) => {
+            this.onPointerDown(pointer);
+        });
+    }
+
+    canWaterAt(playerX: number, playerY: number): boolean {
+        const item = this.inventory.getCurrentItem();
+        if (!item || ITEMS[item.id]?.id !== TOOL_BUCKET_WATER) return false;
+        const crop = this.crops.get(this.cellKey(playerX, playerY));
+        return !!crop && !crop.watered;
     }
 
     interact(playerX: number, playerY: number) {
@@ -46,12 +70,12 @@ export class FarmingSystem {
         if (!itemData) return;
 
         if (itemData.id === TOOL_HOE)           this.openSeedPicker(playerX, playerY);
-        if (itemData.isSeed)                    this.tryPlant(playerX, playerY, item.id);
         if (itemData.id === TOOL_BUCKET_WATER)  this.tryWater(playerX, playerY);
         if (itemData.id === TOOL_SCYTHE)        this.tryHarvest(playerX, playerY);
     }
 
-    update(time: number) {
+    update(time: number, playerX: number, playerY: number) {
+        this.updateCursor(playerX, playerY);
         const isNight = this.isNight();
 
         for (const crop of this.crops.values()) {
@@ -117,11 +141,12 @@ export class FarmingSystem {
         const sprite = this.scene.add.image(cx, cy, `crop_${itemData.cropKey}_0`);
         sprite.setDepth(8);
 
-        const icon = this.createIcon(cx, cy, "icon_water");
+        const { icon, iconBubble } = this.createIcon(cx, cy, "icon_water");
 
         this.crops.set(key, {
             sprite,
             icon,
+            iconBubble,
             seedId,
             stage: 0,
             watered: false,
@@ -139,7 +164,9 @@ export class FarmingSystem {
         crop.watered = true;
         crop.lastGrowTime = this.scene.time.now;
         crop.icon.setVisible(false);
+        crop.iconBubble.setVisible(false);
         this.inventory.removeItemById(TOOL_BUCKET_WATER, 1);
+        this.inventory.addItem(TOOL_BUCKET_EMPTY, 1);
     }
 
     private tryHarvest(x: number, y: number) {
@@ -172,6 +199,7 @@ export class FarmingSystem {
 
         crop.sprite.destroy();
         crop.icon.destroy();
+        crop.iconBubble.destroy();
         this.crops.delete(key);
     }
 
@@ -185,17 +213,107 @@ export class FarmingSystem {
     private updateIcon(crop: PlantedCrop) {
         if (crop.stage === 3) {
             crop.icon.setTexture("icon_scythe").setVisible(true);
+            crop.iconBubble.setVisible(true);
         } else if (!crop.watered) {
             crop.icon.setTexture("icon_water").setVisible(true);
+            crop.iconBubble.setVisible(true);
         } else {
             crop.icon.setVisible(false);
+            crop.iconBubble.setVisible(false);
         }
     }
 
-    private createIcon(x: number, y: number, texture: string): Phaser.GameObjects.Image {
-        return this.scene.add.image(x, y - 28, texture)
-            .setDepth(20)
-            .setScale(0.5);
+    private createIcon(x: number, y: number, texture: string): { icon: Phaser.GameObjects.Image; iconBubble: Phaser.GameObjects.Arc } {
+        const iconBubble = this.scene.add.circle(x, y - 28, 12, 0xffffff).setDepth(19);
+        const icon = this.scene.add.image(x, y - 28, texture).setDepth(20).setScale(0.5);
+        return { icon, iconBubble };
+    }
+
+    private updateCursor(playerX: number, playerY: number) {
+        const item = this.inventory.getCurrentItem();
+        const itemId = item ? ITEMS[item.id]?.id : null;
+        const isHoe = itemId === TOOL_HOE;
+        const isScythe = itemId === TOOL_SCYTHE;
+
+        if (!isHoe && !isScythe) {
+            this.tileCursor.setVisible(false);
+            this.scene.input.setDefaultCursor("default");
+            return;
+        }
+
+        this.scene.input.setDefaultCursor("default");
+
+        const pointer = this.scene.input.activePointer;
+        const worldX = pointer.worldX;
+        const worldY = pointer.worldY;
+
+        const tx = this.snap(worldX);
+        const ty = this.snap(worldY);
+
+        const dist = Phaser.Math.Distance.Between(playerX, playerY, tx, ty);
+        const inRange = dist <= MAX_PLANT_DISTANCE;
+
+        let color: number;
+
+        if (isHoe) {
+            const canFarm = this.farmFields.canFarmAt(tx, ty);
+            color = !canFarm ? 0xff4444 : !inRange ? 0xffcc00 : 0x44ff44;
+        } else {
+            const crop = this.crops.get(this.cellKey(tx, ty));
+            if (!crop) {
+                color = 0xff4444;
+            } else if (!inRange || crop.stage !== 3) {
+                color = 0xffcc00;
+            } else {
+                color = 0x44ff44;
+            }
+        }
+
+        this.tileCursor
+            .setPosition(tx, ty)
+            .setStrokeStyle(2, color, 0.9)
+            .setFillStyle(color, 0.15)
+            .setVisible(true);
+    }
+
+    private onPointerDown(pointer: Phaser.Input.Pointer) {
+        const item = this.inventory.getCurrentItem();
+        if (!item) return;
+
+        const itemId = ITEMS[item.id]?.id;
+        if (itemId !== TOOL_HOE && itemId !== TOOL_SCYTHE) return;
+
+        const worldX = pointer.worldX;
+        const worldY = pointer.worldY;
+
+        const tx = this.snap(worldX);
+        const ty = this.snap(worldY);
+
+        const playerX = (this.scene as any).player?.x ?? 0;
+        const playerY = (this.scene as any).player?.y ?? 0;
+        const dist = Phaser.Math.Distance.Between(playerX, playerY, tx, ty);
+
+        if (itemId === TOOL_HOE) {
+            if (!this.farmFields.canFarmAt(tx, ty)) {
+                UIRoot.toast.show("Não é possível plantar aqui.", "error");
+                return;
+            }
+            if (dist > MAX_PLANT_DISTANCE) {
+                UIRoot.toast.show("Estás longe demais para plantar.", "error");
+                return;
+            }
+            this.openSeedPicker(worldX, worldY);
+        } else {
+            if (!this.crops.get(this.cellKey(tx, ty))) {
+                UIRoot.toast.show("Não há nenhuma planta aqui.", "error");
+                return;
+            }
+            if (dist > MAX_PLANT_DISTANCE) {
+                UIRoot.toast.show("Estás longe demais para colher.", "error");
+                return;
+            }
+            this.tryHarvest(tx, ty);
+        }
     }
 
     private isNight(): boolean {
