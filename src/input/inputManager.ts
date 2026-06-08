@@ -45,6 +45,12 @@ export class InputManager {
                 .on("down", () => this.inventory.selectSlot(i));
         });
 
+        this.scene.input.on("wheel", (_: unknown, __: unknown, ___: unknown, deltaY: number) => {
+            const next = this.inventory.selectedSlot + (deltaY > 0 ? 1 : -1);
+            const clamped = (next + 8) % 8;
+            this.inventory.selectSlot(clamped);
+        });
+
         this.scene.input.keyboard?.on("keydown-E", () => {
             this.inventory.toggleInventory();
         });
