@@ -10,6 +10,7 @@ import { UI_StorageManager } from "./UI_StorageManager";
 import { UI_ToastManager } from "./UI_ToastManager";
 import { UI_TimeManager } from "./UI_TimeManager";
 import { UI_SeedPicker } from "./UI_SeedPicker";
+import { UI_GrowthSpeed } from "./UI_GrowthSpeed";
 
 export class UIRoot {
     private static initialized = false;
@@ -37,6 +38,7 @@ export class UIRoot {
 
         new UI_ActiveEffectsManager();
         this.seedPicker = new UI_SeedPicker();
+        new UI_GrowthSpeed();
 
         this.initialized = true;
     }
