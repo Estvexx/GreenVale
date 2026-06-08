@@ -105,6 +105,9 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
         const isMoving =
             this.body!.velocity.x !== 0 || this.body!.velocity.y !== 0;
 
+        if (this.body!.velocity.x > 0) this.setFlipX(false);
+        else if (this.body!.velocity.x < 0) this.setFlipX(true);
+
         if (isMoving) {
             if (time > this.walkTimer) {
                 this.walkFrame = this.walkFrame === 0 ? 1 : 0;
