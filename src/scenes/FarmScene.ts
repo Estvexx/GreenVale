@@ -88,13 +88,13 @@ export class FarmScene extends Phaser.Scene {
 
         this.realLights.update();
 
-        this.tooltip.classList.toggle(
-            "hidden",
-            !this.interactionZones.isInsideZone(),
-        );
+        const showTooltip = this.interactionZones.isInsideZone()
+            || this.farmingSystem.canWaterHere(this.player.x, this.player.y);
+
+        this.tooltip.classList.toggle("hidden", !showTooltip);
 
         this.effects.update();
-        this.farmingSystem.update(time);
+        this.farmingSystem.update(time, this.player.x, this.player.y);
     }
 
     private fillBucket() {
