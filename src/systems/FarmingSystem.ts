@@ -6,326 +6,290 @@ import { LevelSystem } from "./LevelSystem";
 import { TimeSystem } from "./TimeSystem";
 import { UIRoot } from "../UI/UIRoot";
 
-const TOOL_HOE          = 1;
-const TOOL_SCYTHE       = 2;
-const TOOL_BUCKET_EMPTY = 3;
-const TOOL_BUCKET_WATER = 4;
+const HOE          = 1;
+const SCYTHE       = 2;
+const BUCKET_EMPTY = 3;
+const BUCKET_WATER = 4;
 
-// À noite as plantas crescem 3x mais devagar
-const NIGHT_GROW_MULTIPLIER = 3;
+const TILE_SIZE        = 32;
+const REACH            = 80;
+const NIGHT_SLOW       = 3;
+const HARVEST_STAGE    = 3;
+const POST_HARVEST     = 2;
 
-type PlantedCrop = {
-    sprite: Phaser.GameObjects.Image;
-    icon: Phaser.GameObjects.Image;
-    iconBubble: Phaser.GameObjects.Arc;
-    seedId: number;
-    stage: number;
-    watered: boolean;
-    lastGrowTime: number;
+type Crop = {
+    sprite:     Phaser.GameObjects.Image;
+    bubble:     Phaser.GameObjects.Arc;
+    icon:       Phaser.GameObjects.Image;
+    seedId:     number;
+    stage:      number;
+    watered:    boolean;
+    grownAt:    number;
 };
 
-const TILE_SIZE = 32;
-const MAX_PLANT_DISTANCE = 80;
-
 export class FarmingSystem {
-    private scene: Phaser.Scene;
-    private farmFields: FarmFieldSystem;
-    private inventory = InventorySystem.getInstance();
-    private levelSystem = LevelSystem.getInstance();
-    private timeSystem = TimeSystem.getInstance();
+    private scene:      Phaser.Scene;
+    private fields:     FarmFieldSystem;
+    private inventory   = InventorySystem.getInstance();
+    private levels      = LevelSystem.getInstance();
+    private clock       = TimeSystem.getInstance();
 
-    private crops = new Map<string, PlantedCrop>();
-    private pendingPlantX = 0;
-    private pendingPlantY = 0;
+    private crops       = new Map<string, Crop>();
+    private cursor:     Phaser.GameObjects.Rectangle;
 
-    private tileCursor: Phaser.GameObjects.Rectangle;
+    private plantX = 0;
+    private plantY = 0;
 
-    constructor(scene: Phaser.Scene, farmFields: FarmFieldSystem) {
-        this.scene = scene;
-        this.farmFields = farmFields;
+    constructor(scene: Phaser.Scene, fields: FarmFieldSystem) {
+        this.scene  = scene;
+        this.fields = fields;
 
-        this.tileCursor = scene.add.rectangle(0, 0, TILE_SIZE, TILE_SIZE)
-            .setStrokeStyle(2, 0xffffff, 0.8)
-            .setFillStyle(0xffffff, 0.15)
+        this.cursor = scene.add
+            .rectangle(0, 0, TILE_SIZE, TILE_SIZE)
             .setDepth(15)
             .setVisible(false);
 
-        scene.input.on("pointerdown", (pointer: Phaser.Input.Pointer) => {
-            this.onPointerDown(pointer);
-        });
+        scene.input.on("pointerdown", (p: Phaser.Input.Pointer) => this.onClick(p));
     }
 
-    canWaterAt(playerX: number, playerY: number): boolean {
-        const item = this.inventory.getCurrentItem();
-        if (!item || ITEMS[item.id]?.id !== TOOL_BUCKET_WATER) return false;
-        const crop = this.crops.get(this.cellKey(playerX, playerY));
-        return !!crop && !crop.watered;
+    update(time: number, playerX: number, playerY: number) {
+        this.updateCursor(playerX, playerY);
+        this.growCrops(time);
     }
 
     interact(playerX: number, playerY: number) {
         const item = this.inventory.getCurrentItem();
         if (!item) return;
 
-        const itemData = ITEMS[item.id];
-        if (!itemData) return;
-
-        if (itemData.id === TOOL_HOE)           this.openSeedPicker(playerX, playerY);
-        if (itemData.id === TOOL_BUCKET_WATER)  this.tryWater(playerX, playerY);
-        if (itemData.id === TOOL_SCYTHE)        this.tryHarvest(playerX, playerY);
+        const tool = ITEMS[item.id]?.id;
+        if (tool === HOE)          this.startPlanting(playerX, playerY);
+        if (tool === BUCKET_WATER) this.water(playerX, playerY);
+        if (tool === SCYTHE)       this.harvest(playerX, playerY);
     }
 
-    update(time: number, playerX: number, playerY: number) {
-        this.updateCursor(playerX, playerY);
-        const isNight = this.isNight();
+    canWaterHere(playerX: number, playerY: number): boolean {
+        const item = this.inventory.getCurrentItem();
+        if (ITEMS[item?.id ?? 0]?.id !== BUCKET_WATER) return false;
+        const crop = this.crops.get(this.key(playerX, playerY));
+        return !!crop && !crop.watered;
+    }
+
+    private growCrops(time: number) {
+        const slowdown = this.isNight() ? NIGHT_SLOW : 1;
 
         for (const crop of this.crops.values()) {
-            if (!crop.watered || crop.stage === 3) continue;
+            if (!crop.watered || crop.stage === HARVEST_STAGE) continue;
 
-            const baseGrowTime = ITEMS[crop.seedId]?.growTime;
-            if (!baseGrowTime) continue;
+            const base = ITEMS[crop.seedId]?.growTime;
+            if (!base) continue;
 
-            const growTime = isNight ? baseGrowTime * NIGHT_GROW_MULTIPLIER : baseGrowTime;
-
-            if (time - crop.lastGrowTime >= growTime) {
+            if (time - crop.grownAt >= base * slowdown) {
                 crop.stage++;
-                crop.watered = false;
-                crop.lastGrowTime = time;
-                this.updateCropFrame(crop);
-                this.updateIcon(crop);
+                crop.watered  = false;
+                crop.grownAt  = time;
+                this.refreshSprite(crop);
+                this.refreshIcon(crop);
             }
         }
     }
 
-    private openSeedPicker(x: number, y: number) {
-        if (!this.farmFields.canFarmAt(x, y)) {
-            const required = this.farmFields.getRequiredLevelAt(x, y);
-            if (required) {
-                UIRoot.toast.show(`Nível ${required} necessário para plantar aqui.`, "error");
-            }
+    private startPlanting(x: number, y: number) {
+        if (!this.fields.canFarmAt(x, y)) {
+            const lvl = this.fields.getRequiredLevelAt(x, y);
+            if (lvl) UIRoot.toast.show(`Nível ${lvl} necessário para plantar aqui.`, "error");
             return;
         }
 
-        const key = this.cellKey(x, y);
-        if (this.crops.has(key)) {
-            // enxada em cima de planta existente arranca-a
-            this.tryUproot(x, y);
+        if (this.crops.has(this.key(x, y))) {
+            this.uproot(x, y);
             return;
         }
 
-        this.pendingPlantX = x;
-        this.pendingPlantY = y;
+        this.plantX = x;
+        this.plantY = y;
 
-        const opened = UIRoot.seedPicker.open((seedId) => {
-            this.tryPlant(this.pendingPlantX, this.pendingPlantY, seedId);
+        const ok = UIRoot.seedPicker.open((seedId) => {
+            this.plant(this.plantX, this.plantY, seedId);
         });
 
-        if (!opened) {
-            UIRoot.toast.show("Não tens sementes no inventário.", "error");
-        }
+        if (!ok) UIRoot.toast.show("Não tens sementes no inventário.", "error");
     }
 
-    private tryPlant(x: number, y: number, seedId: number) {
-        if (!this.farmFields.canFarmAt(x, y)) return;
+    private plant(x: number, y: number, seedId: number) {
+        if (!this.fields.canFarmAt(x, y)) return;
+        if (this.crops.has(this.key(x, y))) return;
 
-        const key = this.cellKey(x, y);
-        if (this.crops.has(key)) return;
-
-        const itemData = ITEMS[seedId];
-        if (!itemData?.cropKey) return;
-
+        const data = ITEMS[seedId];
+        if (!data?.cropKey) return;
         if (this.inventory.getItemQuantity(seedId) <= 0) return;
 
         const cx = this.snap(x);
         const cy = this.snap(y);
 
-        const sprite = this.scene.add.image(cx, cy, `crop_${itemData.cropKey}_0`);
-        sprite.setDepth(8);
+        const sprite = this.scene.add.image(cx, cy, `crop_${data.cropKey}_0`).setDepth(8);
+        const { bubble, icon } = this.makeIcon(cx, cy, "icon_water");
 
-        const { icon, iconBubble } = this.createIcon(cx, cy, "icon_water");
-
-        this.crops.set(key, {
-            sprite,
-            icon,
-            iconBubble,
+        this.crops.set(this.key(x, y), {
+            sprite, bubble, icon,
             seedId,
-            stage: 0,
+            stage:   0,
             watered: false,
-            lastGrowTime: this.scene.time.now,
+            grownAt: this.scene.time.now,
         });
 
         this.inventory.removeItemById(seedId, 1);
-        this.levelSystem.addXp(5);
+        this.levels.addXp(5);
     }
 
-    private tryWater(x: number, y: number) {
-        const crop = this.crops.get(this.cellKey(x, y));
+    private water(x: number, y: number) {
+        const crop = this.crops.get(this.key(x, y));
         if (!crop || crop.watered) return;
 
         crop.watered = true;
-        crop.lastGrowTime = this.scene.time.now;
-        crop.icon.setVisible(false);
-        crop.iconBubble.setVisible(false);
-        this.inventory.removeItemById(TOOL_BUCKET_WATER, 1);
-        this.inventory.addItem(TOOL_BUCKET_EMPTY, 1);
+        crop.grownAt = this.scene.time.now;
+        this.hideIcon(crop);
+
+        this.inventory.removeItemById(BUCKET_WATER, 1);
+        this.inventory.addItem(BUCKET_EMPTY, 1);
     }
 
-    private tryHarvest(x: number, y: number) {
-        const key = this.cellKey(x, y);
-        const crop = this.crops.get(key);
+    private harvest(x: number, y: number) {
+        const crop = this.crops.get(this.key(x, y));
         if (!crop) return;
 
-        if (crop.stage !== 3) {
+        if (crop.stage !== HARVEST_STAGE) {
             UIRoot.toast.show("A planta ainda não está pronta.", "error");
             return;
         }
 
-        const harvestId = ITEMS[crop.seedId]?.harvestId;
-        if (harvestId) {
-            this.inventory.addItem(harvestId, 1);
-            this.levelSystem.addXp(20);
+        const drop = ITEMS[crop.seedId]?.harvestId;
+        if (drop) {
+            this.inventory.addItem(drop, 1);
+            this.levels.addXp(20);
         }
 
-        // volta para stage 2 (grande sem fruto), rega para voltar ao 3
-        crop.stage = 2;
+        crop.stage   = POST_HARVEST;
         crop.watered = false;
-        this.updateCropFrame(crop);
-        this.updateIcon(crop);
+        this.refreshSprite(crop);
+        this.refreshIcon(crop);
     }
 
-    private tryUproot(x: number, y: number) {
-        const key = this.cellKey(x, y);
-        const crop = this.crops.get(key);
+    private uproot(x: number, y: number) {
+        const crop = this.crops.get(this.key(x, y));
         if (!crop) return;
 
         crop.sprite.destroy();
+        crop.bubble.destroy();
         crop.icon.destroy();
-        crop.iconBubble.destroy();
-        this.crops.delete(key);
+        this.crops.delete(this.key(x, y));
     }
 
-    private updateCropFrame(crop: PlantedCrop) {
-        const cropKey = ITEMS[crop.seedId]?.cropKey;
-        if (cropKey) {
-            crop.sprite.setTexture(`crop_${cropKey}_${crop.stage}`);
-        }
+    private refreshSprite(crop: Crop) {
+        const key = ITEMS[crop.seedId]?.cropKey;
+        if (key) crop.sprite.setTexture(`crop_${key}_${crop.stage}`);
     }
 
-    private updateIcon(crop: PlantedCrop) {
-        if (crop.stage === 3) {
-            crop.icon.setTexture("icon_scythe").setVisible(true);
-            crop.iconBubble.setVisible(true);
+    private refreshIcon(crop: Crop) {
+        if (crop.stage === HARVEST_STAGE) {
+            crop.icon.setTexture("icon_scythe");
+            this.showIcon(crop);
         } else if (!crop.watered) {
-            crop.icon.setTexture("icon_water").setVisible(true);
-            crop.iconBubble.setVisible(true);
+            crop.icon.setTexture("icon_water");
+            this.showIcon(crop);
         } else {
-            crop.icon.setVisible(false);
-            crop.iconBubble.setVisible(false);
+            this.hideIcon(crop);
         }
     }
 
-    private createIcon(x: number, y: number, texture: string): { icon: Phaser.GameObjects.Image; iconBubble: Phaser.GameObjects.Arc } {
-        const iconBubble = this.scene.add.circle(x, y - 28, 12, 0xffffff).setDepth(19);
-        const icon = this.scene.add.image(x, y - 28, texture).setDepth(20).setScale(0.5);
-        return { icon, iconBubble };
+    private showIcon(crop: Crop) {
+        crop.icon.setVisible(true);
+        crop.bubble.setVisible(true);
+    }
+
+    private hideIcon(crop: Crop) {
+        crop.icon.setVisible(false);
+        crop.bubble.setVisible(false);
+    }
+
+    private makeIcon(x: number, y: number, texture: string) {
+        const bubble = this.scene.add.circle(x, y - 28, 12, 0xffffff).setDepth(19);
+        const icon   = this.scene.add.image(x, y - 28, texture).setDepth(20).setScale(0.5);
+        return { bubble, icon };
     }
 
     private updateCursor(playerX: number, playerY: number) {
-        const item = this.inventory.getCurrentItem();
-        const itemId = item ? ITEMS[item.id]?.id : null;
-        const isHoe = itemId === TOOL_HOE;
-        const isScythe = itemId === TOOL_SCYTHE;
+        const item   = this.inventory.getCurrentItem();
+        const toolId = item ? ITEMS[item.id]?.id : null;
 
-        if (!isHoe && !isScythe) {
-            this.tileCursor.setVisible(false);
-            this.scene.input.setDefaultCursor("default");
+        if (toolId !== HOE && toolId !== SCYTHE) {
+            this.cursor.setVisible(false);
             return;
         }
 
-        this.scene.input.setDefaultCursor("default");
+        const p  = this.scene.input.activePointer;
+        const tx = this.snap(p.worldX);
+        const ty = this.snap(p.worldY);
 
-        const pointer = this.scene.input.activePointer;
-        const worldX = pointer.worldX;
-        const worldY = pointer.worldY;
-
-        const tx = this.snap(worldX);
-        const ty = this.snap(worldY);
-
-        const dist = Phaser.Math.Distance.Between(playerX, playerY, tx, ty);
-        const inRange = dist <= MAX_PLANT_DISTANCE;
+        const dist    = Phaser.Math.Distance.Between(playerX, playerY, tx, ty);
+        const inReach = dist <= REACH;
 
         let color: number;
 
-        if (isHoe) {
-            const canFarm = this.farmFields.canFarmAt(tx, ty);
-            color = !canFarm ? 0xff4444 : !inRange ? 0xffcc00 : 0x44ff44;
+        if (toolId === HOE) {
+            const ok = this.fields.canFarmAt(tx, ty);
+            color = !ok ? 0xff4444 : !inReach ? 0xffcc00 : 0x44ff44;
         } else {
-            const crop = this.crops.get(this.cellKey(tx, ty));
-            if (!crop) {
-                color = 0xff4444;
-            } else if (!inRange || crop.stage !== 3) {
-                color = 0xffcc00;
-            } else {
-                color = 0x44ff44;
-            }
+            const crop = this.crops.get(this.key(tx, ty));
+            color = !crop ? 0xff4444 : (!inReach || crop.stage !== HARVEST_STAGE) ? 0xffcc00 : 0x44ff44;
         }
 
-        this.tileCursor
-            .setPosition(tx, ty)
-            .setStrokeStyle(2, color, 0.9)
-            .setFillStyle(color, 0.15)
-            .setVisible(true);
+        this.cursor.setPosition(tx, ty).setStrokeStyle(2, color, 0.9).setFillStyle(color, 0.15).setVisible(true);
     }
 
-    private onPointerDown(pointer: Phaser.Input.Pointer) {
-        const item = this.inventory.getCurrentItem();
-        if (!item) return;
+    private onClick(pointer: Phaser.Input.Pointer) {
+        const item   = this.inventory.getCurrentItem();
+        const toolId = item ? ITEMS[item.id]?.id : null;
+        if (toolId !== HOE && toolId !== SCYTHE) return;
 
-        const itemId = ITEMS[item.id]?.id;
-        if (itemId !== TOOL_HOE && itemId !== TOOL_SCYTHE) return;
+        const tx = this.snap(pointer.worldX);
+        const ty = this.snap(pointer.worldY);
 
-        const worldX = pointer.worldX;
-        const worldY = pointer.worldY;
+        const player = (this.scene as any).player;
+        const dist   = Phaser.Math.Distance.Between(player?.x ?? 0, player?.y ?? 0, tx, ty);
 
-        const tx = this.snap(worldX);
-        const ty = this.snap(worldY);
-
-        const playerX = (this.scene as any).player?.x ?? 0;
-        const playerY = (this.scene as any).player?.y ?? 0;
-        const dist = Phaser.Math.Distance.Between(playerX, playerY, tx, ty);
-
-        if (itemId === TOOL_HOE) {
-            if (!this.farmFields.canFarmAt(tx, ty)) {
+        if (toolId === HOE) {
+            if (!this.fields.canFarmAt(tx, ty)) {
                 UIRoot.toast.show("Não é possível plantar aqui.", "error");
                 return;
             }
-            if (dist > MAX_PLANT_DISTANCE) {
+            if (dist > REACH) {
                 UIRoot.toast.show("Estás longe demais para plantar.", "error");
                 return;
             }
-            this.openSeedPicker(worldX, worldY);
+            this.startPlanting(pointer.worldX, pointer.worldY);
         } else {
-            if (!this.crops.get(this.cellKey(tx, ty))) {
+            if (!this.crops.get(this.key(tx, ty))) {
                 UIRoot.toast.show("Não há nenhuma planta aqui.", "error");
                 return;
             }
-            if (dist > MAX_PLANT_DISTANCE) {
+            if (dist > REACH) {
                 UIRoot.toast.show("Estás longe demais para colher.", "error");
                 return;
             }
-            this.tryHarvest(tx, ty);
+            this.harvest(tx, ty);
         }
     }
 
-    private isNight(): boolean {
-        const hour = this.timeSystem.getHour();
-        return hour >= 21 || hour < 6;
+    private isNight() {
+        const h = this.clock.getHour();
+        return h >= 21 || h < 6;
     }
 
-    private cellKey(x: number, y: number): string {
+    private key(x: number, y: number) {
         return `${this.snap(x)},${this.snap(y)}`;
     }
 
-    private snap(v: number): number {
-        return Math.floor(v / 32) * 32 + 16;
+    private snap(v: number) {
+        return Math.floor(v / TILE_SIZE) * TILE_SIZE + TILE_SIZE / 2;
     }
 }

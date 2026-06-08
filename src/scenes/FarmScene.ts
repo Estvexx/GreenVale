@@ -80,7 +80,7 @@ export class FarmScene extends Phaser.Scene {
         this.interactionZones.update();
 
         const showTooltip = this.interactionZones.isInsideZone()
-            || this.farmingSystem.canWaterAt(this.player.x, this.player.y);
+            || this.farmingSystem.canWaterHere(this.player.x, this.player.y);
 
         this.tooltip.classList.toggle("hidden", !showTooltip);
 

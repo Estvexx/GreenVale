@@ -101,19 +101,19 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
         }
     }
 
+    private isMoving() {
+        return this.body!.velocity.x !== 0 || this.body!.velocity.y !== 0;
+    }
+
     private updateAnimation(time: number) {
-        const isMoving =
-            this.body!.velocity.x !== 0 || this.body!.velocity.y !== 0;
+        const vx = this.body!.velocity.x;
+        if (vx > 0) this.setFlipX(false);
+        else if (vx < 0) this.setFlipX(true);
 
-        if (this.body!.velocity.x > 0) this.setFlipX(false);
-        else if (this.body!.velocity.x < 0) this.setFlipX(true);
-
-        if (isMoving) {
+        if (this.isMoving()) {
             if (time > this.walkTimer) {
                 this.walkFrame = this.walkFrame === 0 ? 1 : 0;
-                this.setTexture(
-                    this.walkFrame === 0 ? this.idleTexture : this.walkTexture,
-                );
+                this.setTexture(this.walkFrame === 0 ? this.idleTexture : this.walkTexture);
                 this.walkTimer = time + Player.WALK_FRAME_INTERVAL;
             }
         } else {
@@ -123,19 +123,12 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
     }
 
     private updateFootstepSound() {
-        const isMoving =
-            this.body!.velocity.x !== 0 || this.body!.velocity.y !== 0;
+        const soundsOn = localStorage.getItem("soundsEnabled") !== "false";
 
-        const soundsEnabled = localStorage.getItem("soundsEnabled") !== "false";
-
-        if (isMoving && soundsEnabled) {
-            if (!this.footstepSound.isPlaying) {
-                this.footstepSound.play();
-            }
+        if (this.isMoving() && soundsOn) {
+            if (!this.footstepSound.isPlaying) this.footstepSound.play();
         } else {
-            if (this.footstepSound.isPlaying) {
-                this.footstepSound.stop();
-            }
+            if (this.footstepSound.isPlaying) this.footstepSound.stop();
         }
     }
 }

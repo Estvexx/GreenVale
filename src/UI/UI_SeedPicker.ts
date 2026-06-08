@@ -2,8 +2,8 @@ import { ITEMS } from "../data/ItemDatabase";
 import { InventorySystem } from "../systems/InventorySystem";
 
 export class UI_SeedPicker {
-    private overlay = document.getElementById("seed-picker")!;
-    private list = document.getElementById("seed-picker-list")!;
+    private overlay  = document.getElementById("seed-picker")!;
+    private list     = document.getElementById("seed-picker-list")!;
     private closeBtn = document.getElementById("seed-picker-close")!;
     private inventory = InventorySystem.getInstance();
 
@@ -11,43 +11,12 @@ export class UI_SeedPicker {
         this.closeBtn.addEventListener("click", () => this.close());
     }
 
-    open(onPick: (seedId: number) => void) {
-        const seeds = this.getAvailableSeeds();
-
-        if (seeds.length === 0) {
-            return false;
-        }
+    open(onPick: (seedId: number) => void): boolean {
+        const seeds = this.availableSeeds();
+        if (seeds.length === 0) return false;
 
         this.list.innerHTML = "";
-
-        seeds.forEach(({ id, quantity }) => {
-            const item = ITEMS[id];
-            const row = document.createElement("div");
-            row.className = "seed-picker-item";
-
-            const img = document.createElement("img");
-            img.src = `assets/images/crops/${item.cropKey}/stage_0.png`;
-            img.alt = item.name;
-
-            const name = document.createElement("span");
-            name.textContent = item.name;
-
-            const qty = document.createElement("span");
-            qty.className = "qty";
-            qty.textContent = `x${quantity}`;
-
-            row.appendChild(img);
-            row.appendChild(name);
-            row.appendChild(qty);
-
-            row.addEventListener("click", () => {
-                this.close();
-                onPick(id);
-            });
-
-            this.list.appendChild(row);
-        });
-
+        seeds.forEach(({ id, quantity }) => this.addRow(id, quantity, onPick));
         this.overlay.classList.remove("hidden");
         return true;
     }
@@ -57,17 +26,30 @@ export class UI_SeedPicker {
         this.list.innerHTML = "";
     }
 
-    private getAvailableSeeds() {
-        const result: { id: number; quantity: number }[] = [];
+    private addRow(id: number, quantity: number, onPick: (id: number) => void) {
+        const item = ITEMS[id];
+        const row  = document.createElement("div");
+        row.className = "seed-picker-item";
 
-        this.inventory.slots.forEach((slot) => {
-            if (!slot) return;
-            const item = ITEMS[slot.id];
-            if (item?.isSeed) {
-                result.push({ id: slot.id, quantity: slot.quantity });
-            }
-        });
+        const img  = document.createElement("img");
+        img.src    = `assets/images/crops/${item.cropKey}/stage_0.png`;
+        img.alt    = item.name;
 
-        return result;
+        const label = document.createElement("span");
+        label.textContent = item.name;
+
+        const qty = document.createElement("span");
+        qty.className   = "qty";
+        qty.textContent = `x${quantity}`;
+
+        row.append(img, label, qty);
+        row.addEventListener("click", () => { this.close(); onPick(id); });
+        this.list.appendChild(row);
+    }
+
+    private availableSeeds() {
+        return this.inventory.slots
+            .filter(slot => slot && ITEMS[slot.id]?.isSeed)
+            .map(slot => ({ id: slot!.id, quantity: slot!.quantity }));
     }
 }

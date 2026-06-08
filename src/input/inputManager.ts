@@ -28,14 +28,10 @@ export class InputManager {
         this.scene = scene;
         this.onInteract = onInteract;
         this.registerInventoryKeys();
-        this.addMoneyTestKeys();
-        this.addItemTestKeys();
-        this.OpenRadialMenuKey();
-        this.addXP();
         this.registerInteractionKey();
-        this.ExportAllData();
-        this.LoadAllData();
-        this.SaveAllData();
+        this.registerRadialMenu();
+        this.registerSaveKeys();
+        this.registerTestKeys();
     }
 
     private registerInventoryKeys() {
@@ -59,60 +55,42 @@ export class InputManager {
             this.inventory.closeInventory();
         });
     }
-    private OpenRadialMenuKey() {
-        this.scene.input.keyboard?.on("keydown-Q", () => {
-            UIRoot.effectShop.toggle();
-        });
-    }
-    private addMoneyTestKeys() {
-        this.scene.input.keyboard?.on("keydown-P", () => {
-            this.money.add("coins", 100);
-            UIRoot.toast.show("+100 coins");
-        });
-
-        this.scene.input.keyboard?.on("keydown-O", () => {
-            this.money.add("bossTokens", 1);
-            UIRoot.toast.show("+1 boss token");
-        });
-    }
-
-    private addXP() {
-        this.scene.input.keyboard?.on("keydown-U", () => {
-            this.level.addXp(100);
-            UIRoot.toast.show("+100 XP");
-        });
-    }
-
-    private addItemTestKeys() {
-        this.scene.input.keyboard?.on("keydown-I", () => {
-            this.inventory.addItem(20, 1);
-            UIRoot.toast.show("+1 uva");
-        });
-    }
-
     private registerInteractionKey() {
-        this.scene.input.keyboard?.on("keydown-F", () => {
-            this.onInteract?.();
-        });
+        this.scene.input.keyboard?.on("keydown-F", () => this.onInteract?.());
     }
 
-    private SaveAllData() {
+    private registerRadialMenu() {
+        this.scene.input.keyboard?.on("keydown-Q", () => UIRoot.effectShop.toggle());
+    }
+
+    private registerSaveKeys() {
         this.scene.input.keyboard?.on("keydown-K", () => {
-            UIRoot.toast.show("Jogo guardado com sucesso");
             SaveSystem.save();
+            UIRoot.toast.show("Jogo guardado com sucesso");
         });
-    }
-
-    private ExportAllData() {
         this.scene.input.keyboard?.on("keydown-M", () => {
             SaveSystem.downloadSaveFile();
             UIRoot.toast.show("Save exportado");
         });
+        this.scene.input.keyboard?.on("keydown-L", () => SaveSystem.load());
     }
 
-    private LoadAllData() {
-        this.scene.input.keyboard?.on("keydown-L", () => {
-            SaveSystem.load();
+    private registerTestKeys() {
+        this.scene.input.keyboard?.on("keydown-P", () => {
+            this.money.add("coins", 100);
+            UIRoot.toast.show("+100 coins");
+        });
+        this.scene.input.keyboard?.on("keydown-O", () => {
+            this.money.add("bossTokens", 1);
+            UIRoot.toast.show("+1 boss token");
+        });
+        this.scene.input.keyboard?.on("keydown-U", () => {
+            this.level.addXp(100);
+            UIRoot.toast.show("+100 XP");
+        });
+        this.scene.input.keyboard?.on("keydown-I", () => {
+            this.inventory.addItem(20, 1);
+            UIRoot.toast.show("+1 uva");
         });
     }
 }
