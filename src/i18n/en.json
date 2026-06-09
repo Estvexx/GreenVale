@@ -260,5 +260,29 @@
     },
     "time": {
         "day": "Day {day}"
+    },
+    "farming": {
+        "notReady": "The plant is not ready yet.",
+        "tooFarToHarvest": "You are too far to harvest.",
+        "tooFarToPlant": "You are too far to plant.",
+        "cantPlantHere": "You can't plant here.",
+        "noPlantHere": "There is no plant here.",
+        "noSeeds": "You have no seeds in your inventory.",
+        "levelRequired": "Level {level} required to plant here."
+    },
+    "hud": {
+        "saved": "Game saved successfully",
+        "exported": "Save exported"
+    },
+    "mainMenu": {
+        "play": "Play / Continue",
+        "newGame": "New game",
+        "import": "Import save",
+        "chooseFile": "Choose JSON file",
+        "exit": "Exit game"
+    },
+    "loading": {
+        "loading": "Loading...",
+        "done": "Done!"
     }
 }

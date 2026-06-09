@@ -261,5 +261,29 @@
     },
     "time": {
         "day": "Dia {day}"
+    },
+    "farming": {
+        "notReady": "A planta ainda não está pronta.",
+        "tooFarToHarvest": "Estás longe demais para colher.",
+        "tooFarToPlant": "Estás longe demais para plantar.",
+        "cantPlantHere": "Não é possível plantar aqui.",
+        "noPlantHere": "Não há nenhuma planta aqui.",
+        "noSeeds": "Não tens sementes no inventário.",
+        "levelRequired": "Nível {level} necessário para plantar aqui."
+    },
+    "hud": {
+        "saved": "Jogo guardado com sucesso",
+        "exported": "Save exportado"
+    },
+    "mainMenu": {
+        "play": "Jogar / Continuar",
+        "newGame": "Novo jogo",
+        "import": "Importar save",
+        "chooseFile": "Escolher ficheiro JSON",
+        "exit": "Sair do jogo"
+    },
+    "loading": {
+        "loading": "A carregar...",
+        "done": "Pronto!"
     }
 }

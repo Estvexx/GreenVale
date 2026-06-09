@@ -5,6 +5,7 @@ import { ITEMS } from "../data/ItemDatabase";
 import { LevelSystem } from "./LevelSystem";
 import { TimeSystem } from "./TimeSystem";
 import { UIRoot } from "../UI/UIRoot";
+import { t } from "../i18n";
 
 const HOE          = 1;
 const SCYTHE       = 2;
@@ -96,7 +97,7 @@ export class FarmingSystem {
     private startPlanting(x: number, y: number) {
         if (!this.fields.canFarmAt(x, y)) {
             const lvl = this.fields.getRequiredLevelAt(x, y);
-            if (lvl) UIRoot.toast.show(`Nível ${lvl} necessário para plantar aqui.`, "error");
+            if (lvl) UIRoot.toast.show(t("farming.levelRequired").replace("{level}", String(lvl)), "error");
             return;
         }
 
@@ -112,7 +113,7 @@ export class FarmingSystem {
             this.plant(this.plantX, this.plantY, seedId);
         });
 
-        if (!ok) UIRoot.toast.show("Não tens sementes no inventário.", "error");
+        if (!ok) UIRoot.toast.show(t("farming.noSeeds"), "error");
     }
 
     private plant(x: number, y: number, seedId: number) {
@@ -161,7 +162,7 @@ export class FarmingSystem {
         if (!crop) return;
 
         if (crop.stage !== HARVEST_STAGE) {
-            UIRoot.toast.show("A planta ainda não está pronta.", "error");
+            UIRoot.toast.show(t("farming.notReady"), "error");
             return;
         }
 
@@ -263,21 +264,21 @@ export class FarmingSystem {
 
         if (toolId === HOE) {
             if (!this.fields.canFarmAt(tx, ty)) {
-                UIRoot.toast.show("Não é possível plantar aqui.", "error");
+                UIRoot.toast.show(t("farming.cantPlantHere"), "error");
                 return;
             }
             if (dist > REACH) {
-                UIRoot.toast.show("Estás longe demais para plantar.", "error");
+                UIRoot.toast.show(t("farming.tooFarToPlant"), "error");
                 return;
             }
             this.startPlanting(pointer.worldX, pointer.worldY);
         } else {
             if (!this.crops.get(this.key(tx, ty))) {
-                UIRoot.toast.show("Não há nenhuma planta aqui.", "error");
+                UIRoot.toast.show(t("farming.noPlantHere"), "error");
                 return;
             }
             if (dist > REACH) {
-                UIRoot.toast.show("Estás longe demais para colher.", "error");
+                UIRoot.toast.show(t("farming.tooFarToHarvest"), "error");
                 return;
             }
             this.harvest(tx, ty);

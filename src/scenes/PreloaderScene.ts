@@ -1,5 +1,6 @@
 import Phaser from "phaser";
 import { preloadUIImages } from "../utils/preloadUIImages";
+import { t } from "../i18n";
 
 export class PreloaderScene extends Phaser.Scene {
     private logo!: Phaser.GameObjects.Image;
@@ -22,7 +23,7 @@ export class PreloaderScene extends Phaser.Scene {
 
         // Texto "A carregar..." (logo abaixo da logo)
         const loadingText = this.add
-            .text(width / 2, centerY + 30, "A carregar...", {
+            .text(width / 2, centerY + 30, t("loading.loading"), {
                 fontSize: "24px",
                 color: "#ffffff",
             })
@@ -56,7 +57,7 @@ export class PreloaderScene extends Phaser.Scene {
         });
 
         this.load.on("complete", () => {
-            loadingText.setText("Pronto!");
+            loadingText.setText(t("loading.done"));
 
             this.time.delayedCall(100, () => {
                 console.log("A iniciar MainMenuScene...");

@@ -61,6 +61,7 @@ export class FarmScene extends Phaser.Scene {
             this,
             spawnPoint?.x ?? 272,
             spawnPoint?.y ?? 496,
+            mapManager.poleLayer,
         );
 
         this.interactionZones = new InteractionZoneSystem(
@@ -108,10 +109,7 @@ export class FarmScene extends Phaser.Scene {
             ITEM_IDS.BUCKET_WATER,
         );
 
-        if (!converted) {
-            console.log("Não foi possível encher o balde.");
-            return;
-        }
+        if (!converted) return;
 
         LevelSystem.getInstance().addXp(1);
         UIRoot.toast.info("+1 XP");

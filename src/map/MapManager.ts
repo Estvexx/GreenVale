@@ -6,6 +6,7 @@ export class MapManager {
     map: Phaser.Tilemaps.Tilemap;
 
     public lightLayers: Phaser.Tilemaps.TilemapLayer[] = [];
+    public poleLayer: Phaser.Tilemaps.TilemapLayer | null = null;
 
     private mapType: MapType;
 
@@ -73,7 +74,12 @@ export class MapManager {
 
         this.addLayer("Buildings", [tsBuildings, tsPlantsandWell], 3);
 
-        this.addLayer("LightPostsVisual", tsPoles, 11);
+        const poleLayer = this.map.createLayer("LightPostsVisual", tsPoles) as unknown as Phaser.Tilemaps.TilemapLayer | null;
+        if (poleLayer) {
+            poleLayer.setDepth(11);
+            this.poleLayer = poleLayer;
+            this.lightLayers.push(poleLayer);
+        }
     }
 
     private createBossLayers() {
