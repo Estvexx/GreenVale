@@ -252,6 +252,7 @@
         }
     },
     "level": {
+        "label": "Farm Lv. {level}",
         "up": "¡Subiste a Farm Lv. {level}!"
     },
 

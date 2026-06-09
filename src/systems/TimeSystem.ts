@@ -17,8 +17,9 @@ export class TimeSystem {
 
     private listeners: Listener[] = [];
 
-    onChange(callback: Listener) {
+    onChange(callback: Listener): () => void {
         this.listeners.push(callback);
+        return () => { this.listeners = this.listeners.filter(l => l !== callback); };
     }
 
     private notify() {
@@ -64,20 +65,16 @@ export class TimeSystem {
         const hour = this.getHour() + this.getMinute() / 60;
 
         if (hour >= 21 || hour < 5) {
-            console.log("Noite");
-            return 0.55; // noite
+            return 0.55;
         }
         if (hour >= 5 && hour < 7) {
-            console.log("Amanhecer");
-            return 0.3; // amanhecer
+            return 0.3;
         }
         if (hour >= 7 && hour < 18) {
-            console.log("Dia");
-            return 0.03; // dia
+            return 0.03;
         }
         if (hour >= 18 && hour < 21) {
-            console.log("Fim de tarde");
-            return 0.35; // fim de tarde
+            return 0.35;
         }
 
         return 0.03;

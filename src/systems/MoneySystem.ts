@@ -23,11 +23,13 @@ export class MoneySystem {
         return MoneySystem.instance;
     }
 
-    onChange(callback: Listener): void {
+    onChange(callback: Listener): () => void {
         this.listeners.push(callback);
 
         callback("coins", this.coins);
         callback("bossTokens", this.bossTokens);
+
+        return () => { this.listeners = this.listeners.filter(l => l !== callback); };
     }
 
     get(currency: Currency): number {
@@ -82,7 +84,8 @@ export class MoneySystem {
 
         if (saved === null) return defaultValue;
 
-        return Number(saved);
+        const value = Number(saved);
+        return isNaN(value) ? defaultValue : value;
     }
 
     getSaveData() {

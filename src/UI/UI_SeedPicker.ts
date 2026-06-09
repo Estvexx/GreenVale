@@ -23,6 +23,10 @@ export class UI_SeedPicker {
         return true;
     }
 
+    isVisible(): boolean {
+        return !this.overlay.classList.contains("hidden");
+    }
+
     close() {
         this.overlay.classList.add("hidden");
         this.list.innerHTML = "";

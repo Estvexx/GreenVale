@@ -252,6 +252,7 @@
         }
     },
     "level": {
+        "label": "Farm Lv. {level}",
         "up": "You leveled up to Farm Lv. {level}!"
     },
 

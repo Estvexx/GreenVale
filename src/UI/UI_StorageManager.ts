@@ -16,6 +16,7 @@ export class UI_StorageManager {
     private inventory = InventorySystem.getInstance();
 
     private selected: Selected = null;
+    private overlay = document.getElementById("storage-overlay")!;
 
     constructor() {
         this.storage.onChange(() => this.render());
@@ -30,10 +31,14 @@ export class UI_StorageManager {
         this.render();
     }
 
+    isVisible(): boolean {
+        return !this.overlay.classList.contains("hidden");
+    }
+
     open() {
         SoundManager.play("click_sound");
         this.selected = null;
-        document.getElementById("storage-overlay")?.classList.remove("hidden");
+        this.overlay.classList.remove("hidden");
         this.updateSelectionUI();
         this.render();
     }
@@ -41,7 +46,7 @@ export class UI_StorageManager {
     close() {
         SoundManager.play("click_sound");
         this.selected = null;
-        document.getElementById("storage-overlay")?.classList.add("hidden");
+        this.overlay.classList.add("hidden");
         this.updateSelectionUI();
     }
 

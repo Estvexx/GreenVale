@@ -7,6 +7,8 @@ import { TimeSystem } from "./TimeSystem";
 import { UIRoot } from "../UI/UIRoot";
 import { t } from "../i18n";
 
+type SceneWithPlayer = Phaser.Scene & { player?: { x: number; y: number } };
+
 const HOE          = 1;
 const SCYTHE       = 2;
 const BUCKET_EMPTY = 3;
@@ -28,12 +30,15 @@ type Crop = {
     grownAt:    number;
 };
 
+type NotifyFn = (msg: string, type?: string) => void;
+
 export class FarmingSystem {
-    private scene:      Phaser.Scene;
+    private scene:      SceneWithPlayer;
     private fields:     FarmFieldSystem;
     private inventory   = InventorySystem.getInstance();
     private levels      = LevelSystem.getInstance();
     private clock       = TimeSystem.getInstance();
+    private notify:     NotifyFn;
 
     private crops       = new Map<string, Crop>();
     private cursor:     Phaser.GameObjects.Rectangle;
@@ -41,8 +46,9 @@ export class FarmingSystem {
     private plantX = 0;
     private plantY = 0;
 
-    constructor(scene: Phaser.Scene, fields: FarmFieldSystem) {
+    constructor(scene: SceneWithPlayer, fields: FarmFieldSystem, notify?: NotifyFn) {
         this.scene  = scene;
+        this.notify = notify ?? ((msg, type) => UIRoot.toast.show(msg, type as "error" | "info" | "success"));
         this.fields = fields;
 
         this.cursor = scene.add
@@ -97,7 +103,7 @@ export class FarmingSystem {
     private startPlanting(x: number, y: number) {
         if (!this.fields.canFarmAt(x, y)) {
             const lvl = this.fields.getRequiredLevelAt(x, y);
-            if (lvl) UIRoot.toast.show(t("farming.levelRequired").replace("{level}", String(lvl)), "error");
+            if (lvl) this.notify(t("farming.levelRequired").replace("{level}", String(lvl)), "error");
             return;
         }
 
@@ -113,7 +119,7 @@ export class FarmingSystem {
             this.plant(this.plantX, this.plantY, seedId);
         });
 
-        if (!ok) UIRoot.toast.show(t("farming.noSeeds"), "error");
+        if (!ok) this.notify(t("farming.noSeeds"), "error");
     }
 
     private plant(x: number, y: number, seedId: number) {
@@ -140,7 +146,7 @@ export class FarmingSystem {
 
         this.inventory.removeItemById(seedId, 1);
         this.levels.addXp(2);
-        UIRoot.toast.info("+2 XP");
+        this.notify("+2 XP", "info");
     }
 
     private water(x: number, y: number) {
@@ -154,7 +160,7 @@ export class FarmingSystem {
         this.inventory.removeItemById(BUCKET_WATER, 1);
         this.inventory.addItem(BUCKET_EMPTY, 1);
         this.levels.addXp(2);
-        UIRoot.toast.info("+2 XP");
+        this.notify("+2 XP", "info");
     }
 
     private harvest(x: number, y: number) {
@@ -162,7 +168,7 @@ export class FarmingSystem {
         if (!crop) return;
 
         if (crop.stage !== HARVEST_STAGE) {
-            UIRoot.toast.show(t("farming.notReady"), "error");
+            this.notify(t("farming.notReady"), "error");
             return;
         }
 
@@ -170,7 +176,7 @@ export class FarmingSystem {
         if (drop) {
             this.inventory.addItem(drop, 1);
             this.levels.addXp(2);
-            UIRoot.toast.info("+2 XP");
+            this.notify("+2 XP", "info");
         }
 
         crop.stage   = POST_HARVEST;
@@ -259,26 +265,26 @@ export class FarmingSystem {
         const tx = this.snap(pointer.worldX);
         const ty = this.snap(pointer.worldY);
 
-        const player = (this.scene as any).player;
+        const player = this.scene.player;
         const dist   = Phaser.Math.Distance.Between(player?.x ?? 0, player?.y ?? 0, tx, ty);
 
         if (toolId === HOE) {
             if (!this.fields.canFarmAt(tx, ty)) {
-                UIRoot.toast.show(t("farming.cantPlantHere"), "error");
+                this.notify(t("farming.cantPlantHere"), "error");
                 return;
             }
             if (dist > REACH) {
-                UIRoot.toast.show(t("farming.tooFarToPlant"), "error");
+                this.notify(t("farming.tooFarToPlant"), "error");
                 return;
             }
             this.startPlanting(pointer.worldX, pointer.worldY);
         } else {
             if (!this.crops.get(this.key(tx, ty))) {
-                UIRoot.toast.show(t("farming.noPlantHere"), "error");
+                this.notify(t("farming.noPlantHere"), "error");
                 return;
             }
             if (dist > REACH) {
-                UIRoot.toast.show(t("farming.tooFarToHarvest"), "error");
+                this.notify(t("farming.tooFarToHarvest"), "error");
                 return;
             }
             this.harvest(tx, ty);

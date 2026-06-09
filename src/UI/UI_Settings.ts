@@ -1,6 +1,7 @@
 import Phaser from "phaser";
 import { MusicManager } from "../sounds/MusicManager.ts";
 import { SoundManager } from "../sounds/SoundsManager.ts";
+import { setLanguage } from "../i18n/index.ts";
 import type { Player } from "../entities/Player.ts";
 
 type SettingsScene = Phaser.Scene & {
@@ -130,10 +131,7 @@ export class SettingsUI {
 
         const lang = btn.dataset.lang!;
 
-        import("../i18n/index.ts").then(({ setLanguage }) => {
-            setLanguage(lang);
-        });
-
+        setLanguage(lang);
         localStorage.setItem("language", lang);
     }
 

@@ -52,22 +52,16 @@ export class InputManager {
             this.inventory.toggleInventory();
         });
 
+        const settingsMenu = document.getElementById("settings-menu")!;
+        const closeSettings = document.getElementById("close-settings")!;
+
         this.scene.input.keyboard?.on("keydown-ESC", () => {
-            // fecha por ordem de prioridade: seed picker → loja → storage → effect shop → definições → inventário
-            if (!document.getElementById("seed-picker")?.classList.contains("hidden")) {
-                UIRoot.seedPicker.close();
-            } else if (!document.getElementById("shop-overlay")?.classList.contains("hidden")) {
-                UIRoot.shop.close();
-            } else if (!document.getElementById("storage-overlay")?.classList.contains("hidden")) {
-                UIRoot.storage.close();
-            } else if (!document.getElementById("effect-shop-overlay")?.classList.contains("hidden")) {
-                UIRoot.effectShop.close();
-            } else if (!document.getElementById("settings-menu")?.classList.contains("hidden")) {
-                // settings pertence à cena, não ao UIRoot — fechar via DOM
-                document.getElementById("close-settings")?.click();
-            } else {
-                this.inventory.closeInventory();
+            if (UIRoot.closeTopmost()) return;
+            if (!settingsMenu.classList.contains("hidden")) {
+                closeSettings.click();
+                return;
             }
+            this.inventory.closeInventory();
         });
     }
     private registerInteractionKey() {

@@ -69,7 +69,7 @@
                             ></span>
                             <div class="controls-group">
                                 <div
-                                    class="control-card active"
+                                    class="control-card"
                                     data-control="arrows"
                                 >
                                     <span
@@ -82,7 +82,7 @@
                                     ></div>
                                 </div>
 
-                                <div class="control-card" data-control="wasd">
+                                <div class="control-card active" data-control="wasd">
                                     <span
                                         class="material-symbols-outlined control-icon"
                                         >keyboard</span
@@ -524,5 +524,6 @@
         </div>
 
         <script type="module" src="/src/main.ts"></script>
+        <script>document.addEventListener("contextmenu", e => e.preventDefault());</script>
     </body>
 </html>

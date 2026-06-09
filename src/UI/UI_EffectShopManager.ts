@@ -32,6 +32,10 @@ export class UI_EffectShopManager {
         this.overlay.classList.remove("hidden");
     }
 
+    isVisible(): boolean {
+        return this.isOpen;
+    }
+
     close() {
         this.isOpen = false;
         SoundManager.play("click_sound");

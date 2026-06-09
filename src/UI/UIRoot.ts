@@ -22,6 +22,18 @@ export class UIRoot {
     static toast: UI_ToastManager;
     static seedPicker: UI_SeedPicker;
 
+    static reset() {
+        this.initialized = false;
+    }
+
+    static closeTopmost(): boolean {
+        if (this.seedPicker?.isVisible())  { this.seedPicker.close();  return true; }
+        if (this.shop?.isVisible())        { this.shop.close();        return true; }
+        if (this.storage?.isVisible())     { this.storage.close();     return true; }
+        if (this.effectShop?.isVisible())  { this.effectShop.close();  return true; }
+        return false;
+    }
+
     static init() {
         if (this.initialized) return;
 

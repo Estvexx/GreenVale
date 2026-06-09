@@ -52,6 +52,10 @@ export class UI_ShopManager {
         this.render(shop);
     }
 
+    isVisible(): boolean {
+        return !this.overlay.classList.contains("hidden");
+    }
+
     close() {
         SoundManager.play("click_sound");
         this.system.close();

@@ -92,6 +92,10 @@ export class FarmScene extends Phaser.Scene {
 
         MusicManager.play(this, "farmScene_music", 0.05);
         SoundManager.setScene(this);
+
+        this.events.once(Phaser.Scenes.Events.SHUTDOWN, () => {
+            MusicManager.stop();
+        });
     }
 
     update(time: number, delta: number) {

@@ -21,8 +21,9 @@ export class LevelSystem {
         this.xp = Number(localStorage.getItem("farmXp")) || 0;
     }
 
-    onChange(cb: Listener) {
+    onChange(cb: Listener): () => void {
         this.listeners.push(cb);
+        return () => { this.listeners = this.listeners.filter(l => l !== cb); };
     }
 
     private emitChange() {
