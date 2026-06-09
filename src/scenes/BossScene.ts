@@ -121,7 +121,8 @@ export class BossScene extends Phaser.Scene {
 
                 const damageMultiplier = this.effects.getDamageMultiplier();
                 const finalDamage = Math.floor(item.damage * damageMultiplier);
-
+                mob.setTintFill(0xff0000);
+                this.time.delayedCall(100, () => mob.clearTint());
                 mob.takeDamage(finalDamage);
                 SoundManager.play("punch_sound");
             });

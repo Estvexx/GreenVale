@@ -122,6 +122,12 @@ export class UI_ShopManager {
                 }
 
                 UIRoot.toast.success(t(this.messages.success_buy));
+
+                if (shop.id === "sementes" || shop.id === "ferragens") {
+                    setTimeout(() => {
+                        UIRoot.toast.info("+1 XP");
+                    }, 2000);
+                }
             });
 
             sellOneBtn?.addEventListener("click", () => {
