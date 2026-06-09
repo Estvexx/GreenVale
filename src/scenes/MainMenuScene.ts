@@ -18,6 +18,9 @@ export class MainMenuScene extends Phaser.Scene {
         const uiLayer = document.getElementById("ui-layer");
         if (!uiLayer) return;
 
+        this.scene.launch("MenuBackgroundScene");
+        this.scene.sendToBack("MenuBackgroundScene");
+
         SoundManager.setScene(this);
 
         uiLayer.insertAdjacentHTML("afterbegin", menuHtml);
@@ -67,6 +70,7 @@ export class MainMenuScene extends Phaser.Scene {
         };
 
         this.events.once(Phaser.Scenes.Events.SHUTDOWN, () => {
+            this.scene.stop("MenuBackgroundScene");
             this.menuElement?.remove();
             this.menuElement = undefined;
         });
