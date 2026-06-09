@@ -80,7 +80,7 @@ export class PreloaderScene extends Phaser.Scene {
         }
 
         // Ferramentas
-        this.load.image("enxada", "assets/images/tools/Enxada.png");
+        /* this.load.image("enxada", "assets/images/tools/Enxada.png");
         this.load.image("balde_vazio", "assets/images/tools/Balde_Vazio.png");
         this.load.image("foice", "assets/images/tools/Foice.png");
         this.load.image("balde_agua", "assets/images/tools/Balde_Agua.png");
@@ -88,7 +88,7 @@ export class PreloaderScene extends Phaser.Scene {
         this.load.image("espada_2", "assets/images/tools/Espada_2.png");
         this.load.image("espada_3", "assets/images/tools/Espada_3.png");
         this.load.image("espada_4", "assets/images/tools/Espada_4.png");
-        this.load.image("espada_5", "assets/images/tools/Espada_5.png");
+        this.load.image("espada_5", "assets/images/tools/Espada_5.png"); */
 
         // Tudo relacionado ao mapa farmscene
         this.load.tilemapTiledJSON("mapa", "assets/map/mapa.tmj");
@@ -134,15 +134,25 @@ export class PreloaderScene extends Phaser.Scene {
         });
 
         // Relacionado a plantação
-        this.load.spritesheet("frutas", "assets/images/Fruits.png", {
+        /*  this.load.spritesheet("frutas", "assets/images/Fruits.png", {
             frameWidth: 32,
             frameHeight: 32,
-        });
+        }); */
 
-        const cropTypes = ["grapes", "cucumber", "pepper", "greenbeans", "pineapple", "pumpkin"];
+        const cropTypes = [
+            "grapes",
+            "cucumber",
+            "pepper",
+            "greenbeans",
+            "pineapple",
+            "pumpkin",
+        ];
         for (const crop of cropTypes) {
             for (let stage = 0; stage < 4; stage++) {
-                this.load.image(`crop_${crop}_${stage}`, `assets/images/crops/${crop}/stage_${stage}.png`);
+                this.load.image(
+                    `crop_${crop}_${stage}`,
+                    `assets/images/crops/${crop}/stage_${stage}.png`,
+                );
             }
         }
 

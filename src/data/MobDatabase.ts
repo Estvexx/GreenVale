@@ -18,8 +18,8 @@ export const MOBS: Record<string, MobData> = {
         texture: "zombie",
         animKey: "zombie_idle",
         hp: 50,
-        bossCoinDropChance: 0.2,
-        bossCoinBonusChance: 0.05,
+        bossCoinDropChance: 0.4,
+        bossCoinBonusChance: 0.3,
     },
     bear: {
         spawnName: "spawn3",
@@ -28,8 +28,8 @@ export const MOBS: Record<string, MobData> = {
         texture: "bear",
         animKey: "bear_idle",
         hp: 500,
-        bossCoinDropChance: 0.4,
-        bossCoinBonusChance: 0.5,
+        bossCoinDropChance: 0.5,
+        bossCoinBonusChance: 0.4,
     },
     slime: {
         spawnName: "spawn2",
@@ -38,7 +38,7 @@ export const MOBS: Record<string, MobData> = {
         texture: "slime",
         animKey: "slime_idle",
         hp: 1000,
-        bossCoinDropChance: 0.6,
+        bossCoinDropChance: 0.7,
         bossCoinBonusChance: 0.6,
     },
 };

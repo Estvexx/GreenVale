@@ -1,5 +1,7 @@
 import Phaser from "phaser";
 import { MoneySystem } from "../systems/MoneySystem";
+import { LevelSystem } from "../systems/LevelSystem";
+import { UIRoot } from "../UI/UIRoot";
 
 export class Mob extends Phaser.Physics.Arcade.Sprite {
     private maxHp: number;
@@ -84,6 +86,8 @@ export class Mob extends Phaser.Physics.Arcade.Sprite {
         this.kills++;
 
         this.tryDropBossCoin();
+        LevelSystem.getInstance().addXp(1);
+        //UIRoot.toast.info("+1 XP");
 
         this.anims.stop();
         this.setFrame(15);
@@ -116,11 +120,8 @@ export class Mob extends Phaser.Physics.Arcade.Sprite {
 
     private tryDropBossCoin() {
         if (Math.random() > this.bossCoinDropChance) {
-            console.log(this.bossCoinDropChance);
-            console.log("Não caiu boss coin.");
             return;
         }
-        console.log(this.bossCoinDropChance);
         let amount = 1;
 
         if (Math.random() <= this.bossCoinBonusChance) {
@@ -128,7 +129,6 @@ export class Mob extends Phaser.Physics.Arcade.Sprite {
         }
 
         MoneySystem.getInstance().add("bossTokens", amount);
-
-        console.log(`Ganhaste ${amount} boss coin(s)!`);
+        UIRoot.toast.info(`+${amount} bossTokens`);
     }
 }

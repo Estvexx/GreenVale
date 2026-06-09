@@ -24,8 +24,8 @@
     },
 
     "shop": {
-        "buy": "Buy",
-        "sell": "Sell",
+        "buy": "Buy x1",
+        "sell": "Sell x1",
         "sellAll": "All",
 
         "messages": {

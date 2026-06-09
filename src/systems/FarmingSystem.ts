@@ -138,7 +138,8 @@ export class FarmingSystem {
         });
 
         this.inventory.removeItemById(seedId, 1);
-        this.levels.addXp(5);
+        this.levels.addXp(2);
+        UIRoot.toast.info("+2 XP");
     }
 
     private water(x: number, y: number) {
@@ -151,6 +152,8 @@ export class FarmingSystem {
 
         this.inventory.removeItemById(BUCKET_WATER, 1);
         this.inventory.addItem(BUCKET_EMPTY, 1);
+        this.levels.addXp(2);
+        UIRoot.toast.info("+2 XP");
     }
 
     private harvest(x: number, y: number) {
@@ -165,7 +168,8 @@ export class FarmingSystem {
         const drop = ITEMS[crop.seedId]?.harvestId;
         if (drop) {
             this.inventory.addItem(drop, 1);
-            this.levels.addXp(20);
+            this.levels.addXp(2);
+            UIRoot.toast.info("+2 XP");
         }
 
         crop.stage   = POST_HARVEST;

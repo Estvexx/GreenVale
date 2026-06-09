@@ -4,6 +4,7 @@ import { type Shop, type ShopType } from "../types/ShopTypes";
 import { FERRAGENS_SHOP } from "../data/shops/ferragensShop";
 import { SEMENTES_SHOP } from "../data/shops/sementesShop";
 import { MERCADO_SHOP } from "../data/shops/mercadoShop";
+import { LevelSystem } from "./LevelSystem";
 
 export type BuyResult = "success" | "no_money" | "inventory_full";
 export type SellResult = "success" | "no_item";
@@ -42,6 +43,7 @@ export class ShopSystem {
 
     buy(itemId: number): BuyResult {
         const item = this.currentShop?.items.find((i) => i.id === itemId);
+        const shopId = this.currentShop?.id;
 
         if (!item) return "inventory_full";
 
@@ -57,6 +59,10 @@ export class ShopSystem {
         if (!added) {
             money.add(item.currency, item.price);
             return "inventory_full";
+        }
+
+        if (shopId === "sementes" || shopId === "ferragens") {
+            LevelSystem.getInstance().addXp(1);
         }
 
         return "success";

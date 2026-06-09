@@ -18,6 +18,7 @@ import { FarmEnvironmentFX } from "../camera/FarmEnvironmentFX";
 import { changeScene } from "../utils/changeScene";
 import { FarmingSystem } from "../systems/FarmingSystem";
 import { RealLightSystem } from "../lights/RealLightSystem";
+import { LevelSystem } from "../systems/LevelSystem";
 
 export class FarmScene extends Phaser.Scene {
     public player!: Player;
@@ -84,12 +85,14 @@ export class FarmScene extends Phaser.Scene {
 
         this.environmentFX.update(delta);
 
+        this.interactionZones.update();
         this.updateInteractionTooltip();
 
         this.realLights.update();
 
-        const showTooltip = this.interactionZones.isInsideZone()
-            || this.farmingSystem.canWaterHere(this.player.x, this.player.y);
+        const showTooltip =
+            this.interactionZones.isInsideZone() ||
+            this.farmingSystem.canWaterHere(this.player.x, this.player.y);
 
         this.tooltip.classList.toggle("hidden", !showTooltip);
 
@@ -109,7 +112,11 @@ export class FarmScene extends Phaser.Scene {
 
         if (!converted) {
             console.log("Não foi possível encher o balde.");
+            return;
         }
+
+        LevelSystem.getInstance().addXp(1);
+        UIRoot.toast.info("+1 XP");
     }
 
     private handleInteraction() {
