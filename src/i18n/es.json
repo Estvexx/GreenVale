@@ -277,7 +277,10 @@
     },
     "hud": {
         "saved": "Juego guardado con éxito",
-        "exported": "Guardado exportado"
+        "exported": "Guardado exportado",
+        "growth": "Crecimiento",
+        "growthNormal": "Normal",
+        "growthSlow": "Lento (-3×)"
     },
     "mainMenu": {
         "play": "Jugar / Continuar",

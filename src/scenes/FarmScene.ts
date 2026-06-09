@@ -71,6 +71,14 @@ export class FarmScene extends Phaser.Scene {
             mapManager,
         );
 
+        this.input.on("pointerdown", (pointer: Phaser.Input.Pointer) => {
+            if (pointer.rightButtonDown()) return;
+            if (this.interactionZones.containsPoint(pointer.worldX, pointer.worldY)) {
+                this.player.cancelClickMove();
+                this.handleInteraction();
+            }
+        });
+
         new CollisionSystem(this, this.player, mapManager);
 
         new CameraManager(this, this.player, mapManager.map);

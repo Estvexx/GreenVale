@@ -60,6 +60,10 @@ export class InteractionZoneSystem {
         return this.currentZone !== null;
     }
 
+    containsPoint(x: number, y: number): boolean {
+        return this.zones.some(z => z.bounds.contains(x, y));
+    }
+
     private getProperties(
         obj: Phaser.Types.Tilemaps.TiledObject,
         name: string,

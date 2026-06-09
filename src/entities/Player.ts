@@ -129,6 +129,10 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
         }
     }
 
+    cancelClickMove() {
+        this.clickTarget = null;
+    }
+
     private isAnyKeyDown(): boolean {
         if (this.controlScheme === "wasd") {
             return this.wasdKeys.W.isDown || this.wasdKeys.A.isDown ||
