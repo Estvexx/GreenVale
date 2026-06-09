@@ -43,7 +43,7 @@ export class ToolSkinSystem {
 
         const money = MoneySystem.getInstance();
 
-        if (!money.spend("coins", skin.price)) {
+        if (!money.spend("bossTokens", skin.price)) {
             return "no_money";
         }
 

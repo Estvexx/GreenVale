@@ -37,9 +37,9 @@ export const TOOL_SKINS: Record<string, ToolSkin> = {
         price: 100,
         icons: {
             [ITEM_IDS.BUCKET_EMPTY]:
-                "assets/images/tools/skins/Balde_Agua_SKIN1.png",
-            [ITEM_IDS.BUCKET_WATER]:
                 "assets/images/tools/skins/Balde_Vazio_SKIN1.png",
+            [ITEM_IDS.BUCKET_WATER]:
+                "assets/images/tools/skins/Balde_Agua_SKIN1.png",
         },
     },
 
@@ -51,9 +51,9 @@ export const TOOL_SKINS: Record<string, ToolSkin> = {
         price: 100,
         icons: {
             [ITEM_IDS.BUCKET_EMPTY]:
-                "assets/images/tools/skins/Balde_Agua_SKIN2.png",
-            [ITEM_IDS.BUCKET_WATER]:
                 "assets/images/tools/skins/Balde_Vazio_SKIN2.png",
+            [ITEM_IDS.BUCKET_WATER]:
+                "assets/images/tools/skins/Balde_Agua_SKIN2.png",
         },
     },
 };

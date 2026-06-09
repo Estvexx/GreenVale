@@ -8,7 +8,7 @@ export const UPGRADES_SHOP: Shop = {
     items: Object.values(TOOL_SKINS).map((skin) => ({
         skinId: skin.id,
         price: skin.price,
-        currency: "coins",
+        currency: "bossTokens",
         amount: 1,
     })),
 };
