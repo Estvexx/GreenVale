@@ -24,7 +24,7 @@ export const TOOL_SKINS: Record<string, ToolSkin> = {
         id: "scythe_gold",
         targetItemIds: [2],
         name: "Foice Dourada",
-        nameKey: "toolSkins.scytheRed.name",
+        nameKey: "toolSkins.scytheGold.name",
         price: 100,
         icon: "assets/images/tools/skins/Foice_SKIN.png",
     },
@@ -47,7 +47,7 @@ export const TOOL_SKINS: Record<string, ToolSkin> = {
         id: "bucket_lava",
         targetItemIds: [ITEM_IDS.BUCKET_EMPTY, ITEM_IDS.BUCKET_WATER],
         name: "Balde Lava",
-        nameKey: "toolSkins.bucketBlue.name",
+        nameKey: "toolSkins.bucketLava.name",
         price: 100,
         icons: {
             [ITEM_IDS.BUCKET_EMPTY]:

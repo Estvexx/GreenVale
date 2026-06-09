@@ -36,6 +36,10 @@
             "maxSlots": "Limit reached!",
             "noItem": "You don't have that item!"
         },
+        "skinApplied": "Skin applied!",
+        "skinUnavailable": "Skin unavailable.",
+        "select": "Select",
+        "skinBought": "Skin purchased!",
 
         "names": {
             "ferragens": "Hardware",
@@ -284,5 +288,16 @@
     "loading": {
         "loading": "Loading...",
         "done": "Done!"
+    },
+    "well": {
+        "needBucket": "You need an empty bucket.",
+        "noItem": "No item equipped.",
+        "failed": "Could not fill the bucket."
+    },
+    "toolSkins": {
+        "hoeGold": { "name": "Golden Hoe" },
+        "scytheGold": { "name": "Golden Scythe" },
+        "bucketBlue": { "name": "Blue Bucket" },
+        "bucketLava": { "name": "Lava Bucket" }
     }
 }

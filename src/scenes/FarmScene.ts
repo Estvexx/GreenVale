@@ -19,6 +19,7 @@ import { changeScene } from "../utils/changeScene";
 import { FarmingSystem } from "../systems/FarmingSystem";
 import { RealLightSystem } from "../lights/RealLightSystem";
 import { LevelSystem } from "../systems/LevelSystem";
+import { t } from "../i18n";
 
 export class FarmScene extends Phaser.Scene {
     public player!: Player;
@@ -102,14 +103,23 @@ export class FarmScene extends Phaser.Scene {
     private fillBucket() {
         const item = this.inventory.getCurrentItem();
 
-        if (!item) return;
-        if (item.id !== ITEM_IDS.BUCKET_EMPTY) return;
+        if (!item) {
+            UIRoot.toast.error(t("well.noItem"));
+            return;
+        }
+        if (item.id !== ITEM_IDS.BUCKET_EMPTY) {
+            UIRoot.toast.error(t("well.needBucket"));
+            return;
+        }
 
         const converted = this.inventory.convertOneCurrentItem(
             ITEM_IDS.BUCKET_WATER,
         );
 
-        if (!converted) return;
+        if (!converted) {
+            UIRoot.toast.error(t("well.failed"));
+            return;
+        }
 
         LevelSystem.getInstance().addXp(1);
         UIRoot.toast.info("+1 XP");

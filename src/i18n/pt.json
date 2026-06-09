@@ -36,6 +36,10 @@
             "maxSlots": "Limite atingido!",
             "noItem": "Não tens esse item!"
         },
+        "skinApplied": "Skin aplicada!",
+        "skinUnavailable": "Skin indisponível.",
+        "select": "Selecionar",
+        "skinBought": "Skin comprada!",
 
         "names": {
             "ferragens": "Ferragens",
@@ -285,5 +289,16 @@
     "loading": {
         "loading": "A carregar...",
         "done": "Pronto!"
+    },
+    "well": {
+        "needBucket": "Precisas de um balde vazio.",
+        "noItem": "Não tens nenhum item equipado.",
+        "failed": "Não foi possível encher o balde."
+    },
+    "toolSkins": {
+        "hoeGold": { "name": "Enxada Dourada" },
+        "scytheGold": { "name": "Foice Dourada" },
+        "bucketBlue": { "name": "Balde Azul" },
+        "bucketLava": { "name": "Balde de Lava" }
     }
 }

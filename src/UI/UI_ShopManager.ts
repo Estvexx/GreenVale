@@ -23,8 +23,8 @@ export class UI_ShopManager {
         inventory_full: "shop.messages.inventoryFull",
         max_slots: "shop.messages.maxSlots",
         no_item: "shop.messages.noItem",
-        already_owned: "Skin aplicada!",
-        invalid_skin: "Skin indisponível.",
+        already_owned: "shop.skinApplied",
+        invalid_skin: "shop.skinUnavailable",
     };
 
     private readonly currencyIcons: Record<string, string> = {
@@ -124,7 +124,7 @@ export class UI_ShopManager {
                         `
                         : `
                             <button class="shop-item-btn buy-btn">
-                                ${isOwnedSkin ? "Selecionar" : t("shop.buy")}
+                                ${isOwnedSkin ? t("shop.select") : t("shop.buy")}
                             </button>
                         `
                 }
@@ -145,7 +145,7 @@ export class UI_ShopManager {
                 if (result !== "success") {
                     if (result === "already_owned") {
                         this.render(shop);
-                        UIRoot.toast.info("Skin aplicada!");
+                        UIRoot.toast.info(t("shop.skinApplied"));
                         return;
                     }
 
@@ -156,7 +156,7 @@ export class UI_ShopManager {
                 this.render(shop);
                 UIRoot.toast.success(
                     shop.id === "upgrades"
-                        ? "Skin comprada!"
+                        ? t("shop.skinBought")
                         : t(this.messages.success_buy),
                 );
 

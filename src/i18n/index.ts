@@ -18,8 +18,8 @@ export function setLanguage(lang: string) {
 }
 
 export function applyTranslations() {
-    document.querySelectorAll("[data-i18n], [data-18n]").forEach((el) => {
-        const key = el.getAttribute("data-i18n") ?? el.getAttribute("data-18n");
+    document.querySelectorAll("[data-i18n]").forEach((el) => {
+        const key = el.getAttribute("data-i18n");
         if (!key) return;
         el.textContent = t(key);
     });

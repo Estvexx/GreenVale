@@ -36,6 +36,10 @@
             "maxSlots": "¡Límite alcanzado!",
             "noItem": "¡No tienes ese objeto!"
         },
+        "skinApplied": "¡Skin aplicada!",
+        "skinUnavailable": "Skin no disponible.",
+        "select": "Seleccionar",
+        "skinBought": "¡Skin comprada!",
 
         "names": {
             "ferragens": "Ferretería",
@@ -284,5 +288,16 @@
     "loading": {
         "loading": "Cargando...",
         "done": "¡Listo!"
+    },
+    "well": {
+        "needBucket": "Necesitas un cubo vacío.",
+        "noItem": "No tienes ningún objeto equipado.",
+        "failed": "No se pudo llenar el cubo."
+    },
+    "toolSkins": {
+        "hoeGold": { "name": "Azada Dorada" },
+        "scytheGold": { "name": "Guadaña Dorada" },
+        "bucketBlue": { "name": "Cubo Azul" },
+        "bucketLava": { "name": "Cubo de Lava" }
     }
 }
