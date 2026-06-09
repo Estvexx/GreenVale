@@ -294,6 +294,10 @@
         "noItem": "No item equipped.",
         "failed": "Could not fill the bucket."
     },
+    "seedPicker": {
+        "title": "Choose a seed",
+        "cancel": "Cancel"
+    },
     "toolSkins": {
         "hoeGold": { "name": "Golden Hoe" },
         "scytheGold": { "name": "Golden Scythe" },

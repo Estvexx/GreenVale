@@ -294,6 +294,10 @@
         "noItem": "No tienes ningún objeto equipado.",
         "failed": "No se pudo llenar el cubo."
     },
+    "seedPicker": {
+        "title": "Elige una semilla",
+        "cancel": "Cancelar"
+    },
     "toolSkins": {
         "hoeGold": { "name": "Azada Dorada" },
         "scytheGold": { "name": "Guadaña Dorada" },

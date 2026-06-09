@@ -295,6 +295,10 @@
         "noItem": "Não tens nenhum item equipado.",
         "failed": "Não foi possível encher o balde."
     },
+    "seedPicker": {
+        "title": "Escolhe uma semente",
+        "cancel": "Cancelar"
+    },
     "toolSkins": {
         "hoeGold": { "name": "Enxada Dourada" },
         "scytheGold": { "name": "Foice Dourada" },

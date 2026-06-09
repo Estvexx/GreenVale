@@ -1,5 +1,6 @@
 import { ITEMS } from "../data/ItemDatabase";
 import { InventorySystem } from "../systems/InventorySystem";
+import { t, applyTranslations } from "../i18n";
 
 export class UI_SeedPicker {
     private overlay  = document.getElementById("seed-picker")!;
@@ -18,6 +19,7 @@ export class UI_SeedPicker {
         this.list.innerHTML = "";
         seeds.forEach(({ id, quantity }) => this.addRow(id, quantity, onPick));
         this.overlay.classList.remove("hidden");
+        applyTranslations();
         return true;
     }
 
@@ -36,7 +38,7 @@ export class UI_SeedPicker {
         img.alt    = item.name;
 
         const label = document.createElement("span");
-        label.textContent = item.name;
+        label.textContent = item.nameKey ? t(item.nameKey) : item.name;
 
         const qty = document.createElement("span");
         qty.className   = "qty";
