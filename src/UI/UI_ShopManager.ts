@@ -102,7 +102,7 @@ export class UI_ShopManager {
             const discount = shop.id === "sementes" ? EffectSystem.getInstance().getSeedDiscountMultiplier() : 1;
             const displayPrice = Math.floor(item.price * discount);
             const priceHtml = discount < 1
-                ? `<span style="text-decoration:line-through;opacity:0.5">${item.price}</span> ${displayPrice}`
+                ? `${displayPrice} <span style="text-decoration:line-through;opacity:0.45;font-size:0.8em;margin-left:4px">${item.price}</span>`
                 : `${displayPrice}`;
 
             div.innerHTML = `
