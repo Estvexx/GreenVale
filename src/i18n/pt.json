@@ -37,6 +37,7 @@
             "noItem": "Não tens esse item!"
         },
         "skinApplied": "Skin aplicada!",
+        "alreadyHave": "Já tens esta ferramenta!",
         "skinUnavailable": "Skin indisponível.",
         "select": "Selecionar",
         "skinBought": "Skin comprada!",

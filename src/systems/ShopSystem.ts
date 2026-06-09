@@ -7,10 +7,12 @@ import { MERCADO_SHOP } from "../data/shops/mercadoShop";
 import { UPGRADES_SHOP } from "../data/shops/upgradesShop";
 import { LevelSystem } from "./LevelSystem";
 import { ToolSkinSystem } from "./ToolSkinSystem";
+import { ITEMS } from "../data/ItemDatabase";
 
 export type BuyResult =
     | "success"
     | "already_owned"
+    | "already_have"
     | "no_money"
     | "inventory_full"
     | "invalid_skin";
@@ -65,6 +67,11 @@ export class ShopSystem {
 
         const money = MoneySystem.getInstance();
         const inventory = InventorySystem.getInstance();
+
+        const itemData = ITEMS[item.id];
+        if (itemData?.maxSlots === 1 && inventory.slots.some(s => s?.id === item.id)) {
+            return "already_have";
+        }
 
         const paid = money.spend(item.currency, item.price);
 

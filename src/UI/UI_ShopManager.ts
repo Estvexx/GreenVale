@@ -24,6 +24,7 @@ export class UI_ShopManager {
         max_slots: "shop.messages.maxSlots",
         no_item: "shop.messages.noItem",
         already_owned: "shop.skinApplied",
+        already_have: "shop.alreadyHave",
         invalid_skin: "shop.skinUnavailable",
     };
 
