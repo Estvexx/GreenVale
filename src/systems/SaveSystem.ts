@@ -4,6 +4,7 @@ import { StorageSystem } from "./StorageSystem";
 import { MoneySystem } from "./MoneySystem";
 import { LevelSystem } from "./LevelSystem";
 import { EffectSystem } from "./EffectsSystem";
+import { ToolSkinSystem } from "./ToolSkinSystem";
 
 const SAVE_KEY = "greenvale_save";
 
@@ -56,6 +57,8 @@ export class SaveSystem {
         EffectSystem.getInstance().loadSaveData({
             active: [],
         });
+
+        ToolSkinSystem.getInstance().reset();
 
         InventorySystem.getInstance().addStartingItems();
 
@@ -121,6 +124,7 @@ export class SaveSystem {
             money: MoneySystem.getInstance().getSaveData(),
             level: LevelSystem.getInstance().getSaveData(),
             effects: EffectSystem.getInstance().getSaveData(),
+            toolSkins: ToolSkinSystem.getInstance().getSaveData(),
         };
     }
 
@@ -130,5 +134,10 @@ export class SaveSystem {
         MoneySystem.getInstance().loadSaveData(data.money);
         LevelSystem.getInstance().loadSaveData(data.level);
         EffectSystem.getInstance().loadSaveData(data.effects);
+        if (data.toolSkins) {
+            ToolSkinSystem.getInstance().loadSaveData(data.toolSkins);
+        } else {
+            ToolSkinSystem.getInstance().reset();
+        }
     }
 }
