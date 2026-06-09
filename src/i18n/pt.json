@@ -75,6 +75,16 @@
     },
 
     "manual": {
+        "quick": {
+            "button": "Como jogar",
+            "eyebrow": "Guia rápido",
+            "title": "Primeiros passos",
+            "intro": "GreenVale mistura exploração, agricultura e combate. Este guia curto ajuda-te a começar sem precisares de abrir o manual completo.",
+            "move": "Movimenta-te com WASD ou com as setas do teclado.",
+            "inventory": "Carrega em E para abrir o inventário e trocar de ferramentas.",
+            "interact": "Usa F para interagir com lojas, objetos e zonas especiais.",
+            "footer": "Para mais detalhes, abre o manual completo com o botão ao lado."
+        },
         "eyebrow": "Guia rápido",
         "title": "Manual de utilizador",
         "intro": "Aqui tens o essencial para começares. O manual segue o idioma escolhido nas definições.",
@@ -111,6 +121,33 @@
         "tips": {
             "sync": "As skins e o save ficam sincronizados com o ficheiro exportado.",
             "newGame": "Novo jogo repõe o inventário base e limpa o progresso guardado."
+        },
+        "story": {
+            "eyebrow": "Roteiro inicial",
+            "title": "Como jogar, passo a passo",
+            "intro": "Segue esta ordem para perceberes rapidamente o jogo. Mais tarde podes substituir cada bloco por uma imagem do teu próprio gameplay.",
+            "steps": {
+                "step1": {
+                    "image": "Imagem da loja de ferragens",
+                    "title": "1. Vai à Loja de Ferragens",
+                    "text": "Começa por conhecer a Loja de Ferragens. Aqui encontras ferramentas base, baldes e outros itens importantes para começares a jogar."
+                },
+                "step2": {
+                    "image": "Imagem da loja de sementes",
+                    "title": "2. Compra a tua semente",
+                    "text": "Depois vai à Loja de Sementes e escolhe a cultura que queres plantar. As sementes são o ponto de partida da tua produção."
+                },
+                "step3": {
+                    "image": "Imagem da plantação",
+                    "title": "3. Planta, rega e acompanha",
+                    "text": "Usa a ferramenta certa no campo, planta a semente e rega quando for preciso. Assim a colheita cresce até ficar pronta."
+                },
+                "step4": {
+                    "image": "Imagem da colheita e venda",
+                    "title": "4. Colhe, vende e melhora",
+                    "text": "Quando a planta estiver pronta, colhe-a e vende o resultado. Usa as moedas e boss tokens para comprar melhorias, skins e progressão."
+                }
+            }
         }
     },
 

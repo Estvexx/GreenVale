@@ -1,5 +1,14 @@
 <div id="manual-help" class="manual-help">
     <button
+        id="manual-quick-btn"
+        class="manual-help__quick hidden"
+        type="button"
+        data-i18n="manual.quick.button"
+    >
+        Como jogar
+    </button>
+
+    <button
         id="manual-help-btn"
         class="manual-help__toggle hidden"
         type="button"
@@ -132,6 +141,117 @@
                 <p class="manual-help__tip" data-i18n="manual.tips.sync"></p>
                 <p class="manual-help__tip" data-i18n="manual.tips.newGame"></p>
             </div>
+
+            <section class="manual-help__story">
+                <div class="manual-help__story-header">
+                    <p class="manual-help__eyebrow" data-i18n="manual.story.eyebrow"></p>
+                    <h3 data-i18n="manual.story.title"></h3>
+                    <p data-i18n="manual.story.intro"></p>
+                </div>
+
+                <div class="manual-help__story-steps">
+                    <article class="manual-help__story-step">
+                        <div class="manual-help__story-media">
+                            <img
+                                src="assets/images/tutorial/Loja_Ferragens.png"
+                                alt="Loja de Ferragens"
+                            />
+                        </div>
+                        <div class="manual-help__story-content">
+                            <span class="manual-help__story-number">1</span>
+                            <h4 data-i18n="manual.story.steps.step1.title"></h4>
+                            <p data-i18n="manual.story.steps.step1.text"></p>
+                        </div>
+                    </article>
+
+                    <article class="manual-help__story-step">
+                        <div class="manual-help__story-media">
+                            <img
+                                src="assets/images/tutorial/Loja_Sementes.png"
+                                alt="Loja de Sementes"
+                            />
+                        </div>
+                        <div class="manual-help__story-content">
+                            <span class="manual-help__story-number">2</span>
+                            <h4 data-i18n="manual.story.steps.step2.title"></h4>
+                            <p data-i18n="manual.story.steps.step2.text"></p>
+                        </div>
+                    </article>
+
+                    <article class="manual-help__story-step">
+                        <div class="manual-help__story-media">
+                            <img
+                                src="assets/images/tutorial/Plantacao.png"
+                                alt="Plantação"
+                            />
+                        </div>
+                        <div class="manual-help__story-content">
+                            <span class="manual-help__story-number">3</span>
+                            <h4 data-i18n="manual.story.steps.step3.title"></h4>
+                            <p data-i18n="manual.story.steps.step3.text"></p>
+                        </div>
+                    </article>
+
+                    <article class="manual-help__story-step">
+                        <div class="manual-help__story-media">
+                            <img
+                                src="assets/images/tutorial/Loja_Venda.png"
+                                alt="Loja de Venda"
+                            />
+                        </div>
+                        <div class="manual-help__story-content">
+                            <span class="manual-help__story-number">4</span>
+                            <h4 data-i18n="manual.story.steps.step4.title"></h4>
+                            <p data-i18n="manual.story.steps.step4.text"></p>
+                        </div>
+                    </article>
+                </div>
+            </section>
+        </section>
+    </div>
+
+    <div id="manual-quick-overlay" class="manual-help__quick-overlay hidden">
+        <section
+            class="manual-help__quick-panel"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="manual-quick-title"
+        >
+            <button
+                id="manual-quick-close"
+                class="manual-help__close"
+                type="button"
+                aria-label="Fechar guia rápido"
+            >
+                ×
+            </button>
+
+            <p class="manual-help__eyebrow" data-i18n="manual.quick.eyebrow"></p>
+            <h2
+                id="manual-quick-title"
+                class="manual-help__title"
+                data-i18n="manual.quick.title"
+            ></h2>
+            <p class="manual-help__intro" data-i18n="manual.quick.intro"></p>
+
+            <div class="manual-help__quick-grid">
+                <article class="manual-help__quick-card">
+                    <span class="manual-help__quick-key">WASD</span>
+                    <p data-i18n="manual.quick.move"></p>
+                </article>
+
+                <article class="manual-help__quick-card">
+                    <span class="manual-help__quick-key">E</span>
+                    <p data-i18n="manual.quick.inventory"></p>
+                </article>
+
+                <article class="manual-help__quick-card">
+                    <span class="manual-help__quick-key">F</span>
+                    <p data-i18n="manual.quick.interact"></p>
+                </article>
+            </div>
+
+            <p class="manual-help__quick-footer" data-i18n="manual.quick.footer"></p>
         </section>
     </div>
 </div>
