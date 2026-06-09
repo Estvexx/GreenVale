@@ -8,6 +8,7 @@ import { UPGRADES_SHOP } from "../data/shops/upgradesShop";
 import { LevelSystem } from "./LevelSystem";
 import { ToolSkinSystem } from "./ToolSkinSystem";
 import { ITEMS } from "../data/ItemDatabase";
+import { EffectSystem } from "./EffectsSystem";
 
 export type BuyResult =
     | "success"
@@ -73,14 +74,17 @@ export class ShopSystem {
             return "already_have";
         }
 
-        const paid = money.spend(item.currency, item.price);
+        const discount = shopId === "sementes" ? EffectSystem.getInstance().getSeedDiscountMultiplier() : 1;
+        const finalPrice = Math.floor(item.price * discount);
+
+        const paid = money.spend(item.currency, finalPrice);
 
         if (!paid) return "no_money";
 
         const added = inventory.addItem(item.id, item.amount);
 
         if (!added) {
-            money.add(item.currency, item.price);
+            money.add(item.currency, finalPrice);
             return "inventory_full";
         }
 
