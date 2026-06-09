@@ -8,57 +8,48 @@ export type InteractionZone = {
     portalId?: string;
 };
 
+type ZoneEntry = InteractionZone & {
+    bounds: Phaser.Geom.Rectangle;
+};
+
 export class InteractionZoneSystem {
-    private scene: Phaser.Scene;
     private player: Player;
-    private mapManager: MapManager;
-
+    private zones: ZoneEntry[] = [];
     private currentZone: InteractionZone | null = null;
-    private touchedThisFrame = false;
 
-    constructor(scene: Phaser.Scene, player: Player, mapManager: MapManager) {
-        this.scene = scene;
+    constructor(_scene: Phaser.Scene, player: Player, mapManager: MapManager) {
         this.player = player;
-        this.mapManager = mapManager;
 
-        this.createZones();
-    }
-
-    private createZones() {
-        this.mapManager.getInteractables().forEach((obj) => {
-            const zone = this.scene.add.zone(
-                obj.x! + obj.width! / 2,
-                obj.y! + obj.height! / 2,
-                obj.width!,
-                obj.height!,
-            );
-
-            this.scene.physics.add.existing(zone, true);
-
+        mapManager.getInteractables().forEach((obj) => {
             const type = this.getProperties(obj, "type");
-            const shopId = this.getProperties(obj, "shopId");
-            const portalId = this.getProperties(obj, "portalId");
+            if (!type) return;
 
-            this.scene.physics.add.overlap(this.player, zone, () => {
-                if (!type) return;
-
-                this.currentZone = {
-                    type,
-                    shopId,
-                    portalId,
-                };
-
-                this.touchedThisFrame = true;
+            this.zones.push({
+                type,
+                shopId: this.getProperties(obj, "shopId"),
+                portalId: this.getProperties(obj, "portalId"),
+                bounds: new Phaser.Geom.Rectangle(
+                    obj.x!,
+                    obj.y!,
+                    obj.width!,
+                    obj.height!,
+                ),
             });
         });
     }
 
     update() {
-        if (!this.touchedThisFrame) {
-            this.currentZone = null;
-        }
+        const px = this.player.x;
+        const py = this.player.y;
 
-        this.touchedThisFrame = false;
+        const found = this.zones.find(z => z.bounds.contains(px, py)) ?? null;
+
+        // só atualiza se mudou, para não piscar
+        if (found?.type !== this.currentZone?.type ||
+            found?.shopId !== this.currentZone?.shopId ||
+            found?.portalId !== this.currentZone?.portalId) {
+            this.currentZone = found ? { type: found.type, shopId: found.shopId, portalId: found.portalId } : null;
+        }
     }
 
     getCurrentZone() {
