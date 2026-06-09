@@ -7,6 +7,7 @@ import { renderItemIcon } from "../utils/renderItemIcon";
 import { UIRoot } from "./UIRoot";
 import { t } from "../i18n/index";
 import { SoundManager } from "../sounds/SoundsManager";
+import { EffectSystem } from "../systems/EffectsSystem";
 
 export class UI_ShopManager {
     private system = ShopSystem.getInstance();
@@ -98,6 +99,12 @@ export class UI_ShopManager {
                 ? ToolSkinSystem.getInstance().isOwned(item.skinId)
                 : false;
 
+            const discount = shop.id === "sementes" ? EffectSystem.getInstance().getSeedDiscountMultiplier() : 1;
+            const displayPrice = Math.floor(item.price * discount);
+            const priceHtml = discount < 1
+                ? `<span style="text-decoration:line-through;opacity:0.5">${item.price}</span> ${displayPrice}`
+                : `${displayPrice}`;
+
             div.innerHTML = `
                 <div class="shop-item-info">
                     <div class="shop-item-name">${itemName}</div>
@@ -108,7 +115,7 @@ export class UI_ShopManager {
                             alt="${item.currency}"
                             class="price-icon"
                         />
-                        ${item.price}
+                        ${priceHtml}
                     </div>
                 </div>
 
