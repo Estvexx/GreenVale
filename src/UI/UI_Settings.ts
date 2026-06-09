@@ -9,80 +9,85 @@ type SettingsScene = Phaser.Scene & {
 
 export class SettingsUI {
     private scene: SettingsScene;
-    private menu: HTMLElement;
+
     private container = document.getElementById("btnDefinicoes")!;
+    private menu = document.getElementById("settings-menu")!;
+
+    private closeButton = document.getElementById("close-settings")!;
+    private musicToggle = document.getElementById(
+        "toggle-music",
+    ) as HTMLInputElement;
+    private soundsToggle = document.getElementById(
+        "toggle-sounds",
+    ) as HTMLInputElement;
+    private fullscreenToggle = document.getElementById(
+        "toggle-fullscreen",
+    ) as HTMLInputElement;
+
+    private langButtons = document.querySelectorAll<HTMLElement>(".lang-btn");
+    private controlCards =
+        document.querySelectorAll<HTMLElement>(".control-card");
+    private skinCards = document.querySelectorAll<HTMLElement>(".skin-card");
 
     constructor(scene: SettingsScene) {
-        this.container.classList.remove("hidden");
         this.scene = scene;
-        this.menu = document.getElementById("settings-menu")!;
+
+        this.container.classList.remove("hidden");
 
         this.init();
+
+        this.scene.events.once(Phaser.Scenes.Events.SHUTDOWN, () => {
+            this.destroy();
+        });
     }
 
     private init(): void {
-        document.getElementById("btnDefinicoes")!.onclick = () => this.open();
-        document.getElementById("close-settings")!.onclick = () => this.close();
+        this.container.onclick = () => this.open();
+        this.closeButton.onclick = () => this.close();
 
-        document.getElementById("toggle-music")!.onchange = (e) => {
-            const target = e.target as HTMLInputElement;
-            localStorage.setItem("musicEnabled", String(target.checked));
+        this.musicToggle.onchange = () => {
+            localStorage.setItem(
+                "musicEnabled",
+                String(this.musicToggle.checked),
+            );
 
-            if (target.checked) {
+            if (this.musicToggle.checked) {
                 MusicManager.resume();
             } else {
                 MusicManager.pause();
             }
         };
 
-        document.getElementById("toggle-sounds")!.onchange = (e) => {
-            const target = e.target as HTMLInputElement;
-            SoundManager.setEnabled(target.checked);
+        this.soundsToggle.onchange = () => {
+            SoundManager.setEnabled(this.soundsToggle.checked);
         };
 
-        document.querySelectorAll(".lang-btn").forEach((btn) => {
-            btn.addEventListener("click", () =>
-                this.setLang(btn as HTMLElement),
-            );
-        });
-
-        document.querySelectorAll(".control-card").forEach((card) => {
-            card.addEventListener("click", () =>
-                this.setControlKeys(card as HTMLElement),
-            );
-        });
-
-        document.querySelectorAll(".skin-card").forEach((card) => {
-            card.addEventListener("click", () => {
-                const skinKey = (card as HTMLElement).dataset.skin!;
-                this.setSkin(card as HTMLElement, skinKey);
-            });
-        });
-
-        document.addEventListener("fullscreenchange", () => {
-            const checkbox = document.getElementById(
-                "toggle-fullscreen",
-            ) as HTMLInputElement;
-            if (checkbox) {
-                checkbox.checked = !!document.fullscreenElement;
+        this.fullscreenToggle.onchange = () => {
+            if (this.fullscreenToggle.checked) {
+                document.documentElement.requestFullscreen().catch(() => {
+                    this.fullscreenToggle.checked = false;
+                });
+            } else {
+                document.exitFullscreen();
             }
+        };
+
+        document.addEventListener("fullscreenchange", this.onFullscreenChange);
+
+        this.langButtons.forEach((btn) => {
+            btn.onclick = () => this.setLang(btn);
         });
 
-        const fullscreenToggle = document.getElementById(
-            "toggle-fullscreen",
-        ) as HTMLInputElement;
-        if (fullscreenToggle) {
-            fullscreenToggle.onchange = (e) => {
-                const target = e.target as HTMLInputElement;
-                if (target.checked) {
-                    document.documentElement.requestFullscreen().catch(() => {
-                        target.checked = false;
-                    });
-                } else {
-                    document.exitFullscreen();
-                }
+        this.controlCards.forEach((card) => {
+            card.onclick = () => this.setControlKeys(card);
+        });
+
+        this.skinCards.forEach((card) => {
+            card.onclick = () => {
+                const skinKey = card.dataset.skin!;
+                this.setSkin(card, skinKey);
             };
-        }
+        });
 
         this.loadSavedState();
     }
@@ -97,22 +102,27 @@ export class SettingsUI {
     close(): void {
         SoundManager.play("click_sound");
         this.menu.classList.add("hidden");
+
         if (this.scene.player) {
             this.scene.player.applySkin();
             this.scene.player.controlScheme =
                 localStorage.getItem("controlScheme") || "wasd";
         }
+
         this.scene.scene.resume();
     }
 
     private setLang(btn: HTMLElement): void {
         SoundManager.play("click_sound");
-        document
-            .querySelectorAll(".lang-btn")
-            .forEach((b) => b.classList.remove("active"));
+
+        this.langButtons.forEach((b) => {
+            b.classList.remove("active");
+        });
+
         btn.classList.add("active");
 
         const lang = btn.dataset.lang!;
+
         import("../i18n/index.ts").then(({ setLanguage }) => {
             setLanguage(lang);
         });
@@ -122,9 +132,11 @@ export class SettingsUI {
 
     private setControlKeys(card: HTMLElement): void {
         SoundManager.play("click_sound");
-        document
-            .querySelectorAll(".control-card")
-            .forEach((c) => c.classList.remove("active"));
+
+        this.controlCards.forEach((c) => {
+            c.classList.remove("active");
+        });
+
         card.classList.add("active");
 
         const scheme = card.dataset.control!;
@@ -133,48 +145,81 @@ export class SettingsUI {
 
     private setSkin(card: HTMLElement, skinKey: string): void {
         SoundManager.play("click_sound");
-        document
-            .querySelectorAll(".skin-card")
-            .forEach((c) => c.classList.remove("active"));
+
+        this.skinCards.forEach((c) => {
+            c.classList.remove("active");
+        });
+
         card.classList.add("active");
+
         localStorage.setItem("playerSkin", skinKey);
     }
 
     private syncFullscreenToggle(): void {
-        SoundManager.play("click_sound");
-        const checkbox = document.getElementById(
-            "toggle-fullscreen",
-        ) as HTMLInputElement;
-        if (checkbox) {
-            checkbox.checked = !!document.fullscreenElement;
-        }
+        this.fullscreenToggle.checked = !!document.fullscreenElement;
     }
+
+    private onFullscreenChange = () => {
+        this.syncFullscreenToggle();
+    };
 
     private loadSavedState(): void {
         const savedLang = localStorage.getItem("language") || "pt";
-        document.querySelectorAll(".lang-btn").forEach((btn) => {
-            const lang = (btn as HTMLElement).dataset.lang;
-            btn.classList.toggle("active", lang === savedLang);
+
+        this.langButtons.forEach((btn) => {
+            btn.classList.toggle("active", btn.dataset.lang === savedLang);
         });
 
         const savedScheme = localStorage.getItem("controlScheme") || "wasd";
-        document.querySelectorAll(".control-card").forEach((card) => {
-            const scheme = (card as HTMLElement).dataset.control;
-            card.classList.toggle("active", scheme === savedScheme);
+
+        this.controlCards.forEach((card) => {
+            card.classList.toggle(
+                "active",
+                card.dataset.control === savedScheme,
+            );
         });
 
         const savedSkin = localStorage.getItem("playerSkin") || "skin_a";
-        document.querySelectorAll(".skin-card").forEach((card) => {
-            const skin = (card as HTMLElement).dataset.skin;
-            card.classList.toggle("active", skin === savedSkin);
+
+        this.skinCards.forEach((card) => {
+            card.classList.toggle("active", card.dataset.skin === savedSkin);
         });
 
         const musicEnabled = localStorage.getItem("musicEnabled") !== "false";
-        (document.getElementById("toggle-music") as HTMLInputElement).checked =
-            musicEnabled;
+        this.musicToggle.checked = musicEnabled;
 
         const soundsEnabled = localStorage.getItem("soundsEnabled") !== "false";
-        (document.getElementById("toggle-sounds") as HTMLInputElement).checked =
-            soundsEnabled;
+        this.soundsToggle.checked = soundsEnabled;
+
+        this.syncFullscreenToggle();
+    }
+
+    private destroy(): void {
+        this.container.onclick = null;
+        this.closeButton.onclick = null;
+
+        this.musicToggle.onchange = null;
+        this.soundsToggle.onchange = null;
+        this.fullscreenToggle.onchange = null;
+
+        this.langButtons.forEach((btn) => {
+            btn.onclick = null;
+        });
+
+        this.controlCards.forEach((card) => {
+            card.onclick = null;
+        });
+
+        this.skinCards.forEach((card) => {
+            card.onclick = null;
+        });
+
+        document.removeEventListener(
+            "fullscreenchange",
+            this.onFullscreenChange,
+        );
+
+        this.menu.classList.add("hidden");
+        this.container.classList.add("hidden");
     }
 }

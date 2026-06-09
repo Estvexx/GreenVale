@@ -74,6 +74,14 @@
         "close": "Close"
     },
 
+    "save": {
+        "errors": {
+            "importInvalid": "Error importing save. Invalid format.",
+            "LoadError": "Error loading save.",
+            "ReadFileError": "Error reading file."
+        }
+    },
+
     "manual": {
         "quick": {
             "button": "How to play",

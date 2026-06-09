@@ -5,9 +5,10 @@ import { MoneySystem } from "./MoneySystem";
 import { LevelSystem } from "./LevelSystem";
 import { EffectSystem } from "./EffectsSystem";
 import { ToolSkinSystem } from "./ToolSkinSystem";
+import { UIRoot } from "../UI/UIRoot";
+import { t } from "../i18n";
 
 const SAVE_KEY = "greenvale_save";
-
 export class SaveSystem {
     static save() {
         const data = this.getSaveData();
@@ -27,14 +28,17 @@ export class SaveSystem {
 
             return true;
         } catch {
-            console.error("Erro ao carregar save.");
+            UIRoot.toast?.error(t("save.errors.LoadError"));
             return false;
         }
     }
 
+    static delete() {
+        localStorage.removeItem(SAVE_KEY);
+    }
+
     static newGame() {
         this.delete();
-
         InventorySystem.getInstance().loadSaveData({
             slots: Array(28).fill(null),
             selectedSlot: 0,
@@ -60,13 +64,9 @@ export class SaveSystem {
 
         ToolSkinSystem.getInstance().reset();
 
-        InventorySystem.getInstance().addStartingItems();
+        InventorySystem.getInstance().addItem(1, 1);
 
         this.save();
-    }
-
-    static delete() {
-        localStorage.removeItem(SAVE_KEY);
     }
 
     static exportToJson(): string {
@@ -82,7 +82,7 @@ export class SaveSystem {
 
             return true;
         } catch {
-            console.error("Save inválido.");
+            UIRoot.toast?.error(t("save.errors.importInvalid"));
             return false;
         }
     }
@@ -109,8 +109,8 @@ export class SaveSystem {
             const json = await file.text();
 
             return this.importFromJson(json);
-        } catch (error) {
-            console.error("Erro a ler ficheiro:", error);
+        } catch {
+            UIRoot.toast?.error(t("save.errors.ReadFileError"));
             return false;
         }
     }
