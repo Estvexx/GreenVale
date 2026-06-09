@@ -1,4 +1,5 @@
 import { InventorySystem } from "../systems/InventorySystem";
+import { ToolSkinSystem } from "../systems/ToolSkinSystem";
 import { renderItemIcon } from "../utils/renderItemIcon";
 
 export class UI_Inventory {
@@ -6,6 +7,10 @@ export class UI_Inventory {
 
     constructor() {
         this.inventory.onInventoryChange(() => {
+            this.render();
+        });
+
+        ToolSkinSystem.getInstance().onChange(() => {
             this.render();
         });
 

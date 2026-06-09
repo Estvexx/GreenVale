@@ -4,9 +4,16 @@ import { type Shop, type ShopType } from "../types/ShopTypes";
 import { FERRAGENS_SHOP } from "../data/shops/ferragensShop";
 import { SEMENTES_SHOP } from "../data/shops/sementesShop";
 import { MERCADO_SHOP } from "../data/shops/mercadoShop";
+import { UPGRADES_SHOP } from "../data/shops/upgradesShop";
 import { LevelSystem } from "./LevelSystem";
+import { ToolSkinSystem } from "./ToolSkinSystem";
 
-export type BuyResult = "success" | "no_money" | "inventory_full";
+export type BuyResult =
+    | "success"
+    | "already_owned"
+    | "no_money"
+    | "inventory_full"
+    | "invalid_skin";
 export type SellResult = "success" | "no_item";
 
 export class ShopSystem {
@@ -24,6 +31,7 @@ export class ShopSystem {
         ferragens: FERRAGENS_SHOP,
         sementes: SEMENTES_SHOP,
         mercado: MERCADO_SHOP,
+        upgrades: UPGRADES_SHOP,
     };
 
     private currentShop: Shop | null = null;
@@ -41,11 +49,19 @@ export class ShopSystem {
         return this.currentShop;
     }
 
-    buy(itemId: number): BuyResult {
-        const item = this.currentShop?.items.find((i) => i.id === itemId);
+    buy(itemId: number | string): BuyResult {
+        const item = this.currentShop?.items.find(
+            (i) => i.id === itemId || i.skinId === itemId,
+        );
         const shopId = this.currentShop?.id;
 
         if (!item) return "inventory_full";
+
+        if (item.skinId) {
+            return ToolSkinSystem.getInstance().buySkin(item.skinId);
+        }
+
+        if (!item.id) return "inventory_full";
 
         const money = MoneySystem.getInstance();
         const inventory = InventorySystem.getInstance();
@@ -71,7 +87,7 @@ export class ShopSystem {
     sell(itemId: number): SellResult {
         const item = this.currentShop?.items.find((i) => i.id === itemId);
 
-        if (!item) return "no_item";
+        if (!item?.id) return "no_item";
 
         const inventory = InventorySystem.getInstance();
         const money = MoneySystem.getInstance();
@@ -88,7 +104,7 @@ export class ShopSystem {
     sellAll(itemId: number): SellResult {
         const item = this.currentShop?.items.find((i) => i.id === itemId);
 
-        if (!item) return "no_item";
+        if (!item?.id) return "no_item";
 
         const inventory = InventorySystem.getInstance();
         const money = MoneySystem.getInstance();

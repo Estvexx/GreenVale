@@ -1,5 +1,6 @@
 export type ShopItem = {
-    id: number;
+    id?: number;
+    skinId?: string;
     price: number;
     currency: "coins" | "bossTokens";
     amount: number;
@@ -13,4 +14,4 @@ export type Shop = {
     items: ShopItem[];
 };
 
-export type ShopType = "ferragens" | "sementes" | "mercado";
+export type ShopType = "ferragens" | "sementes" | "mercado" | "upgrades";

@@ -1,5 +1,7 @@
 import { ITEMS } from "../data/ItemDatabase";
+import { TOOL_SKINS } from "../data/ToolSkinDatabase";
 import { ShopSystem } from "../systems/ShopSystem";
+import { ToolSkinSystem } from "../systems/ToolSkinSystem";
 import type { Shop, ShopItem, ShopType } from "../types/ShopTypes";
 import { renderItemIcon } from "../utils/renderItemIcon";
 import { UIRoot } from "./UIRoot";
@@ -21,6 +23,8 @@ export class UI_ShopManager {
         inventory_full: "shop.messages.inventoryFull",
         max_slots: "shop.messages.maxSlots",
         no_item: "shop.messages.noItem",
+        already_owned: "Skin aplicada!",
+        invalid_skin: "Skin indisponível.",
     };
 
     private readonly currencyIcons: Record<string, string> = {
@@ -57,19 +61,41 @@ export class UI_ShopManager {
         this.container.innerHTML = "";
 
         shop.items.forEach((item: ShopItem) => {
-            const itemData = ITEMS[item.id];
-            if (!itemData) return;
+            const itemData = item.id ? ITEMS[item.id] : null;
+            const skinData = item.skinId ? TOOL_SKINS[item.skinId] : null;
+
+            if (!itemData && !skinData) return;
 
             const div = document.createElement("div");
             div.className = "shop-item";
 
             const iconWrapper = document.createElement("div");
             iconWrapper.className = "shop-item-icon";
-            renderItemIcon(iconWrapper, item.id);
 
-            const itemName = itemData.nameKey
-                ? t(itemData.nameKey)
-                : itemData.name;
+            if (item.id) {
+                renderItemIcon(iconWrapper, item.id);
+            } else if (skinData) {
+                const icon = skinData.icon ?? Object.values(skinData.icons ?? {})[0];
+
+                if (icon) {
+                    const img = document.createElement("img");
+                    img.src = icon;
+                    img.alt = skinData.name;
+                    iconWrapper.appendChild(img);
+                }
+            }
+
+            const itemName = skinData
+                ? skinData.nameKey
+                    ? t(skinData.nameKey)
+                    : skinData.name
+                : itemData!.nameKey
+                  ? t(itemData!.nameKey)
+                  : itemData!.name;
+
+            const isOwnedSkin = item.skinId
+                ? ToolSkinSystem.getInstance().isOwned(item.skinId)
+                : false;
 
             div.innerHTML = `
                 <div class="shop-item-info">
@@ -98,7 +124,7 @@ export class UI_ShopManager {
                         `
                         : `
                             <button class="shop-item-btn buy-btn">
-                                ${t("shop.buy")}
+                                ${isOwnedSkin ? "Selecionar" : t("shop.buy")}
                             </button>
                         `
                 }
@@ -114,14 +140,25 @@ export class UI_ShopManager {
 
             buyBtn?.addEventListener("click", () => {
                 SoundManager.play("click_sound");
-                const result = this.system.buy(item.id);
+                const result = this.system.buy(item.skinId ?? item.id!);
 
                 if (result !== "success") {
+                    if (result === "already_owned") {
+                        this.render(shop);
+                        UIRoot.toast.info("Skin aplicada!");
+                        return;
+                    }
+
                     this.showError(result);
                     return;
                 }
 
-                UIRoot.toast.success(t(this.messages.success_buy));
+                this.render(shop);
+                UIRoot.toast.success(
+                    shop.id === "upgrades"
+                        ? "Skin comprada!"
+                        : t(this.messages.success_buy),
+                );
 
                 if (shop.id === "sementes" || shop.id === "ferragens") {
                     setTimeout(() => {
@@ -132,7 +169,7 @@ export class UI_ShopManager {
 
             sellOneBtn?.addEventListener("click", () => {
                 SoundManager.play("click_sound");
-                const result = this.system.sell(item.id);
+                const result = this.system.sell(item.id!);
 
                 if (result !== "success") {
                     this.showError(result);
@@ -144,7 +181,7 @@ export class UI_ShopManager {
 
             sellAllBtn?.addEventListener("click", () => {
                 SoundManager.play("click_sound");
-                const result = this.system.sellAll(item.id);
+                const result = this.system.sellAll(item.id!);
 
                 if (result !== "success") {
                     this.showError(result);
