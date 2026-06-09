@@ -4,6 +4,7 @@ import { MoneySystem } from "../systems/MoneySystem";
 import { UIRoot } from "../UI/UIRoot";
 import { LevelSystem } from "../systems/LevelSystem";
 import { SaveSystem } from "../systems/SaveSystem";
+import { t } from "../i18n";
 
 const SLOT_KEYS = [
     Phaser.Input.Keyboard.KeyCodes.ONE,
@@ -66,11 +67,11 @@ export class InputManager {
     private registerSaveKeys() {
         this.scene.input.keyboard?.on("keydown-K", () => {
             SaveSystem.save();
-            UIRoot.toast.show("Jogo guardado com sucesso");
+            UIRoot.toast.show(t("hud.saved"));
         });
         this.scene.input.keyboard?.on("keydown-M", () => {
             SaveSystem.downloadSaveFile();
-            UIRoot.toast.show("Save exportado");
+            UIRoot.toast.show(t("hud.exported"));
         });
         this.scene.input.keyboard?.on("keydown-L", () => SaveSystem.load());
     }

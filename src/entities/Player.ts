@@ -26,7 +26,9 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 
     private static readonly WALK_FRAME_INTERVAL = 200;
 
-    constructor(scene: Phaser.Scene, x: number, y: number) {
+    private poleLayer: Phaser.Tilemaps.TilemapLayer | null = null;
+
+    constructor(scene: Phaser.Scene, x: number, y: number, poleLayer: Phaser.Tilemaps.TilemapLayer | null = null) {
         const skin = Player.getSavedSkin();
         super(scene, x, y, `${skin}_idle`);
 
@@ -58,6 +60,8 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
             volume: 0.25,
         });
 
+        this.poleLayer = poleLayer;
+
         scene.events.once(Phaser.Scenes.Events.SHUTDOWN, () => {
             this.footstepSound.stop();
             this.footstepSound.destroy();
@@ -81,6 +85,7 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
         this.updateAnimation(time);
         this.shadow.setPosition(this.x, this.y + 22);
         this.updateFootstepSound();
+        this.updatePoleTransparency();
     }
 
     private handleMovement() {
@@ -99,6 +104,24 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
             if (this.cursorKeys.up.isDown) this.setVelocityY(-speed);
             if (this.cursorKeys.down.isDown) this.setVelocityY(speed);
         }
+    }
+
+    private updatePoleTransparency() {
+        if (!this.poleLayer) return;
+
+        // reset todos os tiles
+        this.poleLayer.forEachTile(t => t.setAlpha(1));
+
+        // tile na posição do player ou um tile acima (para apanhar o topo do poste)
+        const tile = this.poleLayer.getTileAtWorldXY(this.x, this.y)
+                  ?? this.poleLayer.getTileAtWorldXY(this.x, this.y - 32);
+
+        if (!tile) return;
+
+        // faz fade neste tile e no de cima (poste tem 2 tiles de altura)
+        tile.setAlpha(0.4);
+        this.poleLayer.getTileAt(tile.x, tile.y - 1)?.setAlpha(0.4);
+        this.poleLayer.getTileAt(tile.x, tile.y + 1)?.setAlpha(0.4);
     }
 
     private isMoving() {

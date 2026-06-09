@@ -251,6 +251,19 @@
         "itemHasNoDamage": "Este objeto no causa daño."
     },
     "time": {
-        "day": "DÃ­a {day}"
+        "day": "Día {day}"
+    },
+    "farming": {
+        "notReady": "La planta aún no está lista.",
+        "tooFarToHarvest": "Estás demasiado lejos para cosechar.",
+        "tooFarToPlant": "Estás demasiado lejos para plantar.",
+        "cantPlantHere": "No puedes plantar aquí.",
+        "noPlantHere": "No hay ninguna planta aquí.",
+        "noSeeds": "No tienes semillas en el inventario.",
+        "levelRequired": "Nivel {level} necesario para plantar aquí."
+    },
+    "hud": {
+        "saved": "Juego guardado con éxito",
+        "exported": "Guardado exportado"
     }
 }
