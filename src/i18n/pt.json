@@ -14,7 +14,8 @@
         "red": "Vermelho",
         "purple": "Roxo",
         "screen": "Ecrã",
-        "fullscreen": "Ecrã Completo"
+        "fullscreen": "Ecrã Completo",
+        "clickMove": "Mover com clique"
     },
 
     "effectShop": {
@@ -281,7 +282,8 @@
         "exported": "Save exportado",
         "growth": "Crescimento",
         "growthNormal": "Normal",
-        "growthSlow": "Lento (-3×)"
+        "growthSlow": "Lento (-3×)",
+        "interact": "Pressiona F para interagir"
     },
     "mainMenu": {
         "play": "Jogar / Continuar",

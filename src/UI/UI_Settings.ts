@@ -23,6 +23,9 @@ export class SettingsUI {
     private fullscreenToggle = document.getElementById(
         "toggle-fullscreen",
     ) as HTMLInputElement;
+    private clickMoveToggle = document.getElementById(
+        "toggle-click-move",
+    ) as HTMLInputElement;
 
     private langButtons = document.querySelectorAll<HTMLElement>(".lang-btn");
     private controlCards =
@@ -60,6 +63,10 @@ export class SettingsUI {
 
         this.soundsToggle.onchange = () => {
             SoundManager.setEnabled(this.soundsToggle.checked);
+        };
+
+        this.clickMoveToggle.onchange = () => {
+            localStorage.setItem("clickMoveEnabled", String(this.clickMoveToggle.checked));
         };
 
         this.fullscreenToggle.onchange = () => {
@@ -190,6 +197,9 @@ export class SettingsUI {
 
         const soundsEnabled = localStorage.getItem("soundsEnabled") !== "false";
         this.soundsToggle.checked = soundsEnabled;
+
+        const clickMoveEnabled = localStorage.getItem("clickMoveEnabled") !== "false";
+        this.clickMoveToggle.checked = clickMoveEnabled;
 
         this.syncFullscreenToggle();
     }

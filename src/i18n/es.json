@@ -14,7 +14,8 @@
         "red": "Rojo",
         "purple": "Morado",
         "screen": "Pantalla",
-        "fullscreen": "Pantalla Completa"
+        "fullscreen": "Pantalla Completa",
+        "clickMove": "Mover con clic"
     },
 
     "effectShop": {
@@ -280,7 +281,8 @@
         "exported": "Guardado exportado",
         "growth": "Crecimiento",
         "growthNormal": "Normal",
-        "growthSlow": "Lento (-3×)"
+        "growthSlow": "Lento (-3×)",
+        "interact": "Pulsa F para interactuar"
     },
     "mainMenu": {
         "play": "Jugar / Continuar",

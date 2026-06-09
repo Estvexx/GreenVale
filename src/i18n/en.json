@@ -14,7 +14,8 @@
         "red": "Red",
         "purple": "Purple",
         "screen": "Screen",
-        "fullscreen": "Fullscreen"
+        "fullscreen": "Fullscreen",
+        "clickMove": "Click to move"
     },
 
     "effectShop": {
@@ -280,7 +281,8 @@
         "exported": "Save exported",
         "growth": "Growth",
         "growthNormal": "Normal",
-        "growthSlow": "Slow (-3×)"
+        "growthSlow": "Slow (-3×)",
+        "interact": "Press F to interact"
     },
     "mainMenu": {
         "play": "Play / Continue",

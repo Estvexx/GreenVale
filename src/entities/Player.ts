@@ -66,11 +66,13 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 
         scene.input.on("pointerdown", (pointer: Phaser.Input.Pointer) => {
             if (pointer.rightButtonDown()) return;
+            if (localStorage.getItem("clickMoveEnabled") === "false") return;
             this.clickTarget = { x: pointer.worldX, y: pointer.worldY };
         });
 
         scene.input.on("pointermove", (pointer: Phaser.Input.Pointer) => {
             if (!pointer.isDown || pointer.rightButtonDown()) return;
+            if (localStorage.getItem("clickMoveEnabled") === "false") return;
             if (this.clickTarget && !this.clickTarget.onArrive) {
                 this.clickTarget.x = pointer.worldX;
                 this.clickTarget.y = pointer.worldY;

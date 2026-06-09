@@ -77,7 +77,11 @@ export class FarmScene extends Phaser.Scene {
             if (zone) {
                 const cx = zone.bounds.centerX;
                 const cy = zone.bounds.centerY;
-                this.player.moveTo(cx, cy, () => this.handleInteraction());
+                if (localStorage.getItem("clickMoveEnabled") === "false") {
+                    this.handleInteraction();
+                } else {
+                    this.player.moveTo(cx, cy, () => this.handleInteraction());
+                }
             }
         });
 
