@@ -67,6 +67,8 @@ export class PreloaderScene extends Phaser.Scene {
 
         // ============ ASSETS ============
 
+        this.load.image("menu_background", "assets/images/menu_background.png");
+
         // Player skins
         const skins = ["skin_a", "skin_b", "skin_c", "skin_d"];
         for (const skin of skins) {

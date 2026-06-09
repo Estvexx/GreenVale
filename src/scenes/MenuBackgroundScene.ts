@@ -1,13 +1,7 @@
 import Phaser from "phaser";
 
-const LAYERS = [
-    { key: "chao",          speed: 0.2, y: 0,   alpha: 1   },
-    { key: "terras",        speed: 0.4, y: 0,   alpha: 1   },
-    { key: "arvores_e_poco",speed: 0.7, y: 0,   alpha: 1   },
-];
-
 export class MenuBackgroundScene extends Phaser.Scene {
-    private layers: { img: Phaser.GameObjects.TileSprite; speed: number }[] = [];
+    private bg!: Phaser.GameObjects.TileSprite;
 
     constructor() {
         super({ key: "MenuBackgroundScene", active: false });
@@ -16,28 +10,21 @@ export class MenuBackgroundScene extends Phaser.Scene {
     create() {
         const { width, height } = this.scale;
 
-        for (const def of LAYERS) {
-            const tex = this.textures.get(def.key);
-            const texH = tex.getSourceImage().height as number;
-            const scaleY = height / texH;
+        // imagem do mapa em tile sprite para fazer scroll lento
+        this.bg = this.add.tileSprite(0, 0, width, height, "menu_background")
+            .setOrigin(0, 0);
 
-            const img = this.add.tileSprite(0, 0, width, height, def.key)
-                .setOrigin(0, 0)
-                .setAlpha(def.alpha);
+        // ajustar escala para cobrir o ecrã mantendo aspeto
+        const scaleX = width / 1920;
+        const scaleY = height / 1080;
+        const scale = Math.max(scaleX, scaleY);
+        this.bg.setTileScale(scale, scale);
 
-            img.tileScaleY = scaleY;
-            img.tileScaleX = scaleY; // manter pixel ratio
-
-            this.layers.push({ img, speed: def.speed });
-        }
-
-        // overlay escuro para contraste com o menu
-        this.add.rectangle(0, 0, width, height, 0x000000, 0.45).setOrigin(0, 0);
+        // overlay escuro suave para os botões se destacarem
+        this.add.rectangle(0, 0, width, height, 0x000000, 0.55).setOrigin(0, 0);
     }
 
     update(_: number, delta: number) {
-        for (const layer of this.layers) {
-            layer.img.tilePositionX += layer.speed * (delta / 16);
-        }
+        this.bg.tilePositionX += 0.3 * (delta / 16);
     }
 }
