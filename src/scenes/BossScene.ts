@@ -51,10 +51,18 @@ export class BossScene extends Phaser.Scene {
         MusicManager.play(this, "bossscene_music", 0.3);
         SoundManager.setScene(this);
 
-        if (SoundManager.isEnabled()) {
-            this.fireSound = this.sound.add("fire_sound", { loop: true, volume: 0.8 });
-            this.fireSound.play();
-        }
+        this.fireSound = this.sound.add("fire_sound", { loop: true, volume: 0.8 });
+        if (SoundManager.isEnabled()) this.fireSound.play();
+
+        const unsubscribe = SoundManager.onToggle((enabled) => {
+            if (enabled) {
+                if (!this.fireSound?.isPlaying) this.fireSound?.play();
+            } else {
+                this.fireSound?.stop();
+            }
+        });
+
+
 
         new SettingsUI(this);
         new InputManager(this, () => {
@@ -132,6 +140,7 @@ export class BossScene extends Phaser.Scene {
         });
 
         this.events.once(Phaser.Scenes.Events.SHUTDOWN, () => {
+            unsubscribe();
             this.fireSound?.stop();
             this.fireSound?.destroy();
             this.fireSound = undefined;
