@@ -86,7 +86,6 @@ export class FarmScene extends Phaser.Scene {
         this.environmentFX.update(delta);
 
         this.interactionZones.update();
-        this.updateInteractionTooltip();
 
         this.realLights.update();
 
@@ -94,7 +93,10 @@ export class FarmScene extends Phaser.Scene {
             this.interactionZones.isInsideZone() ||
             this.farmingSystem.canWaterHere(this.player.x, this.player.y);
 
-        this.tooltip.classList.toggle("hidden", !showTooltip);
+        if (this.tooltipVisible !== showTooltip) {
+            this.tooltipVisible = showTooltip;
+            this.tooltip.classList.toggle("hidden", !showTooltip);
+        }
 
         this.effects.update();
         this.farmingSystem.update(time, this.player.x, this.player.y);
@@ -164,17 +166,4 @@ export class FarmScene extends Phaser.Scene {
         this.farmingSystem.interact(this.player.x, this.player.y);
     }
 
-    private updateInteractionTooltip() {
-        const isInsideZone = this.interactionZones.isInsideZone();
-
-        if (this.tooltipVisible === isInsideZone) return;
-
-        this.tooltipVisible = isInsideZone;
-
-        if (isInsideZone) {
-            this.tooltip.classList.remove("hidden");
-        } else {
-            this.tooltip.classList.add("hidden");
-        }
-    }
 }
