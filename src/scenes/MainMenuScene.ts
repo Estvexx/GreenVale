@@ -6,6 +6,29 @@ import { UIRoot } from "../UI/UIRoot";
 import { SaveSystem } from "../systems/SaveSystem";
 import { applyTranslations } from "../i18n";
 
+const SPLASHES = [
+    "Não é o Stardew Valley!",
+    "100% livre de pesticidas!",
+    "As cenouras são reais!",
+    "O poço tem água?",
+    "Rega e reza!",
+    "Sem microtransações... por enquanto",
+    "O boss não morde... muito",
+    "Aprovado por agricultores virtuais!",
+    "Feito com amor e bugs",
+    "A colheita não vai a lado nenhum sozinha!",
+    "O sol nasce para todos... às 07:00",
+    "Já regaste hoje?",
+    "Os zombies também precisam de amor",
+    "Planta agora, chora depois",
+    "A enxada é mais forte que a espada",
+    "Nenhuma planta foi prejudicada",
+    "Modo hardcore: sem balde de água",
+    "Salva frequentemente. Confia em nós.",
+    "A loja fecha às... nunca",
+    "GreenVale™ não responsável por vício",
+];
+
 export class MainMenuScene extends Phaser.Scene {
     private menuElement?: HTMLElement;
     private importInput?: HTMLInputElement;
@@ -32,6 +55,9 @@ export class MainMenuScene extends Phaser.Scene {
             ) as HTMLInputElement | null) ?? undefined;
 
         new SettingsUI(this);
+
+        const splash = document.getElementById("main-menu-splash");
+        if (splash) splash.textContent = SPLASHES[Math.floor(Math.random() * SPLASHES.length)];
 
         document.getElementById("main-menu-play")!.onclick = () => {
             UIRoot.init();

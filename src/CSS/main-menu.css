@@ -17,10 +17,38 @@
     width: min(420px, calc(100vw - 40px));
 }
 
+.main-menu__logo-wrap {
+    position: relative;
+    display: inline-block;
+}
+
 .main-menu__logo {
     width: min(500px, 100vw);
     image-rendering: pixelated;
     filter: drop-shadow(0 10px 0 rgba(0, 0, 0, 0.35));
+    display: block;
+}
+
+.main-menu__splash {
+    position: absolute;
+    bottom: 18%;
+    right: 2%;
+    color: #ffe033;
+    font-family: "Press Start 2P", monospace, sans-serif;
+    font-size: clamp(10px, 1.8vw, 16px);
+    text-shadow: 2px 2px 0 #7a5500, -1px -1px 0 #7a5500;
+    transform: rotate(-20deg);
+    transform-origin: center center;
+    max-width: 38%;
+    text-align: center;
+    line-height: 1.5;
+    pointer-events: none;
+    animation: splash-pulse 0.9s ease-in-out infinite alternate;
+}
+
+@keyframes splash-pulse {
+    from { transform: rotate(-20deg) scale(1);    }
+    to   { transform: rotate(-20deg) scale(1.08); }
 }
 
 .main-menu__actions {
