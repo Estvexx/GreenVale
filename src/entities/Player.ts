@@ -27,7 +27,7 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
     private static readonly WALK_FRAME_INTERVAL = 200;
 
     private poleLayer: Phaser.Tilemaps.TilemapLayer | null = null;
-    private clickTarget: { x: number; y: number } | null = null;
+    private clickTarget: { x: number; y: number; onArrive?: () => void } | null = null;
     private static readonly CLICK_ARRIVE_THRESHOLD = 6;
 
     constructor(scene: Phaser.Scene, x: number, y: number, poleLayer: Phaser.Tilemaps.TilemapLayer | null = null) {
@@ -67,6 +67,14 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
         scene.input.on("pointerdown", (pointer: Phaser.Input.Pointer) => {
             if (pointer.rightButtonDown()) return;
             this.clickTarget = { x: pointer.worldX, y: pointer.worldY };
+        });
+
+        scene.input.on("pointermove", (pointer: Phaser.Input.Pointer) => {
+            if (!pointer.isDown || pointer.rightButtonDown()) return;
+            if (this.clickTarget && !this.clickTarget.onArrive) {
+                this.clickTarget.x = pointer.worldX;
+                this.clickTarget.y = pointer.worldY;
+            }
         });
 
         scene.events.once(Phaser.Scenes.Events.SHUTDOWN, () => {
@@ -121,7 +129,9 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
             const dist = Math.sqrt(dx * dx + dy * dy);
 
             if (dist < Player.CLICK_ARRIVE_THRESHOLD) {
+                const cb = this.clickTarget.onArrive;
                 this.clickTarget = null;
+                cb?.();
             } else {
                 this.setVelocityX((dx / dist) * speed);
                 this.setVelocityY((dy / dist) * speed);
@@ -131,6 +141,10 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 
     cancelClickMove() {
         this.clickTarget = null;
+    }
+
+    moveTo(x: number, y: number, onArrive?: () => void) {
+        this.clickTarget = { x, y, onArrive };
     }
 
     private isAnyKeyDown(): boolean {

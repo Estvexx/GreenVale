@@ -8,7 +8,7 @@ export type InteractionZone = {
     portalId?: string;
 };
 
-type ZoneEntry = InteractionZone & {
+export type ZoneEntry = InteractionZone & {
     bounds: Phaser.Geom.Rectangle;
 };
 
@@ -62,6 +62,10 @@ export class InteractionZoneSystem {
 
     containsPoint(x: number, y: number): boolean {
         return this.zones.some(z => z.bounds.contains(x, y));
+    }
+
+    getZoneAt(x: number, y: number): ZoneEntry | null {
+        return this.zones.find(z => z.bounds.contains(x, y)) ?? null;
     }
 
     private getProperties(

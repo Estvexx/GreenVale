@@ -73,9 +73,11 @@ export class FarmScene extends Phaser.Scene {
 
         this.input.on("pointerdown", (pointer: Phaser.Input.Pointer) => {
             if (pointer.rightButtonDown()) return;
-            if (this.interactionZones.containsPoint(pointer.worldX, pointer.worldY)) {
-                this.player.cancelClickMove();
-                this.handleInteraction();
+            const zone = this.interactionZones.getZoneAt(pointer.worldX, pointer.worldY);
+            if (zone) {
+                const cx = zone.bounds.centerX;
+                const cy = zone.bounds.centerY;
+                this.player.moveTo(cx, cy, () => this.handleInteraction());
             }
         });
 
