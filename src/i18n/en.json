@@ -74,6 +74,83 @@
         "close": "Close"
     },
 
+    "manual": {
+        "quick": {
+            "button": "How to play",
+            "eyebrow": "Quick guide",
+            "title": "First steps",
+            "intro": "GreenVale mixes exploration, farming, and combat. This short guide helps you get started without opening the full manual.",
+            "move": "Move with WASD or the arrow keys.",
+            "inventory": "Press E to open the inventory and swap tools.",
+            "interact": "Use F to interact with shops, objects, and special areas.",
+            "footer": "For more details, open the full manual with the button beside it."
+        },
+        "eyebrow": "Quick guide",
+        "title": "User manual",
+        "intro": "Here is the essentials to get started. The manual follows the language chosen in settings.",
+        "keys": {
+            "title": "Keys and shortcuts",
+            "subtitle": "These are the main actions you will use during the game.",
+            "move": "Move the character around the map.",
+            "slots": "Quickly switch between the 8 inventory slots.",
+            "wheel": "Mouse wheel",
+            "inventory": "Open or close the inventory.",
+            "interact": "Interact with objects, shops, and map areas.",
+            "effects": "Open the radial effects menu.",
+            "close": "Close open menus and overlays.",
+            "save": "Save, export, and load the game."
+        },
+        "cards": {
+            "controls": {
+                "title": "Movement and actions",
+                "text": "Use the arrow keys or WASD to move around and interact with the world."
+            },
+            "inventory": {
+                "title": "Inventory",
+                "text": "Organize items, choose tools, and manage what you collected during the game."
+            },
+            "shop": {
+                "title": "Shops",
+                "text": "Buy tools, upgrades, and skins. Purchased skins are saved for later."
+            },
+            "save": {
+                "title": "Saving and export",
+                "text": "Progress is saved automatically in the browser and can also be exported as JSON."
+            }
+        },
+        "tips": {
+            "sync": "Skins and save data stay synchronized with the exported file.",
+            "newGame": "New game restores the base inventory and clears saved progress."
+        },
+        "story": {
+            "eyebrow": "Starter path",
+            "title": "How to play, step by step",
+            "intro": "Follow this order to quickly understand the game. Later you can replace each block with your own gameplay screenshots.",
+            "steps": {
+                "step1": {
+                    "image": "Hardware shop image",
+                    "title": "1. Visit the Hardware Shop",
+                    "text": "Start by learning the Hardware Shop. This is where you find basic tools, buckets, and other important starter items."
+                },
+                "step2": {
+                    "image": "Seeds shop image",
+                    "title": "2. Buy your seed",
+                    "text": "Next go to the Seeds Shop and choose the crop you want to grow. Seeds are the starting point of your production."
+                },
+                "step3": {
+                    "image": "Farming image",
+                    "title": "3. Plant, water, and watch",
+                    "text": "Use the right tool in the field, plant the seed, and water when needed. The crop will grow until it is ready."
+                },
+                "step4": {
+                    "image": "Harvest and selling image",
+                    "title": "4. Harvest, sell, and improve",
+                    "text": "When the crop is ready, harvest it and sell the result. Use coins and boss tokens to buy upgrades, skins, and progression."
+                }
+            }
+        }
+    },
+
     "items": {
         "hoe": {
             "name": "Hoe",

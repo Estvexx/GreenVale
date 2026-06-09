@@ -1,6 +1,11 @@
 import type { InventorySlot } from "./InventoryTypes";
 import type { Effect } from "./Effect";
 
+export type ToolSkinSaveData = {
+    owned: string[];
+    active: Record<number, string>;
+};
+
 export type GameSaveData = {
     version: number;
 
@@ -26,4 +31,6 @@ export type GameSaveData = {
     effects: {
         active: Effect[];
     };
+
+    toolSkins?: ToolSkinSaveData;
 };

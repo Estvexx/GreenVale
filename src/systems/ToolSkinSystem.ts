@@ -1,5 +1,6 @@
 import { TOOL_SKINS } from "../data/ToolSkinDatabase";
 import { MoneySystem } from "./MoneySystem";
+import type { ToolSkinSaveData } from "../types/SaveTypes";
 
 type Listener = () => void;
 
@@ -43,7 +44,7 @@ export class ToolSkinSystem {
 
         const money = MoneySystem.getInstance();
 
-        if (!money.spend("coins", skin.price)) {
+        if (!money.spend("bossTokens", skin.price)) {
             return "no_money";
         }
 
@@ -84,6 +85,29 @@ export class ToolSkinSystem {
 
     isOwned(skinId: string): boolean {
         return this.ownedSkins.has(skinId);
+    }
+
+    getSaveData(): ToolSkinSaveData {
+        return {
+            owned: [...this.ownedSkins],
+            active: { ...this.activeSkins },
+        };
+    }
+
+    loadSaveData(data: ToolSkinSaveData) {
+        this.ownedSkins = new Set(data.owned);
+        this.activeSkins = { ...data.active };
+
+        this.save();
+        this.notify();
+    }
+
+    reset() {
+        this.ownedSkins.clear();
+        this.activeSkins = {};
+
+        this.save();
+        this.notify();
     }
 
     onChange(callback: Listener) {

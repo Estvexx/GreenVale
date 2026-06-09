@@ -1,0 +1,257 @@
+<div id="manual-help" class="manual-help">
+    <button
+        id="manual-quick-btn"
+        class="manual-help__quick hidden"
+        type="button"
+        data-i18n="manual.quick.button"
+    >
+        Como jogar
+    </button>
+
+    <button
+        id="manual-help-btn"
+        class="manual-help__toggle hidden"
+        type="button"
+        aria-label="Abrir manual"
+    >
+        ?
+    </button>
+
+    <div id="manual-help-overlay" class="manual-help__overlay hidden">
+        <section
+            class="manual-help__panel"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="manual-help-title"
+        >
+            <button
+                id="manual-help-close"
+                class="manual-help__close"
+                type="button"
+                aria-label="Fechar manual"
+            >
+                ×
+            </button>
+
+            <div class="manual-help__header">
+                <span class="manual-help__mark">?</span>
+
+                <div class="manual-help__heading">
+                    <p class="manual-help__eyebrow" data-i18n="manual.eyebrow"></p>
+                    <h2
+                        id="manual-help-title"
+                        class="manual-help__title"
+                        data-i18n="manual.title"
+                    ></h2>
+                </div>
+            </div>
+
+            <p class="manual-help__intro" data-i18n="manual.intro"></p>
+
+            <div class="manual-help__keys">
+                <div class="manual-help__keys-header">
+                    <h3 data-i18n="manual.keys.title"></h3>
+                    <p data-i18n="manual.keys.subtitle"></p>
+                </div>
+
+                <div class="manual-help__keys-list">
+                    <div class="manual-help__key-row">
+                        <div class="manual-help__key-group">
+                            <span class="manual-help__key">WASD</span>
+                            <span class="manual-help__key manual-help__key--alt">
+                                ← ↑ → ↓
+                            </span>
+                        </div>
+                        <p data-i18n="manual.keys.move"></p>
+                    </div>
+
+                    <div class="manual-help__key-row">
+                        <div class="manual-help__key-group">
+                            <span class="manual-help__key">1-8</span>
+                            <span
+                                class="manual-help__key manual-help__key--alt"
+                                data-i18n="manual.keys.wheel"
+                            ></span>
+                        </div>
+                        <p data-i18n="manual.keys.slots"></p>
+                    </div>
+
+                    <div class="manual-help__key-row">
+                        <div class="manual-help__key-group">
+                            <span class="manual-help__key">E</span>
+                        </div>
+                        <p data-i18n="manual.keys.inventory"></p>
+                    </div>
+
+                    <div class="manual-help__key-row">
+                        <div class="manual-help__key-group">
+                            <span class="manual-help__key">F</span>
+                        </div>
+                        <p data-i18n="manual.keys.interact"></p>
+                    </div>
+
+                    <div class="manual-help__key-row">
+                        <div class="manual-help__key-group">
+                            <span class="manual-help__key">Q</span>
+                        </div>
+                        <p data-i18n="manual.keys.effects"></p>
+                    </div>
+
+                    <div class="manual-help__key-row">
+                        <div class="manual-help__key-group">
+                            <span class="manual-help__key">ESC</span>
+                        </div>
+                        <p data-i18n="manual.keys.close"></p>
+                    </div>
+
+                    <div class="manual-help__key-row">
+                        <div class="manual-help__key-group">
+                            <span class="manual-help__key">K</span>
+                            <span class="manual-help__key">M</span>
+                            <span class="manual-help__key">L</span>
+                        </div>
+                        <p data-i18n="manual.keys.save"></p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="manual-help__grid">
+                <article class="manual-help__card">
+                    <h3 data-i18n="manual.cards.controls.title"></h3>
+                    <p data-i18n="manual.cards.controls.text"></p>
+                </article>
+
+                <article class="manual-help__card">
+                    <h3 data-i18n="manual.cards.inventory.title"></h3>
+                    <p data-i18n="manual.cards.inventory.text"></p>
+                </article>
+
+                <article class="manual-help__card">
+                    <h3 data-i18n="manual.cards.shop.title"></h3>
+                    <p data-i18n="manual.cards.shop.text"></p>
+                </article>
+
+                <article class="manual-help__card">
+                    <h3 data-i18n="manual.cards.save.title"></h3>
+                    <p data-i18n="manual.cards.save.text"></p>
+                </article>
+            </div>
+
+            <div class="manual-help__tips">
+                <p class="manual-help__tip" data-i18n="manual.tips.sync"></p>
+                <p class="manual-help__tip" data-i18n="manual.tips.newGame"></p>
+            </div>
+
+            <section class="manual-help__story">
+                <div class="manual-help__story-header">
+                    <p class="manual-help__eyebrow" data-i18n="manual.story.eyebrow"></p>
+                    <h3 data-i18n="manual.story.title"></h3>
+                    <p data-i18n="manual.story.intro"></p>
+                </div>
+
+                <div class="manual-help__story-steps">
+                    <article class="manual-help__story-step">
+                        <div class="manual-help__story-media">
+                            <img
+                                src="assets/images/tutorial/Loja_Ferragens.png"
+                                alt="Loja de Ferragens"
+                            />
+                        </div>
+                        <div class="manual-help__story-content">
+                            <span class="manual-help__story-number">1</span>
+                            <h4 data-i18n="manual.story.steps.step1.title"></h4>
+                            <p data-i18n="manual.story.steps.step1.text"></p>
+                        </div>
+                    </article>
+
+                    <article class="manual-help__story-step">
+                        <div class="manual-help__story-media">
+                            <img
+                                src="assets/images/tutorial/Loja_Sementes.png"
+                                alt="Loja de Sementes"
+                            />
+                        </div>
+                        <div class="manual-help__story-content">
+                            <span class="manual-help__story-number">2</span>
+                            <h4 data-i18n="manual.story.steps.step2.title"></h4>
+                            <p data-i18n="manual.story.steps.step2.text"></p>
+                        </div>
+                    </article>
+
+                    <article class="manual-help__story-step">
+                        <div class="manual-help__story-media">
+                            <img
+                                src="assets/images/tutorial/Plantacao.png"
+                                alt="Plantação"
+                            />
+                        </div>
+                        <div class="manual-help__story-content">
+                            <span class="manual-help__story-number">3</span>
+                            <h4 data-i18n="manual.story.steps.step3.title"></h4>
+                            <p data-i18n="manual.story.steps.step3.text"></p>
+                        </div>
+                    </article>
+
+                    <article class="manual-help__story-step">
+                        <div class="manual-help__story-media">
+                            <img
+                                src="assets/images/tutorial/Loja_Venda.png"
+                                alt="Loja de Venda"
+                            />
+                        </div>
+                        <div class="manual-help__story-content">
+                            <span class="manual-help__story-number">4</span>
+                            <h4 data-i18n="manual.story.steps.step4.title"></h4>
+                            <p data-i18n="manual.story.steps.step4.text"></p>
+                        </div>
+                    </article>
+                </div>
+            </section>
+        </section>
+    </div>
+
+    <div id="manual-quick-overlay" class="manual-help__quick-overlay hidden">
+        <section
+            class="manual-help__quick-panel"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="manual-quick-title"
+        >
+            <button
+                id="manual-quick-close"
+                class="manual-help__close"
+                type="button"
+                aria-label="Fechar guia rápido"
+            >
+                ×
+            </button>
+
+            <p class="manual-help__eyebrow" data-i18n="manual.quick.eyebrow"></p>
+            <h2
+                id="manual-quick-title"
+                class="manual-help__title"
+                data-i18n="manual.quick.title"
+            ></h2>
+            <p class="manual-help__intro" data-i18n="manual.quick.intro"></p>
+
+            <div class="manual-help__quick-grid">
+                <article class="manual-help__quick-card">
+                    <span class="manual-help__quick-key">WASD</span>
+                    <p data-i18n="manual.quick.move"></p>
+                </article>
+
+                <article class="manual-help__quick-card">
+                    <span class="manual-help__quick-key">E</span>
+                    <p data-i18n="manual.quick.inventory"></p>
+                </article>
+
+                <article class="manual-help__quick-card">
+                    <span class="manual-help__quick-key">F</span>
+                    <p data-i18n="manual.quick.interact"></p>
+                </article>
+            </div>
+
+            <p class="manual-help__quick-footer" data-i18n="manual.quick.footer"></p>
+        </section>
+    </div>
+</div>
