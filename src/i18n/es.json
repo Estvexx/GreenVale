@@ -74,6 +74,14 @@
         "close": "Cerrar"
     },
 
+    "save": {
+        "errors": {
+            "importInvalid": "Error al importar el save. Formato inválido.",
+            "LoadError": "Error al cargar el save.",
+            "ReadFileError": "Error al leer el archivo."
+        }
+    },
+
     "manual": {
         "quick": {
             "button": "Cómo jugar",

@@ -7,11 +7,8 @@ export class BossEnvironmentFX {
 
     constructor(scene: Phaser.Scene) {
         this.scene = scene;
-        console.log("BossEnvironmentFX ativo");
-
         this.createRedOverlay();
         this.createLavaParticles();
-        console.log(this.scene.textures.exists("particle_red"));
     }
 
     private createRedOverlay() {
@@ -93,4 +90,3 @@ export class BossEnvironmentFX {
         this.particles.setDepth(10000);
     }
 }
-    
