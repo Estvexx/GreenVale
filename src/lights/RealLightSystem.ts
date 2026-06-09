@@ -58,11 +58,6 @@ export class RealLightSystem {
     }
 
     private createLights() {
-        console.log(
-            "Luzes encontradas:",
-            this.mapManager.getLightObjects().length,
-        );
-
         this.mapManager.getLightObjects().forEach((obj) => {
             const x = (obj.x ?? 0) + (obj.width ?? 0) / 2;
             const y = (obj.y ?? 0) + (obj.height ?? 0) / 2;

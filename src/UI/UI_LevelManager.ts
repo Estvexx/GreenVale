@@ -35,7 +35,7 @@ export class UI_LevelManager {
             this.playLevelUpAnimation(level);
         }
 
-        this.levelText.textContent = `Farm Lv. ${level}`;
+        this.levelText.textContent = t("level.label").replace("{level}", String(level));
         this.xpText.textContent = `${xp} / ${requiredXp} XP`;
         this.xpFill.style.width = `${percentage}%`;
 

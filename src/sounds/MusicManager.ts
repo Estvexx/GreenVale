@@ -29,7 +29,16 @@ export class MusicManager {
             volume,
         });
 
-        this.currentMusic.play();
+        const ctx = (scene.sound as Phaser.Sound.WebAudioSoundManager).context;
+        if (ctx?.state === "suspended") {
+            ctx.resume().then(() => this.currentMusic?.play());
+        } else {
+            this.currentMusic.play();
+        }
+    }
+
+    static isPlaying(): boolean {
+        return this.currentMusic?.isPlaying ?? false;
     }
 
     static pause(): void {

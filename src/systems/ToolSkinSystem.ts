@@ -1,5 +1,6 @@
 import { TOOL_SKINS } from "../data/ToolSkinDatabase";
 import { MoneySystem } from "./MoneySystem";
+import { SaveSystem } from "./SaveSystem";
 import type { ToolSkinSaveData } from "../types/SaveTypes";
 
 type Listener = () => void;
@@ -51,7 +52,7 @@ export class ToolSkinSystem {
         this.ownedSkins.add(skinId);
         this.applySkin(skinId);
 
-        this.save();
+        SaveSystem.save();
         this.notify();
 
         return "success";
@@ -65,7 +66,7 @@ export class ToolSkinSystem {
 
         this.applySkin(skinId);
 
-        this.save();
+        SaveSystem.save();
         this.notify();
 
         return true;
@@ -98,7 +99,6 @@ export class ToolSkinSystem {
         this.ownedSkins = new Set(data.owned);
         this.activeSkins = { ...data.active };
 
-        this.save();
         this.notify();
     }
 
@@ -106,12 +106,12 @@ export class ToolSkinSystem {
         this.ownedSkins.clear();
         this.activeSkins = {};
 
-        this.save();
         this.notify();
     }
 
-    onChange(callback: Listener) {
+    onChange(callback: Listener): () => void {
         this.listeners.push(callback);
+        return () => { this.listeners = this.listeners.filter(l => l !== callback); };
     }
 
     private applySkin(skinId: string) {
@@ -124,11 +124,6 @@ export class ToolSkinSystem {
 
     private notify() {
         this.listeners.forEach((callback) => callback());
-    }
-
-    private save() {
-        localStorage.setItem(OWNED_KEY, JSON.stringify([...this.ownedSkins]));
-        localStorage.setItem(ACTIVE_KEY, JSON.stringify(this.activeSkins));
     }
 
     private load() {

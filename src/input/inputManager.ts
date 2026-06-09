@@ -52,7 +52,15 @@ export class InputManager {
             this.inventory.toggleInventory();
         });
 
+        const settingsMenu = document.getElementById("settings-menu")!;
+        const closeSettings = document.getElementById("close-settings")!;
+
         this.scene.input.keyboard?.on("keydown-ESC", () => {
+            if (UIRoot.closeTopmost()) return;
+            if (!settingsMenu.classList.contains("hidden")) {
+                closeSettings.click();
+                return;
+            }
             this.inventory.closeInventory();
         });
     }

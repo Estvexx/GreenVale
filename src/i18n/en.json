@@ -14,7 +14,8 @@
         "red": "Red",
         "purple": "Purple",
         "screen": "Screen",
-        "fullscreen": "Fullscreen"
+        "fullscreen": "Fullscreen",
+        "clickMove": "Click to move"
     },
 
     "effectShop": {
@@ -36,6 +37,11 @@
             "maxSlots": "Limit reached!",
             "noItem": "You don't have that item!"
         },
+        "skinApplied": "Skin applied!",
+        "alreadyHave": "You already have this tool!",
+        "skinUnavailable": "Skin unavailable.",
+        "select": "Select",
+        "skinBought": "Skin purchased!",
 
         "names": {
             "ferragens": "Hardware",
@@ -246,6 +252,7 @@
         }
     },
     "level": {
+        "label": "Farm Lv. {level}",
         "up": "You leveled up to Farm Lv. {level}!"
     },
 
@@ -272,7 +279,11 @@
     },
     "hud": {
         "saved": "Game saved successfully",
-        "exported": "Save exported"
+        "exported": "Save exported",
+        "growth": "Growth",
+        "growthNormal": "Normal",
+        "growthSlow": "Slow (-3×)",
+        "interact": "Press F to interact"
     },
     "mainMenu": {
         "play": "Play / Continue",
@@ -284,5 +295,20 @@
     "loading": {
         "loading": "Loading...",
         "done": "Done!"
+    },
+    "well": {
+        "needBucket": "You need an empty bucket.",
+        "noItem": "No item equipped.",
+        "failed": "Could not fill the bucket."
+    },
+    "seedPicker": {
+        "title": "Choose a seed",
+        "cancel": "Cancel"
+    },
+    "toolSkins": {
+        "hoeGold": { "name": "Golden Hoe" },
+        "scytheGold": { "name": "Golden Scythe" },
+        "bucketBlue": { "name": "Blue Bucket" },
+        "bucketLava": { "name": "Lava Bucket" }
     }
 }

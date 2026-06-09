@@ -20,12 +20,14 @@ export class InventorySystem {
     private inventoryListeners: Listener[] = [];
     private selectionListeners: Listener[] = [];
 
-    onInventoryChange(cb: Listener) {
+    onInventoryChange(cb: Listener): () => void {
         this.inventoryListeners.push(cb);
+        return () => { this.inventoryListeners = this.inventoryListeners.filter(l => l !== cb); };
     }
 
-    onSelectionChange(cb: Listener) {
+    onSelectionChange(cb: Listener): () => void {
         this.selectionListeners.push(cb);
+        return () => { this.selectionListeners = this.selectionListeners.filter(l => l !== cb); };
     }
 
     private emitInventoryChange() {

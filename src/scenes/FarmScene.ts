@@ -19,6 +19,7 @@ import { changeScene } from "../utils/changeScene";
 import { FarmingSystem } from "../systems/FarmingSystem";
 import { RealLightSystem } from "../lights/RealLightSystem";
 import { LevelSystem } from "../systems/LevelSystem";
+import { t } from "../i18n";
 
 export class FarmScene extends Phaser.Scene {
     public player!: Player;
@@ -70,6 +71,20 @@ export class FarmScene extends Phaser.Scene {
             mapManager,
         );
 
+        this.input.on("pointerdown", (pointer: Phaser.Input.Pointer) => {
+            if (pointer.rightButtonDown()) return;
+            const zone = this.interactionZones.getZoneAt(pointer.worldX, pointer.worldY);
+            if (zone) {
+                const cx = zone.bounds.centerX;
+                const cy = zone.bounds.centerY;
+                if (localStorage.getItem("clickMoveEnabled") === "false") {
+                    this.handleInteraction();
+                } else {
+                    this.player.moveTo(cx, cy, () => this.handleInteraction());
+                }
+            }
+        });
+
         new CollisionSystem(this, this.player, mapManager);
 
         new CameraManager(this, this.player, mapManager.map);
@@ -77,6 +92,10 @@ export class FarmScene extends Phaser.Scene {
 
         MusicManager.play(this, "farmScene_music", 0.05);
         SoundManager.setScene(this);
+
+        this.events.once(Phaser.Scenes.Events.SHUTDOWN, () => {
+            MusicManager.stop();
+        });
     }
 
     update(time: number, delta: number) {
@@ -85,7 +104,6 @@ export class FarmScene extends Phaser.Scene {
         this.environmentFX.update(delta);
 
         this.interactionZones.update();
-        this.updateInteractionTooltip();
 
         this.realLights.update();
 
@@ -93,7 +111,10 @@ export class FarmScene extends Phaser.Scene {
             this.interactionZones.isInsideZone() ||
             this.farmingSystem.canWaterHere(this.player.x, this.player.y);
 
-        this.tooltip.classList.toggle("hidden", !showTooltip);
+        if (this.tooltipVisible !== showTooltip) {
+            this.tooltipVisible = showTooltip;
+            this.tooltip.classList.toggle("hidden", !showTooltip);
+        }
 
         this.effects.update();
         this.farmingSystem.update(time, this.player.x, this.player.y);
@@ -102,14 +123,23 @@ export class FarmScene extends Phaser.Scene {
     private fillBucket() {
         const item = this.inventory.getCurrentItem();
 
-        if (!item) return;
-        if (item.id !== ITEM_IDS.BUCKET_EMPTY) return;
+        if (!item) {
+            UIRoot.toast.error(t("well.noItem"));
+            return;
+        }
+        if (item.id !== ITEM_IDS.BUCKET_EMPTY) {
+            UIRoot.toast.error(t("well.needBucket"));
+            return;
+        }
 
         const converted = this.inventory.convertOneCurrentItem(
             ITEM_IDS.BUCKET_WATER,
         );
 
-        if (!converted) return;
+        if (!converted) {
+            UIRoot.toast.error(t("well.failed"));
+            return;
+        }
 
         LevelSystem.getInstance().addXp(1);
         UIRoot.toast.info("+1 XP");
@@ -154,17 +184,4 @@ export class FarmScene extends Phaser.Scene {
         this.farmingSystem.interact(this.player.x, this.player.y);
     }
 
-    private updateInteractionTooltip() {
-        const isInsideZone = this.interactionZones.isInsideZone();
-
-        if (this.tooltipVisible === isInsideZone) return;
-
-        this.tooltipVisible = isInsideZone;
-
-        if (isInsideZone) {
-            this.tooltip.classList.remove("hidden");
-        } else {
-            this.tooltip.classList.add("hidden");
-        }
-    }
 }

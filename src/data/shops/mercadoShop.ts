@@ -8,37 +8,37 @@ export const MERCADO_SHOP: Shop = {
     items: [
         {
             id: 20,
-            price: 75,
+            price: 70,
             currency: "coins",
             amount: 1,
         },
         {
             id: 21,
-            price: 75,
+            price: 90,
             currency: "coins",
             amount: 1,
         },
         {
             id: 22,
-            price: 75,
+            price: 130,
             currency: "coins",
             amount: 1,
         },
         {
             id: 23,
-            price: 75,
+            price: 100,
             currency: "coins",
             amount: 1,
         },
         {
             id: 24,
-            price: 75,
+            price: 160,
             currency: "coins",
             amount: 1,
         },
         {
             id: 25,
-            price: 75,
+            price: 55,
             currency: "coins",
             amount: 1,
         },

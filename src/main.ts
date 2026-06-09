@@ -4,6 +4,7 @@ import { PreloaderScene } from "./scenes/PreloaderScene";
 import { MainMenuScene } from "./scenes/MainMenuScene";
 import { FarmScene } from "./scenes/FarmScene";
 import { BossScene } from "./scenes/BossScene";
+import { MenuBackgroundScene } from "./scenes/MenuBackgroundScene";
 
 const config: Phaser.Types.Core.GameConfig = {
     //type: Phaser.AUTO,
@@ -30,7 +31,7 @@ const config: Phaser.Types.Core.GameConfig = {
         },
     },
 
-    scene: [BootScene, PreloaderScene, MainMenuScene, FarmScene, BossScene],
+    scene: [BootScene, PreloaderScene, MenuBackgroundScene, MainMenuScene, FarmScene, BossScene],
 };
 
 export default new Phaser.Game(config);

@@ -14,7 +14,8 @@
         "red": "Vermelho",
         "purple": "Roxo",
         "screen": "Ecrã",
-        "fullscreen": "Ecrã Completo"
+        "fullscreen": "Ecrã Completo",
+        "clickMove": "Mover com clique"
     },
 
     "effectShop": {
@@ -36,6 +37,11 @@
             "maxSlots": "Limite atingido!",
             "noItem": "Não tens esse item!"
         },
+        "skinApplied": "Skin aplicada!",
+        "alreadyHave": "Já tens esta ferramenta!",
+        "skinUnavailable": "Skin indisponível.",
+        "select": "Selecionar",
+        "skinBought": "Skin comprada!",
 
         "names": {
             "ferragens": "Ferragens",
@@ -246,6 +252,7 @@
         }
     },
     "level": {
+        "label": "Farm Lv. {level}",
         "up": "Subiste para Farm Lv. {level}!"
     },
 
@@ -273,7 +280,11 @@
     },
     "hud": {
         "saved": "Jogo guardado com sucesso",
-        "exported": "Save exportado"
+        "exported": "Save exportado",
+        "growth": "Crescimento",
+        "growthNormal": "Normal",
+        "growthSlow": "Lento (-3×)",
+        "interact": "Pressiona F para interagir"
     },
     "mainMenu": {
         "play": "Jogar / Continuar",
@@ -285,5 +296,20 @@
     "loading": {
         "loading": "A carregar...",
         "done": "Pronto!"
+    },
+    "well": {
+        "needBucket": "Precisas de um balde vazio.",
+        "noItem": "Não tens nenhum item equipado.",
+        "failed": "Não foi possível encher o balde."
+    },
+    "seedPicker": {
+        "title": "Escolhe uma semente",
+        "cancel": "Cancelar"
+    },
+    "toolSkins": {
+        "hoeGold": { "name": "Enxada Dourada" },
+        "scytheGold": { "name": "Foice Dourada" },
+        "bucketBlue": { "name": "Balde Azul" },
+        "bucketLava": { "name": "Balde de Lava" }
     }
 }

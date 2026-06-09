@@ -17,16 +17,16 @@ export const TOOL_SKINS: Record<string, ToolSkin> = {
         name: "Enxada Dourada",
         nameKey: "toolSkins.hoeGold.name",
         price: 100,
-        icon: "assets/images/tools/skins/Enxada_SKIN.png",
+        icon: "assets/images/tools/Skins/Enxada_SKIN.png",
     },
 
     scythe_gold: {
         id: "scythe_gold",
         targetItemIds: [2],
         name: "Foice Dourada",
-        nameKey: "toolSkins.scytheRed.name",
+        nameKey: "toolSkins.scytheGold.name",
         price: 100,
-        icon: "assets/images/tools/skins/Foice_SKIN.png",
+        icon: "assets/images/tools/Skins/Foice_SKIN.png",
     },
 
     bucket_gold: {
@@ -37,9 +37,9 @@ export const TOOL_SKINS: Record<string, ToolSkin> = {
         price: 100,
         icons: {
             [ITEM_IDS.BUCKET_EMPTY]:
-                "assets/images/tools/skins/Balde_Vazio_SKIN1.png",
+                "assets/images/tools/Skins/Balde_Vazio_SKIN1.png",
             [ITEM_IDS.BUCKET_WATER]:
-                "assets/images/tools/skins/Balde_Agua_SKIN1.png",
+                "assets/images/tools/Skins/Balde_Agua_SKIN1.png",
         },
     },
 
@@ -47,13 +47,13 @@ export const TOOL_SKINS: Record<string, ToolSkin> = {
         id: "bucket_lava",
         targetItemIds: [ITEM_IDS.BUCKET_EMPTY, ITEM_IDS.BUCKET_WATER],
         name: "Balde Lava",
-        nameKey: "toolSkins.bucketBlue.name",
+        nameKey: "toolSkins.bucketLava.name",
         price: 100,
         icons: {
             [ITEM_IDS.BUCKET_EMPTY]:
-                "assets/images/tools/skins/Balde_Vazio_SKIN2.png",
+                "assets/images/tools/Skins/Balde_Vazio_SKIN2.png",
             [ITEM_IDS.BUCKET_WATER]:
-                "assets/images/tools/skins/Balde_Agua_SKIN2.png",
+                "assets/images/tools/Skins/Balde_Agua_SKIN2.png",
         },
     },
 };

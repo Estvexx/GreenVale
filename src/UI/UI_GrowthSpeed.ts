@@ -1,4 +1,5 @@
 import { TimeSystem } from "../systems/TimeSystem";
+import { t } from "../i18n";
 
 export class UI_GrowthSpeed {
     private clock   = TimeSystem.getInstance();
@@ -15,7 +16,7 @@ export class UI_GrowthSpeed {
         const h       = this.clock.getHour();
         const isNight = h >= 21 || h < 6;
 
-        this.label.textContent = isNight ? "Lento (-3×)" : "Normal";
+        this.label.textContent = isNight ? t("hud.growthSlow") : t("hud.growthNormal");
         this.label.className   = isNight ? "slow" : "normal";
     }
 }

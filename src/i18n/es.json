@@ -14,7 +14,8 @@
         "red": "Rojo",
         "purple": "Morado",
         "screen": "Pantalla",
-        "fullscreen": "Pantalla Completa"
+        "fullscreen": "Pantalla Completa",
+        "clickMove": "Mover con clic"
     },
 
     "effectShop": {
@@ -36,6 +37,11 @@
             "maxSlots": "¡Límite alcanzado!",
             "noItem": "¡No tienes ese objeto!"
         },
+        "skinApplied": "¡Skin aplicada!",
+        "alreadyHave": "¡Ya tienes esta herramienta!",
+        "skinUnavailable": "Skin no disponible.",
+        "select": "Seleccionar",
+        "skinBought": "¡Skin comprada!",
 
         "names": {
             "ferragens": "Ferretería",
@@ -246,6 +252,7 @@
         }
     },
     "level": {
+        "label": "Farm Lv. {level}",
         "up": "¡Subiste a Farm Lv. {level}!"
     },
 
@@ -272,7 +279,11 @@
     },
     "hud": {
         "saved": "Juego guardado con éxito",
-        "exported": "Guardado exportado"
+        "exported": "Guardado exportado",
+        "growth": "Crecimiento",
+        "growthNormal": "Normal",
+        "growthSlow": "Lento (-3×)",
+        "interact": "Pulsa F para interactuar"
     },
     "mainMenu": {
         "play": "Jugar / Continuar",
@@ -284,5 +295,20 @@
     "loading": {
         "loading": "Cargando...",
         "done": "¡Listo!"
+    },
+    "well": {
+        "needBucket": "Necesitas un cubo vacío.",
+        "noItem": "No tienes ningún objeto equipado.",
+        "failed": "No se pudo llenar el cubo."
+    },
+    "seedPicker": {
+        "title": "Elige una semilla",
+        "cancel": "Cancelar"
+    },
+    "toolSkins": {
+        "hoeGold": { "name": "Azada Dorada" },
+        "scytheGold": { "name": "Guadaña Dorada" },
+        "bucketBlue": { "name": "Cubo Azul" },
+        "bucketLava": { "name": "Cubo de Lava" }
     }
 }

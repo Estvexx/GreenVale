@@ -20,7 +20,6 @@ export class UI_ManualManager {
         this.quickOverlay =
             document.getElementById("manual-quick-overlay") ?? undefined;
 
-        quickButton?.classList.remove("hidden");
         openButton?.classList.remove("hidden");
 
         quickButton?.addEventListener("click", () => this.openQuick());

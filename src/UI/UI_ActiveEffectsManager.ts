@@ -17,13 +17,10 @@ export class UI_ActiveEffectsManager {
 
     constructor() {
         this.effects.onChange(() => this.render());
+        this.effects.onTick(() => this.render());
         this.panel.classList.remove("hidden");
 
         this.render();
-
-        setInterval(() => {
-            this.render();
-        }, 1000);
     }
 
     private render() {

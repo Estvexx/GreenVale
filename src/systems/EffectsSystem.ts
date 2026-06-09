@@ -16,13 +16,25 @@ export class EffectSystem {
     private effects: Effect[] = [];
 
     private listeners: Listener[] = [];
+    private tickListeners: Listener[] = [];
+    private lastTickSecond = -1;
 
-    onChange(cb: Listener) {
+    onChange(cb: Listener): () => void {
         this.listeners.push(cb);
+        return () => { this.listeners = this.listeners.filter(l => l !== cb); };
+    }
+
+    onTick(cb: Listener): () => void {
+        this.tickListeners.push(cb);
+        return () => { this.tickListeners = this.tickListeners.filter(l => l !== cb); };
     }
 
     private emitChange() {
         this.listeners.forEach((cb) => cb());
+    }
+
+    private emitTick() {
+        this.tickListeners.forEach((cb) => cb());
     }
 
     addEffect(effect: Effect) {
@@ -63,19 +75,22 @@ export class EffectSystem {
 
     update() {
         const now = Date.now();
+        const currentSecond = Math.floor(now / 1000);
 
         const before = this.effects.length;
 
         this.effects = this.effects.filter((effect) => {
-            if (effect.permanent) {
-                return true;
-            }
-
+            if (effect.permanent) return true;
             return effect.expiresAt !== undefined && effect.expiresAt > now;
         });
 
         if (before !== this.effects.length) {
             this.emitChange();
+        }
+
+        if (currentSecond !== this.lastTickSecond && this.effects.some(e => !e.permanent)) {
+            this.lastTickSecond = currentSecond;
+            this.emitTick();
         }
     }
 

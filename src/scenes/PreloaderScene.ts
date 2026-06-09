@@ -60,12 +60,13 @@ export class PreloaderScene extends Phaser.Scene {
             loadingText.setText(t("loading.done"));
 
             this.time.delayedCall(100, () => {
-                console.log("A iniciar MainMenuScene...");
                 this.scene.start("MainMenuScene");
             });
         });
 
         // ============ ASSETS ============
+
+        this.load.image("menu_background", "assets/images/menu_background.png");
 
         // Player skins
         const skins = ["skin_a", "skin_b", "skin_c", "skin_d"];
@@ -79,17 +80,6 @@ export class PreloaderScene extends Phaser.Scene {
                 `assets/images/players/player_walk1_${skin}.png`,
             );
         }
-
-        // Ferramentas
-        /* this.load.image("enxada", "assets/images/tools/Enxada.png");
-        this.load.image("balde_vazio", "assets/images/tools/Balde_Vazio.png");
-        this.load.image("foice", "assets/images/tools/Foice.png");
-        this.load.image("balde_agua", "assets/images/tools/Balde_Agua.png");
-        this.load.image("espada_1", "assets/images/tools/Espada_1.png");
-        this.load.image("espada_2", "assets/images/tools/Espada_2.png");
-        this.load.image("espada_3", "assets/images/tools/Espada_3.png");
-        this.load.image("espada_4", "assets/images/tools/Espada_4.png");
-        this.load.image("espada_5", "assets/images/tools/Espada_5.png"); */
 
         // Tudo relacionado ao mapa farmscene
         this.load.tilemapTiledJSON("mapa", "assets/map/mapa.tmj");
@@ -133,12 +123,6 @@ export class PreloaderScene extends Phaser.Scene {
             frameWidth: 32,
             frameHeight: 32,
         });
-
-        // Relacionado a plantação
-        /*  this.load.spritesheet("frutas", "assets/images/Fruits.png", {
-            frameWidth: 32,
-            frameHeight: 32,
-        }); */
 
         const cropTypes = [
             "grapes",

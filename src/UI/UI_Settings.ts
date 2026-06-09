@@ -1,6 +1,7 @@
 import Phaser from "phaser";
 import { MusicManager } from "../sounds/MusicManager.ts";
 import { SoundManager } from "../sounds/SoundsManager.ts";
+import { setLanguage } from "../i18n/index.ts";
 import type { Player } from "../entities/Player.ts";
 
 type SettingsScene = Phaser.Scene & {
@@ -22,6 +23,9 @@ export class SettingsUI {
     ) as HTMLInputElement;
     private fullscreenToggle = document.getElementById(
         "toggle-fullscreen",
+    ) as HTMLInputElement;
+    private clickMoveToggle = document.getElementById(
+        "toggle-click-move",
     ) as HTMLInputElement;
 
     private langButtons = document.querySelectorAll<HTMLElement>(".lang-btn");
@@ -60,6 +64,10 @@ export class SettingsUI {
 
         this.soundsToggle.onchange = () => {
             SoundManager.setEnabled(this.soundsToggle.checked);
+        };
+
+        this.clickMoveToggle.onchange = () => {
+            localStorage.setItem("clickMoveEnabled", String(this.clickMoveToggle.checked));
         };
 
         this.fullscreenToggle.onchange = () => {
@@ -123,10 +131,7 @@ export class SettingsUI {
 
         const lang = btn.dataset.lang!;
 
-        import("../i18n/index.ts").then(({ setLanguage }) => {
-            setLanguage(lang);
-        });
-
+        setLanguage(lang);
         localStorage.setItem("language", lang);
     }
 
@@ -190,6 +195,9 @@ export class SettingsUI {
 
         const soundsEnabled = localStorage.getItem("soundsEnabled") !== "false";
         this.soundsToggle.checked = soundsEnabled;
+
+        const clickMoveEnabled = localStorage.getItem("clickMoveEnabled") !== "false";
+        this.clickMoveToggle.checked = clickMoveEnabled;
 
         this.syncFullscreenToggle();
     }

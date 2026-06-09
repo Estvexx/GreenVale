@@ -7,6 +7,7 @@ import { renderItemIcon } from "../utils/renderItemIcon";
 import { UIRoot } from "./UIRoot";
 import { t } from "../i18n/index";
 import { SoundManager } from "../sounds/SoundsManager";
+import { EffectSystem } from "../systems/EffectsSystem";
 
 export class UI_ShopManager {
     private system = ShopSystem.getInstance();
@@ -23,8 +24,9 @@ export class UI_ShopManager {
         inventory_full: "shop.messages.inventoryFull",
         max_slots: "shop.messages.maxSlots",
         no_item: "shop.messages.noItem",
-        already_owned: "Skin aplicada!",
-        invalid_skin: "Skin indisponível.",
+        already_owned: "shop.skinApplied",
+        already_have: "shop.alreadyHave",
+        invalid_skin: "shop.skinUnavailable",
     };
 
     private readonly currencyIcons: Record<string, string> = {
@@ -48,6 +50,10 @@ export class UI_ShopManager {
         this.title.textContent = shop.nameKey ? t(shop.nameKey) : shop.name;
 
         this.render(shop);
+    }
+
+    isVisible(): boolean {
+        return !this.overlay.classList.contains("hidden");
     }
 
     close() {
@@ -97,6 +103,12 @@ export class UI_ShopManager {
                 ? ToolSkinSystem.getInstance().isOwned(item.skinId)
                 : false;
 
+            const discount = shop.id === "sementes" ? EffectSystem.getInstance().getSeedDiscountMultiplier() : 1;
+            const displayPrice = Math.floor(item.price * discount);
+            const priceHtml = discount < 1
+                ? `${displayPrice} <span style="text-decoration:line-through;opacity:0.45;font-size:0.8em;margin-left:4px">${item.price}</span>`
+                : `${displayPrice}`;
+
             div.innerHTML = `
                 <div class="shop-item-info">
                     <div class="shop-item-name">${itemName}</div>
@@ -107,7 +119,7 @@ export class UI_ShopManager {
                             alt="${item.currency}"
                             class="price-icon"
                         />
-                        ${item.price}
+                        ${priceHtml}
                     </div>
                 </div>
 
@@ -124,7 +136,7 @@ export class UI_ShopManager {
                         `
                         : `
                             <button class="shop-item-btn buy-btn">
-                                ${isOwnedSkin ? "Selecionar" : t("shop.buy")}
+                                ${isOwnedSkin ? t("shop.select") : t("shop.buy")}
                             </button>
                         `
                 }
@@ -145,7 +157,7 @@ export class UI_ShopManager {
                 if (result !== "success") {
                     if (result === "already_owned") {
                         this.render(shop);
-                        UIRoot.toast.info("Skin aplicada!");
+                        UIRoot.toast.info(t("shop.skinApplied"));
                         return;
                     }
 
@@ -156,7 +168,7 @@ export class UI_ShopManager {
                 this.render(shop);
                 UIRoot.toast.success(
                     shop.id === "upgrades"
-                        ? "Skin comprada!"
+                        ? t("shop.skinBought")
                         : t(this.messages.success_buy),
                 );
 

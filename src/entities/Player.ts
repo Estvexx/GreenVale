@@ -27,6 +27,9 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
     private static readonly WALK_FRAME_INTERVAL = 200;
 
     private poleLayer: Phaser.Tilemaps.TilemapLayer | null = null;
+    private lastFadedTiles: Phaser.Tilemaps.Tile[] = [];
+    private clickTarget: { x: number; y: number; onArrive?: () => void } | null = null;
+    private static readonly CLICK_ARRIVE_THRESHOLD = 6;
 
     constructor(scene: Phaser.Scene, x: number, y: number, poleLayer: Phaser.Tilemaps.TilemapLayer | null = null) {
         const skin = Player.getSavedSkin();
@@ -62,6 +65,21 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 
         this.poleLayer = poleLayer;
 
+        scene.input.on("pointerdown", (pointer: Phaser.Input.Pointer) => {
+            if (pointer.rightButtonDown()) return;
+            if (localStorage.getItem("clickMoveEnabled") === "false") return;
+            this.clickTarget = { x: pointer.worldX, y: pointer.worldY };
+        });
+
+        scene.input.on("pointermove", (pointer: Phaser.Input.Pointer) => {
+            if (!pointer.isDown || pointer.rightButtonDown()) return;
+            if (localStorage.getItem("clickMoveEnabled") === "false") return;
+            if (this.clickTarget && !this.clickTarget.onArrive) {
+                this.clickTarget.x = pointer.worldX;
+                this.clickTarget.y = pointer.worldY;
+            }
+        });
+
         scene.events.once(Phaser.Scenes.Events.SHUTDOWN, () => {
             this.footstepSound.stop();
             this.footstepSound.destroy();
@@ -90,38 +108,78 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 
     private handleMovement() {
         const speed = Player.BASE_SPEED * this.effects.getSpeedMultiplier();
+        const usingKeys = this.isAnyKeyDown();
 
         this.setVelocity(0);
 
-        if (this.controlScheme === "wasd") {
-            if (this.wasdKeys.A.isDown) this.setVelocityX(-speed);
-            if (this.wasdKeys.D.isDown) this.setVelocityX(speed);
-            if (this.wasdKeys.W.isDown) this.setVelocityY(-speed);
-            if (this.wasdKeys.S.isDown) this.setVelocityY(speed);
-        } else {
-            if (this.cursorKeys.left.isDown) this.setVelocityX(-speed);
-            if (this.cursorKeys.right.isDown) this.setVelocityX(speed);
-            if (this.cursorKeys.up.isDown) this.setVelocityY(-speed);
-            if (this.cursorKeys.down.isDown) this.setVelocityY(speed);
+        if (usingKeys) {
+            this.clickTarget = null;
+
+            if (this.controlScheme === "wasd") {
+                if (this.wasdKeys.A.isDown) this.setVelocityX(-speed);
+                if (this.wasdKeys.D.isDown) this.setVelocityX(speed);
+                if (this.wasdKeys.W.isDown) this.setVelocityY(-speed);
+                if (this.wasdKeys.S.isDown) this.setVelocityY(speed);
+            } else {
+                if (this.cursorKeys.left.isDown) this.setVelocityX(-speed);
+                if (this.cursorKeys.right.isDown) this.setVelocityX(speed);
+                if (this.cursorKeys.up.isDown) this.setVelocityY(-speed);
+                if (this.cursorKeys.down.isDown) this.setVelocityY(speed);
+            }
+        } else if (this.clickTarget) {
+            const dx = this.clickTarget.x - this.x;
+            const dy = this.clickTarget.y - this.y;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+
+            if (dist < Player.CLICK_ARRIVE_THRESHOLD) {
+                const cb = this.clickTarget.onArrive;
+                this.clickTarget = null;
+                cb?.();
+            } else {
+                this.setVelocityX((dx / dist) * speed);
+                this.setVelocityY((dy / dist) * speed);
+            }
         }
+    }
+
+    cancelClickMove() {
+        this.clickTarget = null;
+    }
+
+    moveTo(x: number, y: number, onArrive?: () => void) {
+        this.clickTarget = { x, y, onArrive };
+    }
+
+    private isAnyKeyDown(): boolean {
+        if (this.controlScheme === "wasd") {
+            return this.wasdKeys.W.isDown || this.wasdKeys.A.isDown ||
+                   this.wasdKeys.S.isDown || this.wasdKeys.D.isDown;
+        }
+        return this.cursorKeys.left.isDown || this.cursorKeys.right.isDown ||
+               this.cursorKeys.up.isDown || this.cursorKeys.down.isDown;
     }
 
     private updatePoleTransparency() {
         if (!this.poleLayer) return;
 
-        // reset todos os tiles
-        this.poleLayer.forEachTile(t => t.setAlpha(1));
-
-        // tile na posição do player ou um tile acima (para apanhar o topo do poste)
         const tile = this.poleLayer.getTileAtWorldXY(this.x, this.y)
                   ?? this.poleLayer.getTileAtWorldXY(this.x, this.y - 32);
 
+        if (tile === this.lastFadedTiles[0]) return;
+
+        this.lastFadedTiles.forEach(t => t.setAlpha(1));
+        this.lastFadedTiles = [];
+
         if (!tile) return;
 
-        // faz fade neste tile e no de cima (poste tem 2 tiles de altura)
-        tile.setAlpha(0.4);
-        this.poleLayer.getTileAt(tile.x, tile.y - 1)?.setAlpha(0.4);
-        this.poleLayer.getTileAt(tile.x, tile.y + 1)?.setAlpha(0.4);
+        const affected = [
+            tile,
+            this.poleLayer.getTileAt(tile.x, tile.y - 1),
+            this.poleLayer.getTileAt(tile.x, tile.y + 1),
+        ].filter(Boolean) as Phaser.Tilemaps.Tile[];
+
+        affected.forEach(t => t.setAlpha(0.4));
+        this.lastFadedTiles = affected;
     }
 
     private isMoving() {

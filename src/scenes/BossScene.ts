@@ -18,6 +18,7 @@ import { t } from "../i18n";
 import { TimeSystem } from "../systems/TimeSystem";
 import { changeScene } from "../utils/changeScene";
 import { BossLightSystem } from "../lights/BossLightSystem";
+import { SettingsUI } from "../UI/UI_Settings";
 
 export class BossScene extends Phaser.Scene {
     public player!: Player;
@@ -48,14 +49,22 @@ export class BossScene extends Phaser.Scene {
         const spawnPoint = mapManager.getSpawnPoint();
 
         MusicManager.play(this, "bossscene_music", 0.3);
-        this.fireSound = this.sound.add("fire_sound", {
-            loop: true,
-            volume: 0.8,
-        });
-
-        this.fireSound.play();
         SoundManager.setScene(this);
 
+        this.fireSound = this.sound.add("fire_sound", { loop: true, volume: 0.8 });
+        if (SoundManager.isEnabled()) this.fireSound.play();
+
+        const unsubscribe = SoundManager.onToggle((enabled) => {
+            if (enabled) {
+                if (!this.fireSound?.isPlaying) this.fireSound?.play();
+            } else {
+                this.fireSound?.stop();
+            }
+        });
+
+
+
+        new SettingsUI(this);
         new InputManager(this, () => {
             this.handleInteraction();
         });
@@ -131,6 +140,7 @@ export class BossScene extends Phaser.Scene {
         });
 
         this.events.once(Phaser.Scenes.Events.SHUTDOWN, () => {
+            unsubscribe();
             this.fireSound?.stop();
             this.fireSound?.destroy();
             this.fireSound = undefined;

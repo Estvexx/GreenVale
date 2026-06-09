@@ -69,7 +69,7 @@
                             ></span>
                             <div class="controls-group">
                                 <div
-                                    class="control-card active"
+                                    class="control-card"
                                     data-control="arrows"
                                 >
                                     <span
@@ -82,7 +82,7 @@
                                     ></div>
                                 </div>
 
-                                <div class="control-card" data-control="wasd">
+                                <div class="control-card active" data-control="wasd">
                                     <span
                                         class="material-symbols-outlined control-icon"
                                         >keyboard</span
@@ -191,6 +191,17 @@
                                         type="checkbox"
                                         id="toggle-fullscreen"
                                         checked="false"
+                                    />
+                                    <div class="toggle-track"></div>
+                                </label>
+                            </div>
+                            <div class="toggle-row">
+                                <span data-i18n="ui.clickMove"></span>
+                                <label class="toggle">
+                                    <input
+                                        type="checkbox"
+                                        id="toggle-click-move"
+                                        checked
                                     />
                                     <div class="toggle-track"></div>
                                 </label>
@@ -356,7 +367,7 @@
             </div>
 
             <div id="zone-tooltip" class="hidden">
-                Pressiona F para interagir
+                <span data-i18n="hud.interact">Pressiona F para interagir</span>
             </div>
 
             <div id="storage-overlay" class="hidden ui-overlay">
@@ -460,9 +471,9 @@
             </div>
             <div id="seed-picker" class="hidden seed-picker-overlay">
                 <div class="seed-picker-panel">
-                    <h3>Escolhe uma semente</h3>
+                    <h3 data-i18n="seedPicker.title">Escolhe uma semente</h3>
                     <div id="seed-picker-list" class="seed-picker-list"></div>
-                    <button id="seed-picker-close">Cancelar</button>
+                    <button id="seed-picker-close" data-i18n="seedPicker.cancel">Cancelar</button>
                 </div>
             </div>
 
@@ -506,12 +517,13 @@
             </div>
 
             <div id="growth-hud" class="growth-hud hidden">
-                <span class="growth-label">🌱 Crescimento</span>
+                <span class="growth-label" data-i18n="hud.growth">Crescimento</span>
                 <span id="growth-speed"></span>
             </div>
             <!-- ======================================== Aqui acaba a UI-LAYER ======================================== -->
         </div>
 
         <script type="module" src="/src/main.ts"></script>
+        <script>document.addEventListener("contextmenu", e => e.preventDefault());</script>
     </body>
 </html>
