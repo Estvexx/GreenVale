@@ -74,6 +74,46 @@
         "close": "Fechar"
     },
 
+    "manual": {
+        "eyebrow": "Guia rápido",
+        "title": "Manual de utilizador",
+        "intro": "Aqui tens o essencial para começares. O manual segue o idioma escolhido nas definições.",
+        "keys": {
+            "title": "Teclas e atalhos",
+            "subtitle": "Estas são as ações principais que vais usar durante o jogo.",
+            "move": "Mover a personagem pelo mapa.",
+            "slots": "Trocar rapidamente entre os 8 slots do inventário.",
+            "wheel": "Roda do rato",
+            "inventory": "Abrir ou fechar o inventário.",
+            "interact": "Interagir com objetos, lojas e zonas do mapa.",
+            "effects": "Abrir o menu radial dos efeitos.",
+            "close": "Fechar menus e overlays abertos.",
+            "save": "Guardar, exportar e carregar o jogo."
+        },
+        "cards": {
+            "controls": {
+                "title": "Movimento e ações",
+                "text": "Usa as setas ou WASD para te moveres e interagir com o mundo."
+            },
+            "inventory": {
+                "title": "Inventário",
+                "text": "Organiza itens, escolhe ferramentas e gere o que apanhaste durante o jogo."
+            },
+            "shop": {
+                "title": "Lojas",
+                "text": "Compra ferramentas, upgrades e skins. As skins compradas ficam guardadas."
+            },
+            "save": {
+                "title": "Guardar e exportar",
+                "text": "O progresso é guardado automaticamente no navegador e pode ser exportado em JSON."
+            }
+        },
+        "tips": {
+            "sync": "As skins e o save ficam sincronizados com o ficheiro exportado.",
+            "newGame": "Novo jogo repõe o inventário base e limpa o progresso guardado."
+        }
+    },
+
     "items": {
         "hoe": {
             "name": "Enxada",

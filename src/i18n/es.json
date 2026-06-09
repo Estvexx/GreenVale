@@ -74,6 +74,46 @@
         "close": "Cerrar"
     },
 
+    "manual": {
+        "eyebrow": "Guía rápida",
+        "title": "Manual de usuario",
+        "intro": "Aquí tienes lo esencial para empezar. El manual sigue el idioma elegido en ajustes.",
+        "keys": {
+            "title": "Teclas y atajos",
+            "subtitle": "Estas son las acciones principales que usarás durante la partida.",
+            "move": "Mover al personaje por el mapa.",
+            "slots": "Cambiar rápidamente entre los 8 slots del inventario.",
+            "wheel": "Rueda del ratón",
+            "inventory": "Abrir o cerrar el inventario.",
+            "interact": "Interactuar con objetos, tiendas y zonas del mapa.",
+            "effects": "Abrir el menú radial de efectos.",
+            "close": "Cerrar menús y overlays abiertos.",
+            "save": "Guardar, exportar y cargar la partida."
+        },
+        "cards": {
+            "controls": {
+                "title": "Movimiento y acciones",
+                "text": "Usa las flechas o WASD para moverte e interactuar con el mundo."
+            },
+            "inventory": {
+                "title": "Inventario",
+                "text": "Organiza objetos, elige herramientas y gestiona lo que recoges durante la partida."
+            },
+            "shop": {
+                "title": "Tiendas",
+                "text": "Compra herramientas, mejoras y skins. Las skins compradas se guardan."
+            },
+            "save": {
+                "title": "Guardar y exportar",
+                "text": "El progreso se guarda automáticamente en el navegador y también se puede exportar en JSON."
+            }
+        },
+        "tips": {
+            "sync": "Las skins y el save quedan sincronizados con el archivo exportado.",
+            "newGame": "Nuevo juego restablece el inventario base y limpia el progreso guardado."
+        }
+    },
+
     "items": {
         "hoe": {
             "name": "Azada",

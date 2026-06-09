@@ -1,0 +1,137 @@
+<div id="manual-help" class="manual-help">
+    <button
+        id="manual-help-btn"
+        class="manual-help__toggle hidden"
+        type="button"
+        aria-label="Abrir manual"
+    >
+        ?
+    </button>
+
+    <div id="manual-help-overlay" class="manual-help__overlay hidden">
+        <section
+            class="manual-help__panel"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="manual-help-title"
+        >
+            <button
+                id="manual-help-close"
+                class="manual-help__close"
+                type="button"
+                aria-label="Fechar manual"
+            >
+                ×
+            </button>
+
+            <div class="manual-help__header">
+                <span class="manual-help__mark">?</span>
+
+                <div class="manual-help__heading">
+                    <p class="manual-help__eyebrow" data-i18n="manual.eyebrow"></p>
+                    <h2
+                        id="manual-help-title"
+                        class="manual-help__title"
+                        data-i18n="manual.title"
+                    ></h2>
+                </div>
+            </div>
+
+            <p class="manual-help__intro" data-i18n="manual.intro"></p>
+
+            <div class="manual-help__keys">
+                <div class="manual-help__keys-header">
+                    <h3 data-i18n="manual.keys.title"></h3>
+                    <p data-i18n="manual.keys.subtitle"></p>
+                </div>
+
+                <div class="manual-help__keys-list">
+                    <div class="manual-help__key-row">
+                        <div class="manual-help__key-group">
+                            <span class="manual-help__key">WASD</span>
+                            <span class="manual-help__key manual-help__key--alt">
+                                ← ↑ → ↓
+                            </span>
+                        </div>
+                        <p data-i18n="manual.keys.move"></p>
+                    </div>
+
+                    <div class="manual-help__key-row">
+                        <div class="manual-help__key-group">
+                            <span class="manual-help__key">1-8</span>
+                            <span
+                                class="manual-help__key manual-help__key--alt"
+                                data-i18n="manual.keys.wheel"
+                            ></span>
+                        </div>
+                        <p data-i18n="manual.keys.slots"></p>
+                    </div>
+
+                    <div class="manual-help__key-row">
+                        <div class="manual-help__key-group">
+                            <span class="manual-help__key">E</span>
+                        </div>
+                        <p data-i18n="manual.keys.inventory"></p>
+                    </div>
+
+                    <div class="manual-help__key-row">
+                        <div class="manual-help__key-group">
+                            <span class="manual-help__key">F</span>
+                        </div>
+                        <p data-i18n="manual.keys.interact"></p>
+                    </div>
+
+                    <div class="manual-help__key-row">
+                        <div class="manual-help__key-group">
+                            <span class="manual-help__key">Q</span>
+                        </div>
+                        <p data-i18n="manual.keys.effects"></p>
+                    </div>
+
+                    <div class="manual-help__key-row">
+                        <div class="manual-help__key-group">
+                            <span class="manual-help__key">ESC</span>
+                        </div>
+                        <p data-i18n="manual.keys.close"></p>
+                    </div>
+
+                    <div class="manual-help__key-row">
+                        <div class="manual-help__key-group">
+                            <span class="manual-help__key">K</span>
+                            <span class="manual-help__key">M</span>
+                            <span class="manual-help__key">L</span>
+                        </div>
+                        <p data-i18n="manual.keys.save"></p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="manual-help__grid">
+                <article class="manual-help__card">
+                    <h3 data-i18n="manual.cards.controls.title"></h3>
+                    <p data-i18n="manual.cards.controls.text"></p>
+                </article>
+
+                <article class="manual-help__card">
+                    <h3 data-i18n="manual.cards.inventory.title"></h3>
+                    <p data-i18n="manual.cards.inventory.text"></p>
+                </article>
+
+                <article class="manual-help__card">
+                    <h3 data-i18n="manual.cards.shop.title"></h3>
+                    <p data-i18n="manual.cards.shop.text"></p>
+                </article>
+
+                <article class="manual-help__card">
+                    <h3 data-i18n="manual.cards.save.title"></h3>
+                    <p data-i18n="manual.cards.save.text"></p>
+                </article>
+            </div>
+
+            <div class="manual-help__tips">
+                <p class="manual-help__tip" data-i18n="manual.tips.sync"></p>
+                <p class="manual-help__tip" data-i18n="manual.tips.newGame"></p>
+            </div>
+        </section>
+    </div>
+</div>
