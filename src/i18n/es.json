@@ -265,5 +265,16 @@
     "hud": {
         "saved": "Juego guardado con éxito",
         "exported": "Guardado exportado"
+    },
+    "mainMenu": {
+        "play": "Jugar / Continuar",
+        "newGame": "Nueva partida",
+        "import": "Importar guardado",
+        "chooseFile": "Elegir fichero JSON",
+        "exit": "Salir del juego"
+    },
+    "loading": {
+        "loading": "Cargando...",
+        "done": "¡Listo!"
     }
 }

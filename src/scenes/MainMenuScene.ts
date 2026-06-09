@@ -4,6 +4,7 @@ import { SettingsUI } from "../UI/UI_Settings";
 import { SoundManager } from "../sounds/SoundsManager";
 import { UIRoot } from "../UI/UIRoot";
 import { SaveSystem } from "../systems/SaveSystem";
+import { applyTranslations } from "../i18n";
 
 export class MainMenuScene extends Phaser.Scene {
     private menuElement?: HTMLElement;
@@ -20,6 +21,7 @@ export class MainMenuScene extends Phaser.Scene {
         SoundManager.setScene(this);
 
         uiLayer.insertAdjacentHTML("afterbegin", menuHtml);
+        applyTranslations();
         this.menuElement = document.getElementById("main-menu") ?? undefined;
         this.importInput =
             (document.getElementById(

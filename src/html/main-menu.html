@@ -7,20 +7,14 @@
         />
 
         <div class="main-menu__actions">
-            <button id="main-menu-play" class="main-menu__button">
-                Jogar / Continuar
-            </button>
+            <button id="main-menu-play" class="main-menu__button" data-i18n="mainMenu.play"></button>
 
-            <button id="main-menu-new-game" class="main-menu__button">
-                Novo jogo
-            </button>
+            <button id="main-menu-new-game" class="main-menu__button" data-i18n="mainMenu.newGame"></button>
 
-            <button id="main-menu-import" class="main-menu__button">
-                Importar save
-            </button>
+            <button id="main-menu-import" class="main-menu__button" data-i18n="mainMenu.import"></button>
 
             <label class="main-menu__button main-menu__button--file">
-                Escolher ficheiro JSON
+                <span data-i18n="mainMenu.chooseFile"></span>
                 <input
                     id="main-menu-import-input"
                     type="file"
@@ -31,9 +25,8 @@
             <button
                 id="main-menu-exit"
                 class="main-menu__button main-menu__button--exit"
-            >
-                Sair do jogo
-            </button>
+                data-i18n="mainMenu.exit"
+            ></button>
         </div>
     </div>
 </main>
