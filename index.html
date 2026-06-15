@@ -20,10 +20,6 @@
         <link rel="stylesheet" href="/src/CSS/manual.css" />
         <link rel="stylesheet" href="/src/CSS/time.css" />  
 
-        <link
-            href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined"
-            rel="stylesheet"
-        />
         <title>greenvale</title>
     </head>
     <body>
@@ -49,13 +45,16 @@
                             ></span>
                             <div class="lang-group">
                                 <button class="lang-btn active" data-lang="pt">
-                                    🇵🇹 Português
+                                    <span class="lang-code">PT</span>
+                                    Português
                                 </button>
                                 <button class="lang-btn" data-lang="en">
-                                    🇬🇧 English
+                                    <span class="lang-code">EN</span>
+                                    English
                                 </button>
                                 <button class="lang-btn" data-lang="es">
-                                    🇪🇸 Español
+                                    <span class="lang-code">ES</span>
+                                    Español
                                 </button>
                             </div>
                         </div>
@@ -72,10 +71,7 @@
                                     class="control-card"
                                     data-control="arrows"
                                 >
-                                    <span
-                                        class="material-symbols-outlined control-icon"
-                                        >keyboard_double_arrow_up</span
-                                    >
+                                    <div class="control-keys">↑ ↓ ← →</div>
                                     <div
                                         class="keys-label"
                                         data-i18n="ui.arrows"
@@ -83,10 +79,7 @@
                                 </div>
 
                                 <div class="control-card active" data-control="wasd">
-                                    <span
-                                        class="material-symbols-outlined control-icon"
-                                        >keyboard</span
-                                    >
+                                    <div class="control-keys">WASD</div>
                                     <div class="keys-label">WASD</div>
                                 </div>
                             </div>
