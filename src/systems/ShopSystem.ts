@@ -70,7 +70,10 @@ export class ShopSystem {
         const inventory = InventorySystem.getInstance();
 
         const itemData = ITEMS[item.id];
-        if (itemData?.maxSlots === 1 && inventory.slots.some(s => s?.id === item.id)) {
+        const isUniqueItem =
+            itemData?.maxStack === 1 && itemData?.maxSlots === 1;
+
+        if (isUniqueItem && inventory.slots.some((s) => s?.id === item.id)) {
             return "already_have";
         }
 

@@ -43,7 +43,6 @@ export class FarmScene extends Phaser.Scene {
     create() {
         this.isChangingScene = false;
 
-        //this.scene.lights.setAmbientColor(0x888888);
         this.cameras.main.fadeIn(500, 0, 0, 0);
         const mapManager = new MapManager(this);
         this.realLights = new RealLightSystem(this, mapManager);
@@ -73,7 +72,10 @@ export class FarmScene extends Phaser.Scene {
 
         this.input.on("pointerdown", (pointer: Phaser.Input.Pointer) => {
             if (pointer.rightButtonDown()) return;
-            const zone = this.interactionZones.getZoneAt(pointer.worldX, pointer.worldY);
+            const zone = this.interactionZones.getZoneAt(
+                pointer.worldX,
+                pointer.worldY,
+            );
             if (zone) {
                 const cx = zone.bounds.centerX;
                 const cy = zone.bounds.centerY;
@@ -180,8 +182,6 @@ export class FarmScene extends Phaser.Scene {
             }
         }
 
-        // Interação no campo (plantar, regar, colher) — funciona sem zona
         this.farmingSystem.interact(this.player.x, this.player.y);
     }
-
 }
