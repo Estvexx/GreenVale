@@ -25,6 +25,7 @@
     },
 
     "shop": {
+        "title": "Loja",
         "buy": "Comprar x1",
         "sell": "Vender x1",
         "sellAll": "Tudo",
@@ -72,6 +73,17 @@
     "currency": {
         "coins": "Moedas",
         "bossTokens": "Boss Tokens"
+    },
+
+    "inventory": {
+        "title": "Inventário"
+    },
+
+    "storage": {
+        "title": "Armazém",
+        "messages": {
+            "cannotMoveItem": "Limite desse item atingido no inventário."
+        }
     },
 
     "common": {
@@ -256,13 +268,9 @@
         "up": "Subiste para Farm Lv. {level}!"
     },
 
-    "storage": {
-        "messages": {
-            "cannotMoveItem": "Limite desse item atingido no inventário."
-        }
-    },
-
     "combat": {
+        "hp": "Vida",
+        "kills": "Mortes",
         "noItemInHand": "Não tens nenhum item na mão.",
         "itemHasNoDamage": "Este item não causa dano."
     },
@@ -291,7 +299,29 @@
         "newGame": "Novo jogo",
         "import": "Importar save",
         "chooseFile": "Escolher ficheiro JSON",
-        "exit": "Sair do jogo"
+        "exit": "Sair do jogo",
+        "splashes": {
+            "notStardew": "Não é o Stardew Valley!",
+            "pesticides": "100% livre de pesticidas!",
+            "carrots": "As cenouras são reais!",
+            "well": "O poço tem água?",
+            "waterAndPray": "Rega e reza!",
+            "noMicro": "Sem microtransações... por enquanto",
+            "bossBite": "O boss não morde... muito",
+            "farmers": "Aprovado por agricultores virtuais!",
+            "loveBugs": "Feito com amor e bugs",
+            "harvest": "A colheita não vai a lado nenhum sozinha!",
+            "sun": "O sol nasce para todos... às 07:00",
+            "waterToday": "Já regaste hoje?",
+            "zombies": "Os zombies também precisam de amor",
+            "plantCry": "Planta agora, chora depois",
+            "hoeSword": "A enxada é mais forte que a espada",
+            "noPlantsHarmed": "Nenhuma planta foi prejudicada",
+            "hardcore": "Modo hardcore: sem balde de água",
+            "saveOften": "Salva frequentemente. Confia em nós.",
+            "shopNeverCloses": "A loja fecha às... nunca",
+            "responsibility": "GreenVale™ não responsável por vício"
+        }
     },
     "loading": {
         "loading": "A carregar...",

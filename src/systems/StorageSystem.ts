@@ -1,5 +1,6 @@
 import type { InventorySlot } from "../types/InventoryTypes";
 import { ITEMS } from "../data/ItemDatabase";
+import { requestAutoSave } from "./AutoSave";
 
 type Listener = () => void;
 
@@ -23,6 +24,7 @@ export class StorageSystem {
 
     private emitChange() {
         this.listeners.forEach((cb) => cb());
+        requestAutoSave();
     }
 
     addItem(id: number, quantity: number = 1): boolean {

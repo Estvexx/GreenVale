@@ -5,6 +5,9 @@ import { MoneySystem } from "./MoneySystem";
 import { LevelSystem } from "./LevelSystem";
 import { EffectSystem } from "./EffectsSystem";
 import { ToolSkinSystem } from "./ToolSkinSystem";
+import { FarmingSystem } from "./FarmingSystem";
+import { TimeSystem } from "./TimeSystem";
+import { pauseAutoSave, setAutoSaveHandler } from "./AutoSave";
 import { UIRoot } from "../UI/UIRoot";
 import { t } from "../i18n";
 
@@ -39,32 +42,36 @@ export class SaveSystem {
 
     static newGame() {
         this.delete();
-        InventorySystem.getInstance().loadSaveData({
-            slots: Array(28).fill(null),
-            selectedSlot: 0,
+        pauseAutoSave(() => {
+            InventorySystem.getInstance().loadSaveData({
+                slots: Array(28).fill(null),
+                selectedSlot: 0,
+            });
+
+            StorageSystem.getInstance().loadSaveData({
+                slots: Array(40).fill(null),
+            });
+
+            MoneySystem.getInstance().loadSaveData({
+                coins: 100,
+                bossTokens: 0,
+            });
+
+            LevelSystem.getInstance().loadSaveData({
+                level: 1,
+                xp: 0,
+            });
+
+            EffectSystem.getInstance().loadSaveData({
+                active: [],
+            });
+
+            ToolSkinSystem.getInstance().reset();
+            FarmingSystem.loadSaveData({ crops: [] });
+            TimeSystem.getInstance().loadSaveData();
+
+            InventorySystem.getInstance().addItem(1, 1);
         });
-
-        StorageSystem.getInstance().loadSaveData({
-            slots: Array(40).fill(null),
-        });
-
-        MoneySystem.getInstance().loadSaveData({
-            coins: 100,
-            bossTokens: 0,
-        });
-
-        LevelSystem.getInstance().loadSaveData({
-            level: 1,
-            xp: 0,
-        });
-
-        EffectSystem.getInstance().loadSaveData({
-            active: [],
-        });
-
-        ToolSkinSystem.getInstance().reset();
-
-        InventorySystem.getInstance().addItem(1, 1);
 
         this.save();
     }
@@ -125,19 +132,33 @@ export class SaveSystem {
             level: LevelSystem.getInstance().getSaveData(),
             effects: EffectSystem.getInstance().getSaveData(),
             toolSkins: ToolSkinSystem.getInstance().getSaveData(),
+            farming: FarmingSystem.getSaveData(),
+            time: TimeSystem.getInstance().getSaveData(),
         };
     }
 
     private static applySaveData(data: GameSaveData) {
-        InventorySystem.getInstance().loadSaveData(data.inventory);
-        StorageSystem.getInstance().loadSaveData(data.storage);
-        MoneySystem.getInstance().loadSaveData(data.money);
-        LevelSystem.getInstance().loadSaveData(data.level);
-        EffectSystem.getInstance().loadSaveData(data.effects);
-        if (data.toolSkins) {
-            ToolSkinSystem.getInstance().loadSaveData(data.toolSkins);
-        } else {
-            ToolSkinSystem.getInstance().reset();
-        }
+        pauseAutoSave(() => {
+            InventorySystem.getInstance().loadSaveData(data.inventory);
+            StorageSystem.getInstance().loadSaveData(data.storage);
+            MoneySystem.getInstance().loadSaveData(data.money);
+            LevelSystem.getInstance().loadSaveData(data.level);
+            EffectSystem.getInstance().loadSaveData(data.effects);
+
+            if (data.toolSkins) {
+                ToolSkinSystem.getInstance().loadSaveData(data.toolSkins);
+            } else {
+                ToolSkinSystem.getInstance().reset();
+            }
+
+            FarmingSystem.loadSaveData(data.farming);
+            TimeSystem.getInstance().loadSaveData(data.time);
+        });
     }
 }
+
+setAutoSaveHandler(() => SaveSystem.save());
+
+window.addEventListener("beforeunload", () => {
+    SaveSystem.save();
+});

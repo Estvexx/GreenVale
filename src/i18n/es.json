@@ -25,6 +25,7 @@
     },
 
     "shop": {
+        "title": "Tienda",
         "buy": "Comprar x1",
         "sell": "Vender x1",
         "sellAll": "Todo",
@@ -72,6 +73,10 @@
     "currency": {
         "coins": "Monedas",
         "bossTokens": "Boss Tokens"
+    },
+
+    "inventory": {
+        "title": "Inventario"
     },
 
     "common": {
@@ -257,11 +262,14 @@
     },
 
     "storage": {
+        "title": "Almacén",
         "messages": {
             "cannotMoveItem": "Límite de este objeto alcanzado en el inventario."
         }
     },
     "combat": {
+        "hp": "Vida",
+        "kills": "Muertes",
         "noItemInHand": "No tienes ningún objeto equipado.",
         "itemHasNoDamage": "Este objeto no causa daño."
     },
@@ -290,7 +298,29 @@
         "newGame": "Nueva partida",
         "import": "Importar guardado",
         "chooseFile": "Elegir fichero JSON",
-        "exit": "Salir del juego"
+        "exit": "Salir del juego",
+        "splashes": {
+            "notStardew": "¡No es Stardew Valley!",
+            "pesticides": "¡100% libre de pesticidas!",
+            "carrots": "¡Las zanahorias son reales!",
+            "well": "¿El pozo tiene agua?",
+            "waterAndPray": "¡Riega y reza!",
+            "noMicro": "Sin microtransacciones... por ahora",
+            "bossBite": "El boss no muerde... mucho",
+            "farmers": "¡Aprobado por agricultores virtuales!",
+            "loveBugs": "Hecho con amor y bugs",
+            "harvest": "¡La cosecha no se mueve sola!",
+            "sun": "El sol sale para todos... a las 07:00",
+            "waterToday": "¿Ya has regado hoy?",
+            "zombies": "Los zombies también necesitan amor",
+            "plantCry": "Planta ahora, llora después",
+            "hoeSword": "La azada es más fuerte que la espada",
+            "noPlantsHarmed": "Ninguna planta fue dañada",
+            "hardcore": "Modo hardcore: sin cubo de agua",
+            "saveOften": "Guarda a menudo. Confía en nosotros.",
+            "shopNeverCloses": "La tienda cierra a las... nunca",
+            "responsibility": "GreenVale™ no se responsabiliza por la adicción"
+        }
     },
     "loading": {
         "loading": "Cargando...",

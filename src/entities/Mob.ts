@@ -2,6 +2,7 @@ import Phaser from "phaser";
 import { MoneySystem } from "../systems/MoneySystem";
 import { LevelSystem } from "../systems/LevelSystem";
 import { UIRoot } from "../UI/UIRoot";
+import { t } from "../i18n";
 
 export class Mob extends Phaser.Physics.Arcade.Sprite {
     private maxHp: number;
@@ -67,7 +68,7 @@ export class Mob extends Phaser.Physics.Arcade.Sprite {
 
     private updateHpText() {
         this.hpText.setText(
-            `HP: ${this.hp}/${this.maxHp}\nKills: ${this.kills}`,
+            `${t("combat.hp")}: ${this.hp}/${this.maxHp}\n${t("combat.kills")}: ${this.kills}`,
         );
     }
 
@@ -129,6 +130,6 @@ export class Mob extends Phaser.Physics.Arcade.Sprite {
         }
 
         MoneySystem.getInstance().add("bossTokens", amount);
-        UIRoot.toast.info(`+${amount} bossTokens`);
+        UIRoot.toast.info(`+${amount} ${t("currency.bossTokens")}`);
     }
 }

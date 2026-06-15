@@ -1,4 +1,5 @@
 import type { Effect } from "../types/Effect";
+import { requestAutoSave } from "./AutoSave";
 
 type Listener = () => void;
 
@@ -31,6 +32,7 @@ export class EffectSystem {
 
     private emitChange() {
         this.listeners.forEach((cb) => cb());
+        requestAutoSave();
     }
 
     private emitTick() {

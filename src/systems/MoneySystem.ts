@@ -1,3 +1,5 @@
+import { requestAutoSave } from "./AutoSave";
+
 export type Currency = "coins" | "bossTokens";
 
 type Listener = (currency: Currency, value: number) => void;
@@ -69,6 +71,7 @@ export class MoneySystem {
         localStorage.setItem(currency, String(value));
 
         this.notify(currency);
+        requestAutoSave();
     }
 
     private notify(currency: Currency): void {

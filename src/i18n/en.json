@@ -25,6 +25,7 @@
     },
 
     "shop": {
+        "title": "Shop",
         "buy": "Buy x1",
         "sell": "Sell x1",
         "sellAll": "All",
@@ -72,6 +73,10 @@
     "currency": {
         "coins": "Coins",
         "bossTokens": "Boss Tokens"
+    },
+
+    "inventory": {
+        "title": "Inventory"
     },
 
     "common": {
@@ -257,11 +262,14 @@
     },
 
     "storage": {
+        "title": "Storage",
         "messages": {
             "cannotMoveItem": "Limit for this item reached in inventory."
         }
     },
     "combat": {
+        "hp": "HP",
+        "kills": "Kills",
         "noItemInHand": "You have no item equipped.",
         "itemHasNoDamage": "This item does not deal damage."
     },
@@ -290,7 +298,29 @@
         "newGame": "New game",
         "import": "Import save",
         "chooseFile": "Choose JSON file",
-        "exit": "Exit game"
+        "exit": "Exit game",
+        "splashes": {
+            "notStardew": "Not Stardew Valley!",
+            "pesticides": "100% pesticide free!",
+            "carrots": "The carrots are real!",
+            "well": "Does the well have water?",
+            "waterAndPray": "Water and pray!",
+            "noMicro": "No microtransactions... for now",
+            "bossBite": "The boss does not bite... much",
+            "farmers": "Approved by virtual farmers!",
+            "loveBugs": "Made with love and bugs",
+            "harvest": "The harvest will not move by itself!",
+            "sun": "The sun rises for everyone... at 07:00",
+            "waterToday": "Have you watered today?",
+            "zombies": "Zombies need love too",
+            "plantCry": "Plant now, cry later",
+            "hoeSword": "The hoe is stronger than the sword",
+            "noPlantsHarmed": "No plants were harmed",
+            "hardcore": "Hardcore mode: no water bucket",
+            "saveOften": "Save often. Trust us.",
+            "shopNeverCloses": "The shop closes at... never",
+            "responsibility": "GreenVale™ not responsible for addiction"
+        }
     },
     "loading": {
         "loading": "Loading...",

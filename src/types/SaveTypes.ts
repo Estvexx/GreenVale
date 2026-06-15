@@ -6,6 +6,24 @@ export type ToolSkinSaveData = {
     active: Record<number, string>;
 };
 
+export type CropSaveData = {
+    x: number;
+    y: number;
+    seedId: number;
+    stage: number;
+    watered: boolean;
+    grownAt: number;
+};
+
+export type FarmingSaveData = {
+    crops: CropSaveData[];
+};
+
+export type TimeSaveData = {
+    day: number;
+    minutes: number;
+};
+
 export type GameSaveData = {
     version: number;
 
@@ -33,4 +51,6 @@ export type GameSaveData = {
     };
 
     toolSkins?: ToolSkinSaveData;
+    farming?: FarmingSaveData;
+    time?: TimeSaveData;
 };

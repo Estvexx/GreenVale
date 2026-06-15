@@ -1,3 +1,5 @@
+import { requestAutoSave } from "./AutoSave";
+
 type Listener = () => void;
 
 export class LevelSystem {
@@ -62,6 +64,7 @@ export class LevelSystem {
     private save() {
         localStorage.setItem("farmLevel", String(this.level));
         localStorage.setItem("farmXp", String(this.xp));
+        requestAutoSave();
     }
 
     getSaveData() {
