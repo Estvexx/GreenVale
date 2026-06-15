@@ -118,9 +118,26 @@
     font-size: 13px;
     font-family: Georgia, serif;
     cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
     transition:
         border-color 0.2s,
         background-color 0.2s;
+}
+
+.lang-code {
+    min-width: 24px;
+    padding: 2px 4px;
+    border-radius: 4px;
+    background: rgba(200, 136, 42, 0.18);
+    border: 1px solid rgba(200, 136, 42, 0.45);
+    color: var(--color-gold);
+    font-family: "Courier New", monospace;
+    font-size: 11px;
+    font-weight: 800;
+    line-height: 1;
 }
 
 .lang-btn:hover {
@@ -157,14 +174,25 @@
     border-color: var(--color-gold);
 }
 
-.control-card .keys {
-    font-size: 20px;
-    margin-bottom: 6px;
-}
-
 .control-card .keys-label {
     font-size: 13px;
     color: var(--color-muted);
+}
+
+.control-keys {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 36px;
+    margin-bottom: 6px;
+    padding: 4px 8px;
+    border-radius: 6px;
+    background: rgba(245, 230, 200, 0.08);
+    color: var(--color-cream);
+    font-family: "Courier New", monospace;
+    font-size: 16px;
+    font-weight: 800;
+    letter-spacing: 1px;
 }
 
 .toggle-row {
@@ -247,13 +275,8 @@
     color: var(--color-gold);
 }
 
-.control-icon {
-    font-size: 36px;
-    color: var(--color-muted);
-    margin-bottom: 6px;
-}
-
-.control-card.active .control-icon {
+.control-card.active .control-keys {
+    background: rgba(200, 136, 42, 0.18);
     color: var(--color-gold);
 }
 
