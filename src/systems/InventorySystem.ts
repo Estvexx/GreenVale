@@ -1,5 +1,6 @@
 import type { InventorySlot } from "../types/InventoryTypes";
 import { ITEMS } from "../data/ItemDatabase";
+import { requestAutoSave } from "./AutoSave";
 
 type Listener = () => void;
 
@@ -32,10 +33,12 @@ export class InventorySystem {
 
     private emitInventoryChange() {
         this.inventoryListeners.forEach((cb) => cb());
+        requestAutoSave();
     }
 
     private emitSelectionChange() {
         this.selectionListeners.forEach((cb) => cb());
+        requestAutoSave();
     }
 
     selectSlot(index: number) {

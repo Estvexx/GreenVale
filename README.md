@@ -197,9 +197,10 @@ aproximadamente 8,6 MB.
 
 ## Gravação do progresso
 
-O progresso pode ser guardado no armazenamento local do navegador através da
-tecla `K`. A tecla `L` carrega a gravação existente e a tecla `M` permite
-exportar os dados para um ficheiro JSON.
+O progresso é guardado automaticamente no armazenamento local do navegador
+durante o jogo. Também é possível forçar a gravação através da tecla `K`. A
+tecla `L` carrega a gravação existente e a tecla `M` permite exportar os dados
+para um ficheiro JSON.
 
 No menu principal também é possível importar um ficheiro JSON criado
 anteriormente. A opção "Novo jogo" elimina a gravação principal e repõe os
@@ -211,4 +212,3 @@ valores iniciais.
 
 Projeto desenvolvido para o Trabalho Prático 2 de Tecnologias Multimédia,
 ano letivo 2025/2026.
-

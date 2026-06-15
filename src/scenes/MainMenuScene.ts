@@ -4,29 +4,29 @@ import { SettingsUI } from "../UI/UI_Settings";
 import { SoundManager } from "../sounds/SoundsManager";
 import { UIRoot } from "../UI/UIRoot";
 import { SaveSystem } from "../systems/SaveSystem";
-import { applyTranslations } from "../i18n";
+import { applyTranslations, t } from "../i18n";
 
-const SPLASHES = [
-    "Não é o Stardew Valley!",
-    "100% livre de pesticidas!",
-    "As cenouras são reais!",
-    "O poço tem água?",
-    "Rega e reza!",
-    "Sem microtransações... por enquanto",
-    "O boss não morde... muito",
-    "Aprovado por agricultores virtuais!",
-    "Feito com amor e bugs",
-    "A colheita não vai a lado nenhum sozinha!",
-    "O sol nasce para todos... às 07:00",
-    "Já regaste hoje?",
-    "Os zombies também precisam de amor",
-    "Planta agora, chora depois",
-    "A enxada é mais forte que a espada",
-    "Nenhuma planta foi prejudicada",
-    "Modo hardcore: sem balde de água",
-    "Salva frequentemente. Confia em nós.",
-    "A loja fecha às... nunca",
-    "GreenVale™ não responsável por vício",
+const SPLASH_KEYS = [
+    "mainMenu.splashes.notStardew",
+    "mainMenu.splashes.pesticides",
+    "mainMenu.splashes.carrots",
+    "mainMenu.splashes.well",
+    "mainMenu.splashes.waterAndPray",
+    "mainMenu.splashes.noMicro",
+    "mainMenu.splashes.bossBite",
+    "mainMenu.splashes.farmers",
+    "mainMenu.splashes.loveBugs",
+    "mainMenu.splashes.harvest",
+    "mainMenu.splashes.sun",
+    "mainMenu.splashes.waterToday",
+    "mainMenu.splashes.zombies",
+    "mainMenu.splashes.plantCry",
+    "mainMenu.splashes.hoeSword",
+    "mainMenu.splashes.noPlantsHarmed",
+    "mainMenu.splashes.hardcore",
+    "mainMenu.splashes.saveOften",
+    "mainMenu.splashes.shopNeverCloses",
+    "mainMenu.splashes.responsibility",
 ];
 
 export class MainMenuScene extends Phaser.Scene {
@@ -57,11 +57,13 @@ export class MainMenuScene extends Phaser.Scene {
         new SettingsUI(this);
 
         const splash = document.getElementById("main-menu-splash");
-        if (splash) splash.textContent = SPLASHES[Math.floor(Math.random() * SPLASHES.length)];
+        if (splash) splash.textContent = t(SPLASH_KEYS[Math.floor(Math.random() * SPLASH_KEYS.length)]);
 
         document.getElementById("main-menu-play")!.onclick = () => {
             UIRoot.init();
-            SaveSystem.load();
+            if (!SaveSystem.load()) {
+                SaveSystem.newGame();
+            }
             SoundManager.play("click_sound");
             this.scene.start("FarmScene");
         };

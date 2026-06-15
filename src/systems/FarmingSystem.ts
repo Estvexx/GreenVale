@@ -4,8 +4,11 @@ import { FarmFieldSystem } from "./FarmFieldSystem";
 import { ITEMS } from "../data/ItemDatabase";
 import { LevelSystem } from "./LevelSystem";
 import { TimeSystem } from "./TimeSystem";
+import { EffectSystem } from "./EffectsSystem";
 import { UIRoot } from "../UI/UIRoot";
 import { t } from "../i18n";
+import { requestAutoSave } from "./AutoSave";
+import type { CropSaveData, FarmingSaveData } from "../types/SaveTypes";
 
 type SceneWithPlayer = Phaser.Scene & { player?: { x: number; y: number } };
 
@@ -33,11 +36,15 @@ type Crop = {
 type NotifyFn = (msg: string, type?: string) => void;
 
 export class FarmingSystem {
+    private static savedCrops: CropSaveData[] = [];
+    private static activeSystems = new Set<FarmingSystem>();
+
     private scene:      SceneWithPlayer;
     private fields:     FarmFieldSystem;
     private inventory   = InventorySystem.getInstance();
     private levels      = LevelSystem.getInstance();
     private clock       = TimeSystem.getInstance();
+    private effects     = EffectSystem.getInstance();
     private notify:     NotifyFn;
 
     private crops       = new Map<string, Crop>();
@@ -57,11 +64,28 @@ export class FarmingSystem {
             .setVisible(false);
 
         scene.input.on("pointerdown", (p: Phaser.Input.Pointer) => this.onClick(p));
+        this.restoreCrops();
+
+        FarmingSystem.activeSystems.add(this);
+        scene.events.once(Phaser.Scenes.Events.SHUTDOWN, () => {
+            FarmingSystem.activeSystems.delete(this);
+        });
     }
 
-    update(time: number, playerX: number, playerY: number) {
+    update(_time: number, playerX: number, playerY: number) {
         this.updateCursor(playerX, playerY);
-        this.growCrops(time);
+        this.growCrops();
+    }
+
+    static getSaveData(): FarmingSaveData {
+        return {
+            crops: [...this.savedCrops],
+        };
+    }
+
+    static loadSaveData(data?: FarmingSaveData) {
+        this.savedCrops = data?.crops ? [...data.crops] : [];
+        this.activeSystems.forEach((system) => system.reloadCrops());
     }
 
     interact(playerX: number, playerY: number) {
@@ -81,8 +105,11 @@ export class FarmingSystem {
         return !!crop && !crop.watered;
     }
 
-    private growCrops(time: number) {
+    private growCrops() {
+        let changed = false;
         const slowdown = this.isNight() ? NIGHT_SLOW : 1;
+        const growthMultiplier = this.effects.getGrowthMultiplier();
+        const now = Date.now();
 
         for (const crop of this.crops.values()) {
             if (!crop.watered || crop.stage === HARVEST_STAGE) continue;
@@ -90,14 +117,19 @@ export class FarmingSystem {
             const base = ITEMS[crop.seedId]?.growTime;
             if (!base) continue;
 
-            if (time - crop.grownAt >= base * slowdown) {
+            const requiredTime = (base * slowdown) / growthMultiplier;
+
+            if (now - crop.grownAt >= requiredTime) {
                 crop.stage++;
                 crop.watered  = false;
-                crop.grownAt  = time;
+                crop.grownAt  = now;
                 this.refreshSprite(crop);
                 this.refreshIcon(crop);
+                changed = true;
             }
         }
+
+        if (changed) this.saveCrops();
     }
 
     private startPlanting(x: number, y: number) {
@@ -136,17 +168,18 @@ export class FarmingSystem {
         const sprite = this.scene.add.image(cx, cy, `crop_${data.cropKey}_0`).setDepth(8);
         const { bubble, icon } = this.makeIcon(cx, cy, "icon_water");
 
-        this.crops.set(this.key(x, y), {
+        this.crops.set(this.key(cx, cy), {
             sprite, bubble, icon,
             seedId,
             stage:   0,
             watered: false,
-            grownAt: this.scene.time.now,
+            grownAt: Date.now(),
         });
 
         this.inventory.removeItemById(seedId, 1);
         this.levels.addXp(2);
         this.notify("+2 XP", "info");
+        this.saveCrops();
     }
 
     private water(x: number, y: number) {
@@ -154,13 +187,14 @@ export class FarmingSystem {
         if (!crop || crop.watered) return;
 
         crop.watered = true;
-        crop.grownAt = this.scene.time.now;
+        crop.grownAt = Date.now();
         this.hideIcon(crop);
 
         this.inventory.removeItemById(BUCKET_WATER, 1);
         this.inventory.addItem(BUCKET_EMPTY, 1);
         this.levels.addXp(2);
         this.notify("+2 XP", "info");
+        this.saveCrops();
     }
 
     private harvest(x: number, y: number) {
@@ -183,6 +217,7 @@ export class FarmingSystem {
         crop.watered = false;
         this.refreshSprite(crop);
         this.refreshIcon(crop);
+        this.saveCrops();
     }
 
     private uproot(x: number, y: number) {
@@ -193,6 +228,58 @@ export class FarmingSystem {
         crop.bubble.destroy();
         crop.icon.destroy();
         this.crops.delete(this.key(x, y));
+        this.saveCrops();
+    }
+
+    private restoreCrops() {
+        FarmingSystem.savedCrops.forEach((data) => this.createCrop(data));
+    }
+
+    private reloadCrops() {
+        this.crops.forEach((crop) => {
+            crop.sprite.destroy();
+            crop.bubble.destroy();
+            crop.icon.destroy();
+        });
+
+        this.crops.clear();
+        this.restoreCrops();
+    }
+
+    private createCrop(data: CropSaveData) {
+        const cropKey = ITEMS[data.seedId]?.cropKey;
+        if (!cropKey) return;
+
+        const sprite = this.scene.add
+            .image(data.x, data.y, `crop_${cropKey}_${data.stage}`)
+            .setDepth(8);
+        const { bubble, icon } = this.makeIcon(data.x, data.y, "icon_water");
+
+        const crop: Crop = {
+            sprite,
+            bubble,
+            icon,
+            seedId: data.seedId,
+            stage: data.stage,
+            watered: data.watered,
+            grownAt: data.grownAt,
+        };
+
+        this.crops.set(this.key(data.x, data.y), crop);
+        this.refreshIcon(crop);
+    }
+
+    private saveCrops() {
+        FarmingSystem.savedCrops = [...this.crops.values()].map((crop) => ({
+            x: crop.sprite.x,
+            y: crop.sprite.y,
+            seedId: crop.seedId,
+            stage: crop.stage,
+            watered: crop.watered,
+            grownAt: crop.grownAt,
+        }));
+
+        requestAutoSave();
     }
 
     private refreshSprite(crop: Crop) {
