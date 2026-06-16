@@ -13,16 +13,17 @@ export class UI_TimeManager {
         this.time.onChange(() => {
             this.render();
         });
+        window.addEventListener("greenvale:languagechange", this.render);
 
         this.render();
     }
 
-    private render() {
+    private render = () => {
         this.dayText.textContent = t("time.day").replace(
             "{day}",
             String(this.time.getDay()),
         );
 
         this.clockText.textContent = this.time.getTimeText();
-    }
+    };
 }

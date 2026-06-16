@@ -15,6 +15,7 @@ export function t(key: string): string {
 export function setLanguage(lang: string) {
     localStorage.setItem("lang", lang);
     applyTranslations();
+    window.dispatchEvent(new Event("greenvale:languagechange"));
 }
 
 export function applyTranslations() {
